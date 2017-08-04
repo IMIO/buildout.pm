@@ -1,0 +1,123 @@
+We assume the installation in the folder /srv/zinstances/mc30
+ (that can be changed) and on an ubuntu distribution.
+Your real username must replace in our commands the string "username".
+Each command, specified by the symbol ">", can be executed
+ (without the symbol >).
+
+First we become root
+> sudo -s
+
+We install the necessary libraries
+> apt-get install build-essential
+> apt-get install libreadline6-dev
+> apt-get install zlib1g-dev (support zlib)
+> apt-get install libjpeg62-dev
+> apt-get install subversion
+> apt-get install libpq-dev
+> apt-get install libxml2-dev
+> apt-get install libxslt1-dev
+> apt-get install libbz2-dev
+> apt-get install git
+> apt-get install bzr
+
+Needed by documentviewer product:
+> apt-get install rubygems
+> gem install docsplit
+> apt-get install graphicsmagick
+> apt-get install poppler-utils
+
+We work in the folder /srv
+> cd /srv
+
+We change the owner of the folder to avoid continue working as root
+> chown -R username:username .
+
+We leave the user root.
+> exit
+
+We create some directories
+> mkdir install
+> mkdir zinstances
+> cd install
+
+We install python2.7 that will be used to run the buildout and zope instance
+> wget http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+> tar xvzf Python-2.7.3.tgz
+> cd Python-2.7.3
+> ./configure --prefix=/srv/python273
+> make
+> make install
+
+We install the python utility easy_install
+> cd /srv/install
+> wget http://peak.telecommunity.com/dist/ez_setup.py
+> /srv/python273/bin/python ez_setup.py
+
+We install the python utility virtualenv
+> /srv/python273/bin/easy_install virtualenv
+
+We can define a cache for buildout
+See http://www.communesplone.org/support/documentation/tutoriels/utilisation-dun-buildout/definition-dun-cache-pour-buildout/
+
+We download the buildout files in our folder
+> cd /srv/zinstances
+> svn co http://svn.communesplone.org/svn/communesplone/buildout/server.mc/tags/mc30/ mc30
+> cd mc30
+
+We modify the Makefile file to indicate the real path of the virtualenv utility.
+To do that, you can edit the file in a simple text editor.
+It's necessary to replace the line "virtualenv273 --no-site-packages ." by
+    "/srv/python273/bin/virtualenv --no-site-packages ."
+OR
+You can create a link to our virtualenv without modifying Makefile
+    "sudo ln -s /srv/python273/bin/virtualenv /usr/local/bin/virtualenv-2.7"
+
+we initialize the buildout
+> make bootstrap
+
+1) Use in development (without ZEO, with debug products)
+
+We execute the buildout after each modification in the buildout.cfg file
+> make buildout
+OR
+> bin/buildout -v
+
+We start the zope server.
+> bin/instance1 fg
+OR
+> bin/instance1 start
+
+We can connect the zope server in a browser on the following address http://localhost:8080/manage_main
+
+We can add a mount point (separate database file, defined in the file zope_add.conf)
+=> choose in the list (up right in the browser page) "ZODB Mount Point"
+Select a mount point name ("xxx" and click on "Create selected mount points").
+
+All objects added in the zope folder "xxx" will be stored in the db file "xxx.fs"
+ in place of in "Data.fs".
+
+2) Usage in production (multiple Zope instances for the same database, ZEO mode)
+
+We can replace in the file buildout.cfg the name dev.cfg by prod.cfg.
+
+We execute the buildout after each modification in the buildout.cfg file
+> make buildout
+OR
+> bin/buildout -v
+
+We start the zeo server.
+> bin/zeoserver start
+
+We start each zope server (following instance name section).
+> bin/instance1 fg
+OR
+> bin/instance1 start
+
+We can connect the zope server in a browser on the following address http://localhost:8080/manage_main
+
+We can add a mount point (separate database file, defined in the file zeo_add.conf and zope_add_zeo.conf)
+=> choose in the list (up right in the browser page) "ZODB Mount Point"
+Select a mount point name ("xxx" and click on "Create selected mount points").
+
+All objects added in the zope folder "xxx" will be stored in the db file "xxx.fs"
+ in place of in "Data.fs".
