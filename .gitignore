@@ -18,3 +18,5 @@ python-eggs
 src
 var
 versions-picked.cfg
+pip-selfcheck.json
+uuid.txt
