@@ -1,6 +1,3 @@
-#
-# taken into account by: svn propset svn:ignore -F svn.ignore .
-#
 .installed.cfg
 .coverage
 .mr.developer.cfg
