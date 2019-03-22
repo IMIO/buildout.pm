@@ -39,4 +39,4 @@ upgrade:
 
 .PHONY: cleanall
 cleanall:
-	rm -fr lib bin/buildout develop-eggs downloads eggs parts .installed.cfg
+	rm -fr lib bin develop-eggs downloads eggs parts .installed.cfg
