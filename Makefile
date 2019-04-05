@@ -3,13 +3,13 @@
 plone=$(shell grep plone-path port.cfg|cut -c 14-)
 hostname=$(shell hostname)
 instance1_port=$(shell grep instance1-http port.cfg|cut -c 18-)
+profile:=communes
 all: run
 
 .PHONY: bootstrap
 bootstrap:
 	virtualenv-2.7 .
-	./bin/pip install setuptools==38.2.4
-	./bin/python bootstrap.py --version=2.10.0
+	./bin/pip install -r requirements.txt
 
 .PHONY: buildout
 buildout:
@@ -40,3 +40,10 @@ upgrade:
 .PHONY: cleanall
 cleanall:
 	rm -fr lib bin develop-eggs downloads eggs parts .installed.cfg
+
+.PHONY: jenkins
+jenkins: bootstrap
+	# can be run by example with: make jenkins profile='communes'
+	sed -ie "s#communes#$(profile)#" jenkins.cfg
+	bin/buildout -c jenkins.cfg
+
