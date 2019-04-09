@@ -1,4 +1,4 @@
 pmPipeline {
-  profileName = 'commune'
+  profileName = 'communes'
   testSuiteName = 'testmc'
 }
