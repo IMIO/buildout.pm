@@ -9,23 +9,23 @@ all: run
 .PHONY: bootstrap
 bootstrap:
 	virtualenv-2.7 .
-	./bin/pip install -r requirements.txt
+	bin/python bin/pip install -r requirements.txt
 
 .PHONY: buildout
 buildout:
 	if test -f .installed.cfg;then rm .installed.cfg;fi
 	if ! test -f bin/buildout;then make bootstrap;fi
-	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/buildout;fi
+	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout;fi
 
 .PHONY: standard-config
 standard-config:
 	if ! test -f bin/buildout;then make bootstrap;fi
-	bin/buildout -t 5 -c standard-config.cfg
+	bin/python bin/buildout -t 5 -c standard-config.cfg
 
 .PHONY: run
 run:
 	if ! test -f bin/instance1;then make buildout;fi
-	bin/instance1 fg
+	bin/python bin/instance1 fg
 
 .PHONY: upgrade
 upgrade:
@@ -45,5 +45,4 @@ cleanall:
 jenkins: bootstrap
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
-	bin/buildout -c jenkins.cfg
-
+	bin/python bin/buildout -c jenkins.cfg
