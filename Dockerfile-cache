@@ -1,4 +1,4 @@
-FROM docker-staging.imio.be/base:latest
+FROM docker-staging.imio.be/base:18.04
 
 ARG repo=buildout.pm
 RUN mkdir -p /home/imio/.buildout/downloads \
@@ -34,5 +34,5 @@ USER root
 RUN apt-get clean autoclean \
   && apt-get purge -y $buildDeps \
   && apt-get autoremove -y \
-  && rm /usr/lib/libreoffice/program/libmergedlo.so
+  && rm /usr/lib/libreoffice/program/libmergedlo.so \
   && rm -rf /home/imio/.buildout/downloads/ /var/lib/apt/lists/* /tmp/* /var/tmp/* /home/imio/.cache /home/imio/.local

@@ -1,0 +1,28 @@
+---
+version: '3.4'
+services:
+  zeo:
+    image: buildout.pm:test
+    command: zeoserver start
+    read_only: false
+    volumes:
+      - imio-pm:/home/imio/imio-pm/var
+    tmpfs:
+      - /var/tmp:rw,uid=913,gid=209
+      - /home/imio/imio-pm/var/log:rw,uid=913,gid=209
+    healthcheck:
+      disable: true
+  instance:
+    image: buildout.pm:test
+    command: fg
+    read_only: false
+    environment:
+      ZEO_ADDRESS: zeo:8100
+    ports:
+      - 8081
+    tmpfs:
+      - /var/tmp:rw,uid=913,gid=209
+      - /home/imio/imio-pm/var/instance:rw,uid=913,gid=209
+      - /home/imio/imio-pm/var/instance/var/blobstorage:rw,uid=913,gid=209
+volumes:
+  imio-pm:

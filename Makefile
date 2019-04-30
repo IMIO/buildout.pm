@@ -16,7 +16,7 @@ help:  ## Display this help
 
 .PHONY: bootstrap
 bootstrap:  ## Creates virtualenv and instal requirements.txt
-	virtualenv .
+	virtualenv-2.7 .
 	bin/python bin/pip install -r requirements.txt
 
 .PHONY: buildout
@@ -73,3 +73,6 @@ eggs:  ## Copy eggs from docker image to speed up docker build
 .PHONY: dockerbuild
 dockerbuild: eggs  ## Build docker image
 	docker build . -t $(IMAGE_NAME)
+
+dockerbuild-cache:  ## Build docker base image
+	docker build . -t buildout.pm:cache -f Dockerfile-cache
