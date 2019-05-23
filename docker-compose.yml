@@ -1,12 +1,21 @@
 ---
 version: '3.4'
 services:
+  libreoffice:
+    image: libreoffice:latest
+    read_only: false
+    expose:
+      - 8997/tcp
+    tmpfs:
+      - /var/tmp:rw
   zeo:
     image: buildout.pm:test
     command: zeoserver start
     read_only: false
     volumes:
       - imio-pm:/home/imio/imio-pm/var
+    ports:
+      - 8100:8100
     tmpfs:
       - /var/tmp:rw,uid=913,gid=209
       - /home/imio/imio-pm/var/log:rw,uid=913,gid=209
@@ -19,10 +28,9 @@ services:
     environment:
       ZEO_ADDRESS: zeo:8100
     ports:
-      - 8081
+      - 8081:8081
     tmpfs:
       - /var/tmp:rw,uid=913,gid=209
       - /home/imio/imio-pm/var/instance:rw,uid=913,gid=209
-      - /home/imio/imio-pm/var/instance/var/blobstorage:rw,uid=913,gid=209
 volumes:
   imio-pm:

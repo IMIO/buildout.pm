@@ -1,10 +1,5 @@
 FROM buildout.pm:cache as cache
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends libmagic-dev \
-  && apt-get clean
-
-
 RUN mkdir /home/imio/imio-pm
 COPY --chown=imio *.conf *.cfg Makefile *.py *.txt /home/imio/imio-pm/
 WORKDIR /home/imio/imio-pm
@@ -24,17 +19,14 @@ LABEL plone=$PLONE_VERSION \
   maintainer="IMIO"
 
 RUN apt-get update -y \
-  && apt-get install -y --no-install-recommends python graphicsmagick poppler-utils ruby libmagic1 libjpeg62 libopenjp2-7 libpython3.6 \
+  && apt-get install -y -q python graphicsmagick poppler-utils ruby libmagic1 libjpeg62 libopenjp2-7 libpython3.6 libreoffice-script-provider-python \
   && apt-get clean \
   && gem install docsplit && gem cleanup all
 
-COPY --from=cache /usr/lib/libreoffice/program/ /usr/lib/libreoffice/program/
+COPY --chown=imio --from=cache /home/imio/ /home/imio/
+COPY --chown=imio docker-initialize.py docker-entrypoint.sh /
 
 USER imio
-
-COPY --chown=imio --from=cache /home/imio/ /home/imio/
-COPY --chown=imio --from=cache /usr/lib/python3/dist-packages/uno*.py /usr/lib/python3/dist-packages/
-COPY docker-initialize.py docker-entrypoint.sh /
 
 WORKDIR /home/imio/imio-pm
 ENV ZEO_HOST=db \
@@ -43,6 +35,5 @@ ENV ZEO_HOST=db \
  PROJECT_ID=imio
 
 EXPOSE 8081
-WORKDIR /home/imio/imio-pm
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["start"]

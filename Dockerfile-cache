@@ -12,27 +12,27 @@ RUN buildDeps="build-essential libpq-dev libreadline-dev wget git subversion lib
   && apt-get update \
   && apt-get full-upgrade -y \
   && apt-get install -y --no-install-recommends $buildDeps \
-  && runDeps="python3-uno graphicsmagick poppler-utils ruby libmagic-dev" \
+  && runDeps="graphicsmagick poppler-utils ruby libmagic-dev" \
   && apt-get install -y --no-install-recommends $runDeps \
   && gem install docsplit \
-  && pip install python-magic \
   && ln -sf /usr/bin/virtualenv /usr/local/bin/virtualenv-2.7
 
 COPY --chown=imio eggs /home/imio/.buildout/eggs
 
 USER imio
-RUN cd /home/imio/ \
-  && git clone https://github.com/IMIO/${repo}.git ${repo} \
-  && cd /home/imio/${repo} \
-  && mkdir -p var/filestorage/ \
+WORKDIR /home/imio/
+RUN git clone https://github.com/IMIO/${repo}.git ${repo}
+
+WORKDIR /home/imio/${repo}
+RUN mkdir -p var/filestorage/ \
   && touch var/filestorage/Data.fs \
-  && make buildout \
-  && cd /home/imio/ \
-  && rm -rf ${repo}
+  && make buildout
+
+WORKDIR /home/imio/
+RUN rm -rf ${repo}
 
 USER root
-RUN apt-get clean autoclean \
-  && apt-get purge -y $buildDeps \
+RUN apt-get purge -y $buildDeps \
   && apt-get autoremove -y \
-  && rm /usr/lib/libreoffice/program/libmergedlo.so \
+  && apt-get clean autoclean \
   && rm -rf /home/imio/.buildout/downloads/ /var/lib/apt/lists/* /tmp/* /var/tmp/* /home/imio/.cache /home/imio/.local
