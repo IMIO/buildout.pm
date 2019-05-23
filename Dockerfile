@@ -1,4 +1,4 @@
-FROM buildout.pm:cache as cache
+FROM docker-staging.imio.be/iadelib/mutual:cache as cache
 
 RUN mkdir /home/imio/imio-pm
 COPY --chown=imio *.conf *.cfg Makefile *.py *.txt /home/imio/imio-pm/

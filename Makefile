@@ -64,7 +64,7 @@ jenkins: bootstrap  ## Same as buildout but for jenkins use only
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg
 
-IMAGE_NAME=buildout.pm:test
+IMAGE_NAME=docker-staging.imio.be/iadelib/mutual
 
 eggs:  ## Copy eggs from docker image to speed up docker build
 	-docker run --entrypoint='' $(IMAGE_NAME) tar -c -C /home/imio/.buildout eggs | tar x
@@ -75,4 +75,4 @@ dockerbuild: eggs  ## Build docker image
 	docker build . -t $(IMAGE_NAME)
 
 dockerbuild-cache:  ## Build docker base image
-	docker build . -t buildout.pm:cache -f Dockerfile-cache
+	docker build . -t $(IMAGE_NAME):cache -f Dockerfile-cache

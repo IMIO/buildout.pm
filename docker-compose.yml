@@ -2,14 +2,14 @@
 version: '3.4'
 services:
   libreoffice:
-    image: libreoffice:latest
+    image: docker-staging.imio.be/libreoffice/server:latest
     read_only: false
     expose:
       - 8997/tcp
     tmpfs:
       - /var/tmp:rw
   zeo:
-    image: buildout.pm:test
+    image: docker-staging.imio.be/iadelib/mutual
     command: zeoserver start
     read_only: false
     volumes:
@@ -22,7 +22,7 @@ services:
     healthcheck:
       disable: true
   instance:
-    image: buildout.pm:test
+    image: docker-staging.imio.be/iadelib/mutual
     command: fg
     read_only: false
     environment:
