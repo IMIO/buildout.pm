@@ -1,0 +1,20 @@
+debug = false
+logLevel = "ERROR"
+
+defaultEntryPoints = ["http"]
+
+[web]
+# Port for the status/dashboard page
+address = ":9080"
+
+[entryPoints]
+    [entryPoints.http]
+    address = ":80"
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "localhost"
+watch = true
+exposedByDefault = false

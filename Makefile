@@ -8,7 +8,14 @@ profile:=communes
 product:=MeetingCommunes
 
 all: run
+cfg:=buildout.cfg
 
+define BUILDOUT_CFG_CONTENT
+[buildout]
+extends =
+  $(profile).cfg
+endef
+export BUILDOUT_CFG_CONTENT
 .DEFAULT_GOAL:=help
 
 help:  ## Display this help
@@ -19,11 +26,13 @@ bootstrap:  ## Creates virtualenv and instal requirements.txt
 	virtualenv-2.7 .
 	bin/python bin/pip install -r requirements.txt
 
+
 .PHONY: buildout
 buildout:  ## Run bootstrap if needed and  build the buildout
+	if ! test -f .installed.cfg;then echo "$$BUILDOUT_CFG_CONTENT" > buildout.cfg;fi
 	if test -f .installed.cfg;then rm .installed.cfg;fi
 	if ! test -f bin/buildout;then make bootstrap;fi
-	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout;fi
+	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout -c $(cfg);fi
 
 .PHONY: standard-config
 standard-config:  ## Create a stadard plone site
@@ -64,7 +73,7 @@ jenkins: bootstrap  ## Same as buildout but for jenkins use only
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg
 
-IMAGE_NAME=docker-staging.imio.be/iadelib/mutual
+IMAGE_NAME=docker-staging.imio.be/iadelib/mutual:latest
 
 eggs:  ## Copy eggs from docker image to speed up docker build
 	-docker run --entrypoint='' $(IMAGE_NAME) tar -c -C /home/imio/.buildout eggs | tar x
@@ -75,4 +84,4 @@ dockerbuild: eggs  ## Build docker image
 	docker build . -t $(IMAGE_NAME)
 
 dockerbuild-cache:  ## Build docker base image
-	docker build . -t $(IMAGE_NAME):cache -f Dockerfile-cache
+	docker build . -t docker-staging.imio.be/buildout.pm:cache -f Dockerfile-cache

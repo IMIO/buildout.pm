@@ -3,10 +3,11 @@ FROM docker-staging.imio.be/iadelib/mutual:cache as cache
 RUN mkdir /home/imio/imio-pm
 COPY --chown=imio *.conf *.cfg Makefile *.py *.txt /home/imio/imio-pm/
 WORKDIR /home/imio/imio-pm
+ARG profile=communes
 RUN sed -i '/^    instance[0-9]/d' prod.cfg \
   && mkdir -p var/filestorage/ \
   && touch var/filestorage/Data.fs \
-  && make buildout
+  && make buildout profile=${profile} cfg=docker.cfg
 
 FROM docker-staging.imio.be/base:18.04 as base
 

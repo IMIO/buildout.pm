@@ -6,31 +6,57 @@ services:
     read_only: false
     expose:
       - 8997/tcp
-    tmpfs:
-      - /var/tmp:rw
-  zeo:
-    image: docker-staging.imio.be/iadelib/mutual
-    command: zeoserver start
-    read_only: false
     volumes:
-      - imio-pm:/home/imio/imio-pm/var
+      - type: tmpfs
+        target: /var/tmp
+  zeo:
+    image: docker-staging.imio.be/iadelib/mutual:latest
+    command: zeoserver start
+    read_only: true
+    tmpfs:
+      - /home/imio/imio-pm/var:rw,uid=913,gid=209
+    volumes:
+      - imio-pm-blobstorage:/home/imio/imio-pm/var/blobstorage
+      - imio-pm-filestorage:/home/imio/imio-pm/var/filestorage
+      - imio-pm-log:/home/imio/imio-pm/var/log
+      - type: tmpfs
+        target: /var/tmp
     ports:
       - 8100:8100
-    tmpfs:
-      - /var/tmp:rw,uid=913,gid=209
-      - /home/imio/imio-pm/var/log:rw,uid=913,gid=209
     healthcheck:
       disable: true
   instance:
-    image: docker-staging.imio.be/iadelib/mutual
-    command: fg
+    image: docker-staging.imio.be/iadelib/mutual:latest
     read_only: false
+    tmpfs:
+      - /home/imio/imio-pm/var:rw,uid=913,gid=209
+    volumes:
+      - imio-pm-blobstorage:/home/imio/imio-pm/var/blobstorage
+      - imio-pm-log:/home/imio/imio-pm/var/log
+      - type: tmpfs
+        target: /var/tmp
+    labels:
+      traefik.enable: true
+      traefik.backend: pm
+      traefik.port: 8081
+      traefik.frontend.rule: Host:pm.localhost;AddPrefix:/VirtualHostBase/http/pm.localhost:80/plone/VirtualHostRoot/
+      traefik.backend.loadbalancer.stickiness: 'true'
     environment:
       ZEO_ADDRESS: zeo:8100
+      ZEO_SHARED_BLOB_DIR: "on"
     ports:
-      - 8081:8081
-    tmpfs:
-      - /var/tmp:rw,uid=913,gid=209
-      - /home/imio/imio-pm/var/instance:rw,uid=913,gid=209
+      - 8081
+  traefik:
+    image: traefik
+    read_only: true
+    restart: always
+    ports:
+      - "80:80"
+      - "9080:9080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/traefik.toml
 volumes:
-  imio-pm:
+  imio-pm-blobstorage:
+  imio-pm-filestorage:
+  imio-pm-log:

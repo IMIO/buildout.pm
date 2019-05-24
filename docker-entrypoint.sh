@@ -35,6 +35,7 @@ if [[ $START == *"$1"* ]]; then
 
 	trap _stop SIGTERM SIGINT
 	$CMD start
+  sleep 3
 	$CMD logtail &
 	child=$!
 
