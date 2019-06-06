@@ -10,6 +10,7 @@ fake-eggs
 include
 lib
 logrotate.conf
+make.log
 parts
 python-eggs
 src
