@@ -23,7 +23,7 @@ help:  ## Display this help
 
 .PHONY: bootstrap
 bootstrap:  ## Creates virtualenv and instal requirements.txt
-	virtualenv-2.7 .
+	virtualenv .
 	bin/python bin/pip install -r requirements.txt
 
 
