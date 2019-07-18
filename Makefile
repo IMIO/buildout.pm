@@ -1,9 +1,12 @@
 #!/usr/bin/make
 #
 plone=$(shell grep plone-path port.cfg|cut -c 14-)
+cluster=$(shell grep cluster port.cfg|cut -c 11-)
 hostname=$(shell hostname)
 instance1_port=$(shell grep instance1-http port.cfg|cut -c 18-)
 profile:=communes
+product:=MeetingCommunes
+
 all: run
 
 .PHONY: bootstrap
@@ -29,13 +32,22 @@ run:
 
 .PHONY: upgrade
 upgrade:
-	if ! test -f bin/instance1;then make buildout;fi
-	echo $(plone)
-	echo $(hostname)
-	echo $(instance1_port)
-#	./copy-data.sh --disable-auth=1
-	./bin/upgrade-portals --username admin -G profile-Products.MeetingCommunes:default $(plone)
-	$ echo "Job done for instance $(plone), check http://$(hostname):$(instance1_port)/manage_main" | mail -s "Migration finished for $(plone)" pm-interne@imio.be
+	git fetch --tags
+	git checkout $(shell git describe --tags)
+
+	~/imio.updates/bin/update_instances \
+	-p $(cluster) \
+	-m buildout \
+	-s restart \
+	-d
+
+	~/imio.updates/bin/update_instances \
+	-p $(cluster) \
+	-a 8 \
+	-e pm-interne@imio.be \
+	-f upgrade profile-Products.CMFPlone:plone \
+	-f upgrade profile-Products.$(product):default \
+	-d
 
 .PHONY: cleanall
 cleanall:
