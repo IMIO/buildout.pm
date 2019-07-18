@@ -49,14 +49,6 @@ upgrade:
 	-f upgrade profile-Products.$(product):default \
 	-d
 
-	~/imio.updates/bin/update_instances \
-	-p $(cluster) \
-	-a 8 \
-	-e pm-interne@imio.be \
-	-f upgrade profile-Products.CMFPlone:plone \
-	-f upgrade profile-Products.$(product):default \
-	-d
-
 .PHONY: cleanall
 cleanall:
 	rm -fr lib bin develop-eggs downloads eggs parts .installed.cfg
