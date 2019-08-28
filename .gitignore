@@ -19,3 +19,6 @@ versions-picked.cfg
 pip-selfcheck.json
 uuid.txt
 .idea/
+share
+config/core.properties
+local
