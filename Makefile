@@ -6,6 +6,7 @@ hostname=$(shell hostname)
 instance1_port=$(shell grep instance1-http port.cfg|cut -c 18-)
 profile:=communes
 product:=MeetingCommunes
+testSuite:=testmc
 
 all: run
 
@@ -58,3 +59,10 @@ jenkins: bootstrap
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg
+
+.PHONY: test
+test:
+	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore &
+	bin/solr-start
+	bin/$(testSuite)
+	bin/solr-stop
