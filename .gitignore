@@ -3,6 +3,7 @@
 .mr.developer.cfg
 htmlcov
 bin
+core.properties
 develop-eggs
 downloads
 eggs
