@@ -35,7 +35,7 @@ upgrade:
 	git fetch --tags
 	git checkout $(shell git describe --tags)
 	rm -f make.log
-	buildout
+	make buildout
 		
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
