@@ -44,7 +44,7 @@ upgrade:
 	
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
-	-a 8
+	-a 8 \
 	-e pm-interne@imio.be \
 	-f upgrade profile-Products.CMFPlone:plone \
 	-f upgrade profile-Products.$(product):default \
