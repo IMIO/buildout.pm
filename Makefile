@@ -35,33 +35,19 @@ upgrade:
 	git fetch --tags
 	git checkout $(shell git describe --tags)
 	rm -f make.log
-	
-	~/imio.updates/bin/update_instances \
-	-p $(cluster) \
-	-m buildout \
-	-d
-	
+	buildout
+		
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
 	-s restart \
 	-d
-
-	~/imio.updates/bin/update_instances \
-	-p $(cluster) \
-	-a 0 \
-	-d
 	
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
-	-a 8 \
+	-a 8
 	-e pm-interne@imio.be \
 	-f upgrade profile-Products.CMFPlone:plone \
 	-f upgrade profile-Products.$(product):default \
-	-d
-	
-	~/imio.updates/bin/update_instances \
-	-p $(cluster) \
-	-a 1 \
 	-d
 
 .PHONY: cleanall
