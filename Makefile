@@ -30,24 +30,24 @@ run:
 	if ! test -f bin/instance1;then make buildout;fi
 	bin/python bin/instance1 fg
 
-.PHONY: upgrade
-upgrade:
+.PHONY: refresh-tag
+refresh-tag:
 	git fetch --tags
 	git checkout $(shell git describe --tags)
-	rm -f make.log
 	make buildout
-		
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
 	-s restart \
 	-d
-	
+
+.PHONY: upgrade
+upgrade:refresh-tag
+	rm -f make.log
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
 	-a 8 \
 	-e pm-interne@imio.be \
-	-f upgrade profile-Products.CMFPlone:plone \
-	-f upgrade profile-Products.$(product):default \
+	-f upgrade _all_ \
 	-d
 
 .PHONY: cleanall
