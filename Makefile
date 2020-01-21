@@ -55,7 +55,7 @@ cleanall:
 	rm -fr lib bin develop-eggs downloads eggs parts .installed.cfg
 
 .PHONY: jenkins
-jenkins: bootstrap
+jenkins: cleanall bootstrap
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg
