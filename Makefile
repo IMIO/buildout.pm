@@ -11,7 +11,7 @@ all: run
 
 .PHONY: bootstrap
 bootstrap:
-	virtualenv-2.7 .
+	if test -f virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
 	bin/python bin/pip install -r requirements.txt
 
 .PHONY: buildout
@@ -52,7 +52,7 @@ upgrade:refresh-tag
 
 .PHONY: cleanall
 cleanall:
-	rm -fr lib bin develop-eggs downloads eggs parts .installed.cfg
+	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg
 
 .PHONY: jenkins
 jenkins: bootstrap
