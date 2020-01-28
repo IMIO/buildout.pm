@@ -28,6 +28,7 @@ standard-config:
 .PHONY: run
 run: buildout
 	#if ! test -f bin/instance1;then make buildout;fi
+	bin/zeoserver stop
 	bin/zeoserver start
 	bin/python bin/instance1 fg
 
