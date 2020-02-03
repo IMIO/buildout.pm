@@ -26,8 +26,10 @@ standard-config:
 	bin/python bin/buildout -t 5 -c standard-config.cfg
 
 .PHONY: run
-run:
-	if ! test -f bin/instance1;then make buildout;fi
+run: buildout
+	#if ! test -f bin/instance1;then make buildout;fi
+	bin/zeoserver stop
+	bin/zeoserver start
 	bin/python bin/instance1 fg
 
 .PHONY: refresh-tag
@@ -59,3 +61,7 @@ jenkins: bootstrap
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg
+
+.PHONY: libreoffice
+libreoffice:
+	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
