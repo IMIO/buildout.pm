@@ -11,7 +11,7 @@ all: run
 
 .PHONY: bootstrap
 bootstrap:
-	if test -f virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
+	if test -f /usr/bin/virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
 	bin/python bin/pip install -r requirements.txt
 
 .PHONY: buildout
