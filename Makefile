@@ -35,13 +35,15 @@ run: buildout
 .PHONY: refresh-tag
 refresh-tag:
 	git fetch -fv --tags
-	sleep 1
-	git checkout $(shell git describe --tags)
+	make checkout
 	make buildout
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
 	-s restart \
 	-d
+
+checkout:
+	git checkout $(shell git describe --tags)
 
 .PHONY: upgrade
 upgrade:refresh-tag
