@@ -32,7 +32,7 @@ run: buildout
 	bin/zeoserver start
 	bin/python bin/instance1 fg
 
-.PHONY: refresh-tag
+.PHONY: refresh-tag # derp
 refresh-tag:
 	git fetch -fv --tags
 	git checkout $(shell git describe --tags $(shell git rev-list --tags --max-count=1))
