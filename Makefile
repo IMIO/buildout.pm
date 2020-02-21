@@ -32,10 +32,11 @@ run: buildout
 	bin/zeoserver start
 	bin/python bin/instance1 fg
 
-.PHONY: refresh-tag # derp
+.PHONY: refresh-tag
 refresh-tag:
 	git fetch -fv --tags
-	git checkout $(shell git describe --tags $(shell git rev-list --tags --max-count=1))
+	sleep 1
+	git checkout $(shell git describe --tags)
 	make buildout
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
