@@ -34,11 +34,8 @@ run: buildout
 
 .PHONY: refresh-tag
 refresh-tag:
-	git stash
-	git pull -v
-	git fetch --tags
-	git checkout $(shell git describe --tags)
-	git stash pop
+	git fetch -fv --tags
+	git checkout $(shell git describe --tags $(shell git rev-list --tags --max-count=1))
 	make buildout
 	~/imio.updates/bin/update_instances \
 	-p $(cluster) \
