@@ -8,7 +8,7 @@
     <!-- Default Field Types -->
     <fieldType name="long" class="solr.LongPointField" positionIncrementGap="0" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
-    <fieldType name="date" class="solr.TrieDateField" positionIncrementGap="0" />
+    <fieldType name="date" class="solr.DatePointField" positionIncrementGap="0" />
     <fieldType name="tfloat" class="solr.FloatPointField" positionIncrementGap="0" />
     <fieldType name="tfloats" class="solr.FloatPointField" positionIncrementGap="0" multiValued="true" />
     <fieldType name="tint" class="solr.IntPointField" positionIncrementGap="0" />
@@ -19,8 +19,8 @@
     <fieldType name="random" class="solr.RandomSortField" indexed="true"/>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true"/>
     <fieldType name="strings" class="solr.StrField" sortMissingLast="true" multiValued="true"/>
-    <fieldType name="tdate" class="solr.TrieDateField" positionIncrementGap="0" />
-    <fieldType name="tdates" class="solr.TrieDateField" positionIncrementGap="0" multiValued="true" />
+    <fieldType name="tdate" class="solr.DatePointField" positionIncrementGap="0" />
+    <fieldType name="tdates" class="solr.DatePointField" positionIncrementGap="0" multiValued="true" />
     <fieldType name="tdouble" class="solr.DoublePointField" positionIncrementGap="0" />
     <fieldType name="tdoubles" class="solr.DoublePointField" positionIncrementGap="0" multiValued="true" />
 
