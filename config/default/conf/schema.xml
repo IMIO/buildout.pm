@@ -156,7 +156,7 @@
     <field name="get_full_title"           type="string"   indexed="false" stored="true" />
     <field name="getItemIsSigned"          type="boolean"  indexed="true"  stored="true" />
     <field name="getItemNumber"            type="tint"     indexed="true"  stored="true" />
-    <field name="getObjPositionInParent"   type="string"   indexed="true"  stored="true" />
+    <field name="getObjPositionInParent"   type="tint"     indexed="true"  stored="true" />
     <field name="getPreferredMeeting"      type="string"   indexed="true"  stored="true" />
     <field name="getPreferredMeetingDate"  type="date"     indexed="true"  stored="true" />
     <field name="getProposingGroup"        type="string"   indexed="true"  stored="true" />
