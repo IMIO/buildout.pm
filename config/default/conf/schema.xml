@@ -143,7 +143,7 @@
     <field name="downOrUpWorkflowAgain"    type="string"   indexed="true"  stored="true" />
     <field name="due_date"                 type="date"     indexed="true"  stored="true" />
     <field name="effectiveRange"           type="date"     indexed="true"  stored="true" />
-    <field name="enabled"                type="boolean"  indexed="true"  stored="true" />
+    <field name="enabled"                  type="boolean"  indexed="true"  stored="true" />
     <field name="end"                      type="date"     indexed="true"  stored="true" />
     <field name="externalIdentifier"       type="string"   indexed="true"  stored="true" />
     <field name="getAssociatedGroups"      type="string"   indexed="true"  stored="true"  multiValued="true" />/>
@@ -157,6 +157,7 @@
     <field name="getItemIsSigned"          type="boolean"  indexed="true"  stored="true" />
     <field name="getItemNumber"            type="tint"     indexed="true"  stored="true" />
     <field name="getObjPositionInParent"   type="tint"     indexed="true"  stored="true" />
+    <field name="getObjSize"               type="string"   indexed="true"  stored="true" />
     <field name="getPreferredMeeting"      type="string"   indexed="true"  stored="true" />
     <field name="getPreferredMeetingDate"  type="date"     indexed="true"  stored="true" />
     <field name="getProposingGroup"        type="string"   indexed="true"  stored="true" />
