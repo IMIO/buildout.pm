@@ -152,7 +152,7 @@
     <field name="getConfigId"              type="string"   indexed="true"  stored="true" />/>
     <field name="getCopyGroups"            type="string"   indexed="true"  stored="true"  multiValued="true" />/>
     <field name="getDate"                  type="date"     indexed="true"  stored="true" />/>
-    <field name="getGroupInCharge"         type="string"   indexed="true"  stored="true" />/>
+    <field name="getGroupsInCharge"        type="string"   indexed="true"  stored="true" />/>
     <field name="get_full_title"           type="string"   indexed="false" stored="true" />
     <field name="getItemIsSigned"          type="boolean"  indexed="true"  stored="true" />
     <field name="getItemNumber"            type="tint"     indexed="true"  stored="true" />
