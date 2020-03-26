@@ -1,0 +1,6 @@
+[report]
+omit =
+    */Extensions*
+    */test*
+    */migrations/*
+    */upgrades/*
