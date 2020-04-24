@@ -12,13 +12,20 @@ all: run
 .PHONY: bootstrap
 bootstrap:
 	if test -f /usr/bin/virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
+	make install-requirements
+
+install-requirements:
 	bin/python bin/pip install -r requirements.txt
 
 .PHONY: buildout
 buildout:
+	echo "Starting Buildout on $(shell date)"
 	if test -f .installed.cfg;then rm .installed.cfg;fi
 	if ! test -f bin/buildout;then make bootstrap;fi
+	# reinstall requirements in case it changed since last bootstrap
+	make install-requirements
 	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout;fi
+	echo "Finished on $(shell date)"
 
 .PHONY: standard-config
 standard-config:
