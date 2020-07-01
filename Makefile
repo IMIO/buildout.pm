@@ -24,13 +24,13 @@ buildout:
 	if ! test -f bin/buildout;then make bootstrap;fi
 	# reinstall requirements in case it changed since last bootstrap
 	make install-requirements
-	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout;fi
+	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout -t 120;fi
 	echo "Finished on $(shell date)"
 
 .PHONY: standard-config
 standard-config:
 	if ! test -f bin/buildout;then make bootstrap;fi
-	bin/python bin/buildout -t 5 -c standard-config.cfg
+	bin/python bin/buildout -t 120 -c standard-config.cfg
 
 .PHONY: run
 run: buildout
