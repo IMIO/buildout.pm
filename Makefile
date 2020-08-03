@@ -9,8 +9,14 @@ product:=MeetingCommunes
 
 all: run
 
+.DEFAULT_GOAL:=help
+
+help:  ## Displays this help
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+
 .PHONY: bootstrap
-bootstrap:
+bootstrap:  ## Creates virtualenv and installs requirements.txt
 	if test -f /usr/bin/virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
 	make install-requirements
 
@@ -18,7 +24,7 @@ install-requirements:
 	bin/python bin/pip install -r requirements.txt
 
 .PHONY: buildout
-buildout:
+buildout:  ## Runs bootstrap if needed and builds the buildout
 	echo "Starting Buildout on $(shell date)"
 	if test -f .installed.cfg;then rm .installed.cfg;fi
 	if ! test -f bin/buildout;then make bootstrap;fi
@@ -28,57 +34,33 @@ buildout:
 	echo "Finished on $(shell date)"
 
 .PHONY: standard-config
-standard-config:
+standard-config:  ## Creates a standard plone site
 	if ! test -f bin/buildout;then make bootstrap;fi
 	bin/python bin/buildout -t 120 -c standard-config.cfg
 
 .PHONY: run
-run: buildout
+run: buildout  ## Runs buildout if needed and starts instance1 in foregroud
 	#if ! test -f bin/instance1;then make buildout;fi
 	bin/zeoserver stop
 	bin/zeoserver start
 	bin/python bin/instance1 fg
 
-.PHONY: refresh-tag
-refresh-tag:
-	git fetch -fv --tags
-	make checkout
-	make buildout
-	~/imio.updates/bin/update_instances \
-	-p $(cluster) \
-	-s restart \
-	-d
-
-checkout:
-	git checkout $(shell git describe --tags)
-
-.PHONY: upgrade
-upgrade:refresh-tag
-	rm -f make.log
-	~/imio.updates/bin/update_instances \
-	-p $(cluster) \
-	-a 8 \
-	-e pm-interne@imio.be \
-	-f upgrade _all_ \
-	-d
-
 .PHONY: cleanall
-cleanall:
+cleanall:  ## Clears build artefacts and virtualenv
 	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg
 
 .PHONY: jenkins
-jenkins: bootstrap
+jenkins: bootstrap  ## Same as buildout but for jenkins use only
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg
 
 .PHONY: libreoffice
-libreoffice:
+libreoffice:  ## Starts a LibreOffice server daemon process using locally installed LibreOffice
 	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 
 .PHONY: copy-data
-copy-data:
+copy-data:  ## Clears local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
 	rm -rf var/blobstorage var/filestorage
-	mkdir -p var/blobstorage
-	mkdir -p var/filestorage
+	mkdir -p var/blobstorage var/filestorage
 	scripts/copy-data.sh -s=$(server) -b=$(buildout)
