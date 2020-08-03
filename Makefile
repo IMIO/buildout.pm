@@ -75,3 +75,10 @@ jenkins: bootstrap
 .PHONY: libreoffice
 libreoffice:
 	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
+
+.PHONY: copy-data
+copy-data:
+	rm -rf var/blobstorage var/filestorage
+	mkdir -p var/blobstorage
+	mkdir -p var/filestorage
+	scripts/copy-data.sh -s=$(server) -b=$(buildout)
