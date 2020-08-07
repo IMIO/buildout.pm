@@ -53,7 +53,8 @@ cleanall:  ## Clears build artefacts and virtualenv
 jenkins: bootstrap  ## Same as buildout but for jenkins use only
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
-	bin/python bin/buildout -vc jenkins.cfg
+	bin/python bin/buildout -c jenkins.cfg annotate
+	bin/python bin/buildout -c jenkins.cfg
 
 .PHONY: libreoffice
 libreoffice:  ## Starts a LibreOffice server daemon process using locally installed LibreOffice
