@@ -1,0 +1,12 @@
+name: Update images
+on:    
+  schedule:
+    - cron: '0 2 * * *' # Weekly on Sundays at 02:00
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+    - name: curl
+      uses: wei/curl@master
+      with:
+        args: -X POST ${{ secrets.DOCKER_HUB_TRIGGER_URL }}
