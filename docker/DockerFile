@@ -1,0 +1,77 @@
+FROM imiobe/plone-base:4.3.19-debian as builder
+
+ENV PIP=9.0.3 \
+    ZC_BUILDOUT=2.13.1 \
+    SETUPTOOLS=40.8.0 \
+    DELIB_MAJOR=4.1 \
+    DELIB_VERSION=4.1.19 \
+    FLAVOR="communes"
+
+RUN apt-get update \
+  && apt-get full-upgrade -y -q \
+  && apt-get install -qy --no-install-recommends \
+     libreoffice-script-provider-python \
+     graphicsmagick \
+     ghostscript \
+     poppler-utils \
+     ruby \
+     libmagic1 \
+     libjpeg62 \
+     libopenjp2-7 \
+     libldap-2.4-2 \
+     libwebp6 \
+  && buildDeps="make python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libssl-dev libsasl2-dev" \
+  && apt-get install -qy --no-install-recommends $buildDeps \
+  && gem install docsplit
+
+WORKDIR /plone
+COPY --chown=imio *.cfg Makefile /plone/
+RUN pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && echo "[buildout]" > buildout.cfg \
+  && echo "extends = $FLAVOR.cfg" >> buildout.cfg \
+  && cat buildout.cfg \
+  && su -c "buildout -t 30 -N" -s /bin/sh imio
+
+FROM imiobe/plone-base:4.3.19-debian
+ENV PIP=9.0.3 \
+    ZC_BUILDOUT=2.13.1 \
+    SETUPTOOLS=40.8.0 \
+    DELIB_MAJOR=4.1 \
+    DELIB_VERSION=4.1.19 \
+    FLAVOR="communes"
+
+LABEL delib=$DELIB_VERSION \
+      name="ia.Delib" \
+      description="ia.Delib image, based on imiobe/plone-base:4.3.19-debian" \
+      maintainer="iMio"
+
+RUN apt-get update \
+  && apt-get full-upgrade -y -q \
+  && apt-get install -qy --no-install-recommends \
+     libreoffice-script-provider-python \
+     graphicsmagick \
+     ghostscript \
+     poppler-utils \
+     ruby \
+     libmagic1 \
+     libjpeg62 \
+     libopenjp2-7 \
+     libldap-2.4-2 \
+     libwebp6
+
+WORKDIR /plone
+
+COPY --chown=imio --from=builder /plone/eggs eggs
+COPY --from=builder /usr/local/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
+COPY --chown=imio docker-initialize.py docker-entrypoint.sh /
+
+USER imio
+
+ENV ZEO_HOST=db \
+ ZEO_PORT=8100 \
+ HOSTNAME_HOST=local \
+ PROJECT_ID=plone
+
+EXPOSE 8081
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["start"]
