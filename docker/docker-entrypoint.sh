@@ -7,7 +7,7 @@ CMD="bin/instance1"
 ARGS="$@"
 
 python /docker-initialize.py
-mkdir -p /home/plone/plone-pm/var/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
+mkdir -p /plone/plone-pm/var/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
 
 if [ -e "custom.cfg" ]; then
 	if [ ! -e "bin/develop" ]; then
