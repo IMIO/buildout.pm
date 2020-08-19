@@ -1,0 +1,40 @@
+version: '3.4'
+services:
+  zeo:
+    image: imiobe/iadelib:latest
+    volumes:
+      - ./docker/blobstorage:/home/plone/var/blobstorage
+      - ./docker/filestorage:/home/plone/var/filestorage
+      - tmp:/var/tmp
+    command: zeoserver
+    environment:
+        - HTTP_PORT=8081
+        - ZEO_ADDRESS=db:8100
+        - HOSTNAME_HOST=local
+        - PROJECT_ID=plone
+        - CUSTOM_TMP=/var/tmp
+  instance:
+    image: imiobe/iadelib:latest
+    ports:
+      - "20080:8081"
+    links:
+      - "zeo:db"
+      - "libreoffice:oo"
+    environment:
+        - HTTP_PORT=8081
+        - ZEO_ADDRESS=db:8100
+        - HOSTNAME_HOST=local
+        - PROJECT_ID=plone
+        - CUSTOM_TMP=/var/tmp
+    volumes:
+      - tmp:/var/tmp
+  libreoffice:
+    image: imiobe/iadelib:latest
+    command: soffice --invisible --headless --nologo --nofirststartwizard --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
+    expose:
+      - "2002"
+    volumes:
+      - tmp:/var/tmp
+
+volumes:
+  tmp:

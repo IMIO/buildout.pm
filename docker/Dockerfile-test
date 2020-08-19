@@ -1,0 +1,21 @@
+FROM imiobe/iadelib:latest
+
+ENV PIP=9.0.3 \
+    ZC_BUILDOUT=2.13.1 \
+    SETUPTOOLS=40.8.0 \
+    DELIB_MAJOR=4.1 \
+    DELIB_VERSION=4.1.19 \
+    FLAVOR="communes"
+
+USER root
+
+RUN buildDeps="build-essential subversion git cmake make wget python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libssl-dev libsasl2-dev" \
+  && apt-get install -qqy --no-install-recommends $buildDeps
+
+WORKDIR /plone
+COPY --chown=imio *.cfg *.conf Makefile /plone/
+RUN pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && echo "[buildout]" > buildout.cfg \
+  && echo "extends = $FLAVOR-dev.cfg" >> buildout.cfg \
+  && cat buildout.cfg \
+  && su -c "buildout -t 30" -s /bin/sh imio \

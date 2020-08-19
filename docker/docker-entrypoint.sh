@@ -6,13 +6,13 @@ START="start restart zeoserver"
 CMD="bin/instance1"
 ARGS="$@"
 
-python /docker-initialize.py
+python docker-initialize.py
 mkdir -p /plone/plone-pm/var/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
 
 if [ -e "custom.cfg" ]; then
 	if [ ! -e "bin/develop" ]; then
 		buildout -c custom.cfg
-		python /docker-initialize.py
+		python docker-initialize.py
 	fi
 fi
 
