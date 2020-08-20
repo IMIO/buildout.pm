@@ -74,6 +74,7 @@ RUN apt-get update \
      libopenjp2-7 \
      libldap-2.4-2 \
      libwebp6\
+  && gem install docsplit \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && chmod +x /plone/docker-entrypoint.sh
 
