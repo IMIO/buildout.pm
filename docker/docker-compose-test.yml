@@ -8,7 +8,7 @@ services:
     volumes:
       - tmp:/var/tmp
   zeo:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:test
     volumes:
       - ./data/blobstorage:/data/blobstorage
       - ./data/filestorage:/data/filestorage
@@ -21,7 +21,7 @@ services:
         - PROJECT_ID=plone
         - CUSTOM_TMP=/var/tmp
   instance:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:test
     ports:
       - "20080:8081"
     links:
@@ -35,6 +35,7 @@ services:
         - CUSTOM_TMP=/var/tmp
     volumes:
       - tmp:/var/tmp
+    command: bin/testmc
 
 volumes:
   tmp:

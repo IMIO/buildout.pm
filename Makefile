@@ -14,7 +14,6 @@ all: run
 help:  ## Displays this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-
 .PHONY: bootstrap
 bootstrap:  ## Creates virtualenv and installs requirements.txt
 	if test -f /usr/bin/virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
@@ -27,10 +26,10 @@ install-requirements:
 buildout:  ## Runs bootstrap if needed and builds the buildout
 	echo "Starting Buildout on $(shell date)"
 	if test -f .installed.cfg;then rm .installed.cfg;fi
-	if ! test -f bin/buildout;then make bootstrap;fi
+	if ! test -f bin/buildout;then make bootstrap; else make install-requirements;fi
 	# reinstall requirements in case it changed since last bootstrap
-	make install-requirements
-	if ! test -f var/filestorage/Data.fs;then make standard-config; else bin/python bin/buildout -t 120;fi
+	if ! test -f var/filestorage/Data.fs; then make standard-config;fi
+	bin/python bin/buildout -t 120
 	echo "Finished on $(shell date)"
 
 .PHONY: standard-config
