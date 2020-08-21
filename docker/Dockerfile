@@ -1,12 +1,12 @@
 FROM imiobe/plone-base:4.3.19-debian as builder
 
-ENV PIP=9.0.3 \
-    ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19 \
-    FLAVOR="communes"
+ENV DELIB_MAJOR=4.1 \
+    DELIB_VERSION=4.1.19
 
+ARG PROFILE="communes.cfg restapi.cfg"
+
+WORKDIR /
+USER root
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
@@ -20,7 +20,7 @@ RUN apt-get update \
      libopenjp2-7 \
      libldap-2.4-2 \
      libwebp6 \
-  && buildDeps="build-essential cmake wget python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libssl-dev libsasl2-dev" \
+  && buildDeps="build-essential cmake make virtualenv wget python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libsasl2-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
   && gem install docsplit \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
@@ -31,22 +31,33 @@ RUN apt-get update \
   && make install
 
 WORKDIR /plone
-COPY --chown=imio *.cfg *.conf /plone/
-RUN pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+
+COPY --chown=imio *.cfg *.conf requirements.txt Makefile standard-config.py /plone/
+
+USER imio
+
+RUN pip install pip \
+  && sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
-  && echo "extends = $FLAVOR.cfg" >> buildout.cfg \
+  && echo "extends =" >> buildout.cfg \
+  && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    docker.cfg" >> buildout.cfg \
+  && echo \
+  && echo "===================================" \
+  && echo "Used buildout.cfg :" \
   && cat buildout.cfg \
-  && su -c "buildout -t 30 -N" -s /bin/sh imio \
-  && mv buildout.cfg buildout.txt \
-  && rm -rf *.cfg develop-eggs/ src/
+  && echo "===================================" \
+  && echo \
+  && cat buildout.cfg \
+  && virtualenv -p python2 . \
+  && bin/python bin/pip install -r requirements.txt \
+  && bin/python bin/buildout -t 120 -c standard-config.cfg \
+  && bin/python bin/buildout -t 120 \
+  && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
 
 FROM imiobe/plone-base:4.3.19-debian
-ENV PIP=9.0.3 \
-    ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19 \
-    FLAVOR="communes"
+ENV DELIB_MAJOR=4.1 \
+    DELIB_VERSION=4.1.19
 
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \
@@ -70,10 +81,12 @@ RUN apt-get update \
      poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62 \
+     libjpeg62-turbo \
      libopenjp2-7 \
      libldap-2.4-2 \
      libwebp6\
+     libpq5 \
+     lbzip2 \
   && gem install docsplit \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && chmod +x /plone/docker-entrypoint.sh
