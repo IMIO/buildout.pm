@@ -5,8 +5,6 @@ import re
 import os
 import warnings
 
-warnings.simplefilter("always", DeprecationWarning)
-
 
 class Environment(object):
     """ Configure container via environment variables

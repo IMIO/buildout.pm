@@ -15,11 +15,11 @@ services:
       - tmp:/var/tmp
     command: zeoserver
     environment:
-        - HTTP_PORT=8081
-        - ZEO_ADDRESS=db:8100
-        - HOSTNAME_HOST=local
-        - PROJECT_ID=plone
-        - CUSTOM_TMP=/var/tmp
+      - HTTP_PORT=8081
+      - ZEO_ADDRESS=db:8100
+      - HOSTNAME_HOST=local
+      - PROJECT_ID=plone
+      - CUSTOM_TMP=/var/tmp
   instance:
     image: imiobe/iadelib:latest
     ports:
@@ -28,11 +28,11 @@ services:
       - "zeo:db"
       - "libreoffice:oo"
     environment:
-        - HTTP_PORT=8081
-        - ZEO_ADDRESS=db:8100
-        - HOSTNAME_HOST=local
-        - PROJECT_ID=plone
-        - CUSTOM_TMP=/var/tmp
+      - HTTP_PORT=8081
+      - ZEO_ADDRESS=db:8100
+      - HOSTNAME_HOST=local
+      - PROJECT_ID=plone
+      - CUSTOM_TMP=/var/tmp
     volumes:
       - tmp:/var/tmp
 

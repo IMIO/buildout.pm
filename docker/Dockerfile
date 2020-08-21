@@ -51,7 +51,6 @@ RUN pip install pip \
   && cat buildout.cfg \
   && virtualenv -p python2 . \
   && bin/python bin/pip install -r requirements.txt \
-  && bin/python bin/buildout -t 120 -c standard-config.cfg \
   && bin/python bin/buildout -t 120 \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
 
