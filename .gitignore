@@ -23,4 +23,4 @@ uuid.txt
 share
 config/core.properties
 local
-docker/data
+docker/data/*
