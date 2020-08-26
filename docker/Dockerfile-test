@@ -13,11 +13,35 @@ WORKDIR /plone
 
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
-  && buildDeps="build-essential git subversion wget python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libssl-dev libsasl2-dev" \
+  && buildDeps="build-essential \
+                python-dev \
+                git \
+                subversion \
+                cmake \
+                make \
+                virtualenv \
+                wget \
+                python-pip \
+                libpq-dev \
+                libreadline-dev \
+                gcc \
+                libc6-dev \
+                libpcre3-dev \
+                libssl-dev \
+                libxml2-dev \
+                libxslt1-dev \
+                libbz2-dev \
+                libffi-dev \
+                libjpeg62-turbo-dev \
+                libopenjp2-7-dev \
+                zlib1g-dev \
+                libldap2-dev \
+                libwebp-dev \
+                libsasl2-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT
 
-COPY --chown=imio *.cfg *.conf /plone/
+COPY --chown=imio *.cfg *.conf Makefile /plone/
 RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
@@ -25,3 +49,5 @@ RUN echo "[buildout]" > buildout.cfg \
   && cat buildout.cfg \
   && touch /data/filestorage/Data.fs \
   && su -c "buildout -t 30 -N" -s /bin/sh imio
+
+USER imio

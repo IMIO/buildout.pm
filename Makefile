@@ -7,6 +7,8 @@ instance1_port=$(shell grep instance1-http port.cfg|cut -c 18-)
 profile:=communes
 product:=MeetingCommunes
 
+test_suite:=testmc
+
 all: run
 
 .DEFAULT_GOAL:=help
@@ -64,3 +66,8 @@ copy-data:  ## Clears local data and copies the Data.fs and blobstorage from a p
 	rm -rf var/blobstorage var/filestorage
 	mkdir -p var/blobstorage var/filestorage
 	scripts/copy-data.sh -s=$(server) -b=$(buildout)
+
+.PHONY: test
+test:
+	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore &
+	bin/$(test_suite)
