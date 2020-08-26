@@ -33,6 +33,7 @@ services:
       - HOSTNAME_HOST=local
       - PROJECT_ID=plone
       - CUSTOM_TMP=/var/tmp
+      - OO_SERVER=libreoffice
     volumes:
       - tmp:/var/tmp
 

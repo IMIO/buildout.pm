@@ -9,18 +9,46 @@ WORKDIR /
 USER root
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
+  # needed because of jre installation bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
+  && mkdir -p /usr/share/man/man1 \
   && apt-get install -qqy --no-install-recommends \
+     default-jre \
+     libreoffice \
      libreoffice-script-provider-python \
      graphicsmagick \
      ghostscript \
      poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62 \
+     libjpeg62-turbo \
      libopenjp2-7 \
      libldap-2.4-2 \
-     libwebp6 \
-  && buildDeps="build-essential cmake make virtualenv wget python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libsasl2-dev" \
+     libwebp6\
+     libpq5 \
+     lbzip2 \
+     libsigc++-2.0-0v5 \
+  && buildDeps="build-essential \
+                cmake \
+                make \
+                wget \
+                python-pip \
+                libpq-dev \
+                libreadline-dev \
+                gcc \
+                libc6-dev \
+                libpcre3-dev \
+                libssl-dev \
+                libxml2-dev \
+                libxslt1-dev \
+                libbz2-dev \
+                libffi-dev \
+                libjpeg62-turbo-dev \
+                libopenjp2-7-dev \
+                zlib1g-dev \
+                libldap2-dev \
+                libwebp-dev \
+                libsasl2-dev \
+                libsigc++-2.0-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
   && gem install docsplit \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
@@ -49,9 +77,8 @@ RUN pip install pip \
   && echo "===================================" \
   && echo \
   && cat buildout.cfg \
-  && virtualenv -p python2 . \
-  && bin/python bin/pip install -r requirements.txt \
-  && bin/python bin/buildout -t 120 \
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && su -c "buildout -t 30 -N" -s /bin/sh imio \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
 
 FROM imiobe/plone-base:4.3.19-debian
@@ -73,7 +100,11 @@ COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh /plone
 
 RUN apt-get update \
   && apt-get full-upgrade -qqy -q \
+  # needed because of jre installation bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
+  && mkdir -p /usr/share/man/man1 \
   && apt-get install -qqy --no-install-recommends \
+     default-jre \
+     libreoffice \
      libreoffice-script-provider-python \
      graphicsmagick \
      ghostscript \
@@ -86,6 +117,7 @@ RUN apt-get update \
      libwebp6\
      libpq5 \
      lbzip2 \
+     libsigc++-2.0-0v5 \
   && gem install docsplit \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && chmod +x /plone/docker-entrypoint.sh
