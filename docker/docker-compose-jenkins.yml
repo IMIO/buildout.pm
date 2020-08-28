@@ -17,6 +17,8 @@ services:
         - PROJECT_ID=plone
         - CUSTOM_TMP=/tmp
         - OO_SERVER=libreoffice
+        - OO_PORT=2002
+        - USE_STREAM=False
     volumes:
       - tmp:/tmp
     command: bin/testmc

@@ -62,10 +62,7 @@ WORKDIR /plone
 
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile standard-config.py /plone/
 
-USER imio
-
-RUN pip install pip \
-  && sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
+RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
