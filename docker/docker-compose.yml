@@ -2,17 +2,19 @@ version: '3.4'
 services:
   libreoffice:
     image: imiobe/libreoffice:debian-buster
-    command: soffice --invisible --headless --nologo --nofirststartwizard --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
+    command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
     volumes:
-      - tmp:/var/tmp
+      - tmp:/tmp
+      - vartmp:/var/tmp
   zeo:
     image: imiobe/iadelib:latest
     volumes:
       - ./data/blobstorage:/data/blobstorage
       - ./data/filestorage:/data/filestorage
-      - tmp:/var/tmp
+      - tmp:/tmp
+      - vartmp:/var/tmp
     command: zeoserver
     environment:
       - HTTP_PORT=8081
@@ -40,7 +42,9 @@ services:
       - OO_PORT=2002
       - USE_STREAM=False
     volumes:
-      - tmp:/var/tmp
+      - tmp:/tmp
+      - vartmp:/var/tmp
 
 volumes:
   tmp:
+  vartmp:

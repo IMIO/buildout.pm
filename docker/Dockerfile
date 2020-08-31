@@ -17,10 +17,12 @@ RUN apt-get update \
      libreoffice-script-provider-python \
      graphicsmagick \
      ghostscript \
+     poppler-data \
      poppler-utils \
      ruby \
      libmagic1 \
      libjpeg62-turbo \
+     libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
      libwebp6\
@@ -105,10 +107,12 @@ RUN apt-get update \
      libreoffice-script-provider-python \
      graphicsmagick \
      ghostscript \
+     poppler-data \
      poppler-utils \
      ruby \
      libmagic1 \
      libjpeg62-turbo \
+     libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
      libwebp6\

@@ -1,8 +1,8 @@
 version: '3.4'
 services:
   libreoffice:
-    image: imiobe/iadelib:test
-    command: soffice --invisible --headless --nologo --nofirststartwizard --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
+    image: imiobe/libreoffice:debian-buster
+    command: soffice --headless --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
     volumes:
