@@ -15,6 +15,8 @@ RUN apt-get update \
      default-jre \
      libreoffice \
      libreoffice-script-provider-python \
+     file \
+     imagemagick \
      graphicsmagick \
      ghostscript \
      poppler-data \
@@ -105,6 +107,8 @@ RUN apt-get update \
      default-jre \
      libreoffice \
      libreoffice-script-provider-python \
+     file \
+     imagemagick \
      graphicsmagick \
      ghostscript \
      poppler-data \
