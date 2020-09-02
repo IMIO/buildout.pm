@@ -8,10 +8,13 @@ services:
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
+    networks:
+      - libreoffice
+
   instance:
     image: imiobe/iadelib:test
-    links:
-      - "libreoffice:oo"
+    networks:
+      - libreoffice
     environment:
       - HTTP_PORT=8081
       - ZEO_ADDRESS=db:8100
@@ -29,3 +32,6 @@ services:
 volumes:
   tmp:
   vartmp:
+
+networks:
+  libreoffice:

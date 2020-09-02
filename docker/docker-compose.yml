@@ -8,6 +8,8 @@ services:
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
+    networks:
+      - libreoffice
   zeo:
     image: imiobe/iadelib:latest
     volumes:
@@ -17,26 +19,21 @@ services:
       - vartmp:/var/tmp
     command: zeoserver
     environment:
-      - HTTP_PORT=8081
-      - ZEO_ADDRESS=db:8100
       - HOSTNAME_HOST=local
-      - PROJECT_ID=plone
       - CUSTOM_TMP=/var/tmp
-      - OO_SERVER=libreoffice
-      - OO_PORT=2002
-      - USE_STREAM=False
+    networks:
+      - zeo
   instance:
     image: imiobe/iadelib:latest
     ports:
       - "20080:8081"
-    links:
-      - "zeo:db"
-      - "libreoffice:oo"
+    networks:
+      - zeo
+      - libreoffice
     environment:
       - HTTP_PORT=8081
-      - ZEO_ADDRESS=db:8100
+      - ZEO_ADDRESS=zeo:8100
       - HOSTNAME_HOST=local
-      - PROJECT_ID=plone
       - CUSTOM_TMP=/var/tmp
       - OO_SERVER=libreoffice
       - OO_PORT=2002
@@ -48,3 +45,7 @@ services:
 volumes:
   tmp:
   vartmp:
+
+networks:
+  zeo:
+  libreoffice:
