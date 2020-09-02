@@ -39,6 +39,7 @@ RUN apt-get update \
                 libwebp-dev \
                 libsasl2-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
+  && rm -rf /var/lib/apt/lists/* \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT
 
 COPY --chown=imio *.cfg *.conf Makefile /plone/

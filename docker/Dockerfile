@@ -31,6 +31,7 @@ RUN apt-get update \
      libpq5 \
      lbzip2 \
      libsigc++-2.0-0v5 \
+  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
                 cmake \
                 make \
@@ -54,6 +55,7 @@ RUN apt-get update \
                 libsasl2-dev \
                 libsigc++-2.0-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
+  && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
   && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
@@ -123,6 +125,8 @@ RUN apt-get update \
      libpq5 \
      lbzip2 \
      libsigc++-2.0-0v5 \
+  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
+  && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && chmod +x /plone/docker-entrypoint.sh
