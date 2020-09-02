@@ -13,6 +13,8 @@ services:
 
   instance:
     image: imiobe/iadelib:test
+    depends_on:
+      - libreoffice
     networks:
       - libreoffice
     environment:
