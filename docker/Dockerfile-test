@@ -14,14 +14,15 @@ WORKDIR /plone
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && buildDeps="build-essential \
-                python-dev \
                 git \
                 subversion \
                 cmake \
                 make \
-                virtualenv \
                 wget \
-                python-pip \
+                python3-pip \
+                python-dev \
+                python2.7-dev \
+                virtualenv \
                 libpq-dev \
                 libreadline-dev \
                 gcc \
@@ -32,23 +33,25 @@ RUN apt-get update \
                 libxslt1-dev \
                 libbz2-dev \
                 libffi-dev \
-                libjpeg62-turbo-dev \
+                libjpeg62-dev \
                 libopenjp2-7-dev \
                 zlib1g-dev \
                 libldap2-dev \
                 libwebp-dev \
-                libsasl2-dev" \
+                libsasl2-dev \
+                libsigc++-2.0-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
-  && rm -rf /var/lib/apt/lists/* \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT
+  && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=imio *.cfg *.conf Makefile /plone/
+
+USER imio
+
 RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && cat buildout.cfg \
   && touch /data/filestorage/Data.fs \
-  && su -c "buildout -t 30 -N" -s /bin/sh imio
-
-USER imio
+  && bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && bin/buildout -t 30 -N

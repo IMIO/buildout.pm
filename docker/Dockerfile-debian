@@ -1,10 +1,10 @@
-FROM imiobe/plone-base:4.3.19-ubuntu as builder
+FROM imiobe/plone-base:4.3.19-debian as builder
 
 ENV DELIB_MAJOR=4.1 \
     DELIB_VERSION=4.1.19 \
-    ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
+    ZC_BUILDOUT = 2.13.1 \
+    SETUPTOOLS = 40.8.0 \
+    PIP = 20.2.2 \
 
 ARG PROFILE="communes.cfg restapi.cfg"
 
@@ -19,7 +19,6 @@ RUN apt-get update \
      libreoffice \
      libreoffice-script-provider-python \
      file \
-     python2.7 \
      imagemagick \
      graphicsmagick \
      ghostscript \
@@ -27,7 +26,7 @@ RUN apt-get update \
      poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62 \
+     libjpeg62-turbo \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
@@ -35,13 +34,12 @@ RUN apt-get update \
      libpq5 \
      lbzip2 \
      libsigc++-2.0-0v5 \
-  && apt-get purge -qqy libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
+  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
                 cmake \
                 make \
                 wget \
-                python2.7-dev \
-                virtualenv \
+                python-pip \
                 libpq-dev \
                 libreadline-dev \
                 gcc \
@@ -52,14 +50,14 @@ RUN apt-get update \
                 libxslt1-dev \
                 libbz2-dev \
                 libffi-dev \
-                libjpeg62-dev \
+                libjpeg62-turbo-dev \
                 libopenjp2-7-dev \
                 zlib1g-dev \
                 libldap2-dev \
                 libwebp-dev \
                 libsasl2-dev \
                 libsigc++-2.0-dev" \
-  && apt-get install -qqy --no-install-recommends $buildDeps \
+  && apt-get install -qy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
@@ -84,17 +82,14 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && cat buildout.cfg \
   && echo "===================================" \
   && echo \
-  && su -c "virtualenv -p python2 ." -s /bin/sh imio \
-  && su -c "bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT" -s /bin/sh imio \
-  && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
+  && cat buildout.cfg \
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && su -c "buildout -t 30 -N" -s /bin/sh imio \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
 
-FROM imiobe/plone-base:4.3.19-ubuntu
+FROM imiobe/plone-base:4.3.19-debian
 ENV DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19 \
-    ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
+    DELIB_VERSION=4.1.19
 
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \
@@ -118,7 +113,6 @@ RUN apt-get update \
      libreoffice \
      libreoffice-script-provider-python \
      file \
-     python2.7 \
      imagemagick \
      graphicsmagick \
      ghostscript \
@@ -126,7 +120,7 @@ RUN apt-get update \
      poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62 \
+     libjpeg62-turbo \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
@@ -137,7 +131,7 @@ RUN apt-get update \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
-  && bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && chmod +x /plone/docker-entrypoint.sh
 
 WORKDIR /plone
