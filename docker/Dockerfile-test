@@ -19,8 +19,6 @@ RUN apt-get update \
                 cmake \
                 make \
                 wget \
-                python3-pip \
-                python-dev \
                 python2.7-dev \
                 virtualenv \
                 libpq-dev \
