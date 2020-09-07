@@ -1,17 +1,22 @@
 version: '3.4'
 services:
   libreoffice:
-    image: imiobe/libreoffice:debian-buster
+    image: imiobe/libreoffice:6.4
     command: soffice --headless --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
+    networks:
+      - libreoffice
+
   instance:
     image: imiobe/iadelib:test
-    links:
-      - "libreoffice:oo"
+    depends_on:
+      - libreoffice
+    networks:
+      - libreoffice
     environment:
       - HTTP_PORT=8081
       - ZEO_ADDRESS=db:8100
@@ -29,3 +34,6 @@ services:
 volumes:
   tmp:
   vartmp:
+
+networks:
+  libreoffice:
