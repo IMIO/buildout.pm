@@ -84,7 +84,7 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && cat buildout.cfg \
   && echo "===================================" \
   && echo \
-  && su -c "virtualenv -p python2 ." -s /bin/sh imio \
+  && su -c "virtualenv -p python2.7 ." -s /bin/sh imio \
   && su -c "bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT" -s /bin/sh imio \
   && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
