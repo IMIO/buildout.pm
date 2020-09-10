@@ -1,0 +1,23 @@
+FROM imiobe/iadelib:dev
+
+ENV PIP=9.0.3 \
+    ZC_BUILDOUT=2.13.1 \
+    SETUPTOOLS=40.8.0 \
+    DELIB_MAJOR=4.1 \
+    DELIB_VERSION=4.1.19
+
+ARG PROFILE="communes-dev.cfg"
+
+USER root
+WORKDIR /plone
+
+COPY --chown=imio *.cfg *.conf Makefile /plone/
+
+USER imio
+
+RUN echo "[buildout]" > buildout.cfg \
+  && echo "extends =" >> buildout.cfg \
+  && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    docker.cfg" >> buildout.cfg \
+  && bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && bin/buildout -t 30 -N
