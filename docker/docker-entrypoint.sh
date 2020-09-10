@@ -6,7 +6,7 @@ START="start restart zeoserver"
 CMD="bin/instance1"
 ARGS="$@"
 
-python docker-initialize.py
+python2.7 docker-initialize.py
 mkdir -p /data/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
 
 if [ -e "custom.cfg" ]; then

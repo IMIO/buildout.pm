@@ -1,4 +1,4 @@
-FROM imiobe/iadelib:latest
+FROM imiobe/iadelib:dev
 
 ENV PIP=9.0.3 \
     ZC_BUILDOUT=2.13.1 \
@@ -11,36 +11,6 @@ ARG PROFILE="communes-dev.cfg"
 USER root
 WORKDIR /plone
 
-RUN apt-get update \
-  && apt-get full-upgrade -qqy \
-  && buildDeps="build-essential \
-                git \
-                subversion \
-                cmake \
-                make \
-                wget \
-                python2.7-dev \
-                virtualenv \
-                libpq-dev \
-                libreadline-dev \
-                gcc \
-                libc6-dev \
-                libpcre3-dev \
-                libssl-dev \
-                libxml2-dev \
-                libxslt1-dev \
-                libbz2-dev \
-                libffi-dev \
-                libjpeg62-dev \
-                libopenjp2-7-dev \
-                zlib1g-dev \
-                libldap2-dev \
-                libwebp-dev \
-                libsasl2-dev \
-                libsigc++-2.0-dev" \
-  && apt-get install -qy --no-install-recommends $buildDeps \
-  && rm -rf /var/lib/apt/lists/*
-
 COPY --chown=imio *.cfg *.conf Makefile /plone/
 
 USER imio
@@ -49,7 +19,5 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && cat buildout.cfg \
-  && touch /data/filestorage/Data.fs \
   && bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && bin/buildout -t 30 -N
