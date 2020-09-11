@@ -1,4 +1,4 @@
-FROM imiobe/iadelib:dev
+FROM imiobe/iadelib:4.1-dev
 
 ENV ZC_BUILDOUT=2.13.1 \
     SETUPTOOLS=40.8.0 \
