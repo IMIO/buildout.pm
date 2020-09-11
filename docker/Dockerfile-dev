@@ -29,7 +29,7 @@ RUN apt-get update -qqy \
                 libxslt1-dev \
                 libbz2-dev \
                 libffi-dev \
-                libjpeg62-dev \
+                libjpeg62-turbo-dev \
                 libopenjp2-7-dev \
                 zlib1g-dev \
                 libldap2-dev \
@@ -49,5 +49,5 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && cat buildout.cfg \
   && touch /data/filestorage/Data.fs \
-  && bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && bin/buildout -t 30 -N
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && buildout -t 30 -N
