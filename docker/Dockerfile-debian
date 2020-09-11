@@ -2,9 +2,9 @@ FROM imiobe/plone-base:4.3.19-debian as builder
 
 ENV DELIB_MAJOR=4.1 \
     DELIB_VERSION=4.1.19 \
-    ZC_BUILDOUT = 2.13.1 \
-    SETUPTOOLS = 40.8.0 \
-    PIP = 20.2.2 \
+    ZC_BUILDOUT=2.13.1 \
+    SETUPTOOLS=40.8.0 \
+    PIP=20.2.2
 
 ARG PROFILE="communes.cfg restapi.cfg"
 
@@ -88,8 +88,10 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
 
 FROM imiobe/plone-base:4.3.19-debian
-ENV DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19
+ENV DELIB_MAJOR=4.2 \
+    ZC_BUILDOUT=2.13.1 \
+    SETUPTOOLS=40.8.0 \
+    PIP=20.2.2
 
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \

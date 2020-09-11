@@ -1,17 +1,15 @@
-FROM imiobe/iadelib:latest
+FROM imiobe/iadelib:buster-latest
 
-ENV PIP=9.0.3 \
-    ZC_BUILDOUT=2.13.1 \
+ENV ZC_BUILDOUT=2.13.1 \
     SETUPTOOLS=40.8.0 \
-    DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19
+    PIP=20.2.2
 
 ARG PROFILE="communes-dev.cfg"
 
 USER root
 WORKDIR /plone
 
-RUN apt-get update \
+RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
   && buildDeps="build-essential \
                 git \
@@ -38,7 +36,7 @@ RUN apt-get update \
                 libwebp-dev \
                 libsasl2-dev \
                 libsigc++-2.0-dev" \
-  && apt-get install -qy --no-install-recommends $buildDeps \
+  && apt-get install -qqy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=imio *.cfg *.conf Makefile /plone/

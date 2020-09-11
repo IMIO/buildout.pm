@@ -1,10 +1,8 @@
 FROM imiobe/iadelib:dev
 
-ENV PIP=9.0.3 \
-    ZC_BUILDOUT=2.13.1 \
+ENV ZC_BUILDOUT=2.13.1 \
     SETUPTOOLS=40.8.0 \
-    DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19
+    PIP=20.2.2
 
 ARG PROFILE="communes-dev.cfg"
 
