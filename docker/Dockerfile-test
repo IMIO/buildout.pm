@@ -1,27 +1,21 @@
-FROM imiobe/iadelib:latest
+FROM imiobe/iadelib:dev
 
-ENV PIP=9.0.3 \
-    ZC_BUILDOUT=2.13.1 \
+ENV ZC_BUILDOUT=2.13.1 \
     SETUPTOOLS=40.8.0 \
-    DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19
+    PIP=20.2.2
 
 ARG PROFILE="communes-dev.cfg"
 
 USER root
 WORKDIR /plone
 
-RUN apt-get update \
-  && apt-get full-upgrade -qqy \
-  && buildDeps="build-essential git subversion wget python-pip libpq-dev libreadline-dev gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev libldap2-dev lbzip2 libwebp-dev libssl-dev libsasl2-dev" \
-  && apt-get install -qy --no-install-recommends $buildDeps \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT
+COPY --chown=imio *.cfg *.conf Makefile /plone/
 
-COPY --chown=imio *.cfg *.conf /plone/
+USER imio
+
 RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && cat buildout.cfg \
-  && touch /data/filestorage/Data.fs \
-  && su -c "buildout -t 30 -N" -s /bin/sh imio
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && buildout -t 30 -N

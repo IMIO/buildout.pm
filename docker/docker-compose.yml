@@ -1,40 +1,54 @@
 version: '3.4'
 services:
   libreoffice:
-    image: imiobe/libreoffice:debian-buster
-    command: soffice --invisible --headless --nologo --nofirststartwizard --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
+    image: imiobe/libreoffice:6.1
+    command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
     volumes:
-      - tmp:/var/tmp
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    networks:
+      - libreoffice
   zeo:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:dev
+    command: zeoserver
+    environment:
+      - HOSTNAME_HOST=local
+      - CUSTOM_TMP=/var/tmp
     volumes:
       - ./data/blobstorage:/data/blobstorage
       - ./data/filestorage:/data/filestorage
-      - tmp:/var/tmp
-    command: zeoserver
-    environment:
-      - HTTP_PORT=8081
-      - ZEO_ADDRESS=db:8100
-      - HOSTNAME_HOST=local
-      - PROJECT_ID=plone
-      - CUSTOM_TMP=/var/tmp
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    networks:
+      - zeo
   instance:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:dev
     ports:
       - "20080:8081"
-    links:
-      - "zeo:db"
-      - "libreoffice:oo"
+    networks:
+      - zeo
+      - libreoffice
+    depends_on:
+      - zeo
+      - libreoffice
     environment:
       - HTTP_PORT=8081
-      - ZEO_ADDRESS=db:8100
+      - ZEO_ADDRESS=zeo:8100
       - HOSTNAME_HOST=local
-      - PROJECT_ID=plone
       - CUSTOM_TMP=/var/tmp
+      - OO_SERVER=libreoffice
+      - OO_PORT=2002
+      - USE_STREAM=False
     volumes:
-      - tmp:/var/tmp
+      - tmp:/tmp
+      - vartmp:/var/tmp
 
 volumes:
   tmp:
+  vartmp:
+
+networks:
+  zeo:
+  libreoffice:
