@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   libreoffice:
-    image: imiobe/libreoffice:6.4
+    image: imiobe/libreoffice:6.1
     command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
@@ -11,20 +11,20 @@ services:
     networks:
       - libreoffice
   zeo:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:dev
+    command: zeoserver
+    environment:
+      - HOSTNAME_HOST=local
+      - CUSTOM_TMP=/var/tmp
     volumes:
       - ./data/blobstorage:/data/blobstorage
       - ./data/filestorage:/data/filestorage
       - tmp:/tmp
       - vartmp:/var/tmp
-    command: zeoserver
-    environment:
-      - HOSTNAME_HOST=local
-      - CUSTOM_TMP=/var/tmp
     networks:
       - zeo
   instance:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:dev
     ports:
       - "20080:8081"
     networks:

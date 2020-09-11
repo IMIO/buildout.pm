@@ -17,5 +17,5 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && bin/buildout -t 30 -N
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && buildout -t 30 -N

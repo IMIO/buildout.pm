@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   libreoffice:
-    image: imiobe/libreoffice:6.4
+    image: imiobe/libreoffice:6.1
     command: soffice --headless --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
@@ -12,7 +12,7 @@ services:
       - libreoffice
 
   instance:
-    image: imiobe/iadelib:test
+    image: imiobe/iadelib:dev
     depends_on:
       - libreoffice
     networks:
