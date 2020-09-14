@@ -6,7 +6,7 @@ ENV DELIB_MAJOR=4.1 \
     SETUPTOOLS=40.8.0 \
     PIP=20.2.2
 
-ARG PROFILE="communes.cfg restapi.cfg"
+ARG PROFILE="communes.cfg"
 
 WORKDIR /
 USER root
@@ -75,6 +75,10 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
+  && echo "    solr.cfg" >> buildout.cfg \
+  && echo "    amqp.cfg" >> buildout.cfg \
+  && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && echo \
   && echo "===================================" \

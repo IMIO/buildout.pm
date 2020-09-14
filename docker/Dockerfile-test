@@ -16,6 +16,10 @@ USER imio
 RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
+  && echo "    solr.cfg" >> buildout.cfg \
+  && echo "    amqp.cfg" >> buildout.cfg \
+  && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && buildout -t 30 -N
