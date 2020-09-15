@@ -30,6 +30,8 @@ RUN apt-get update \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
+     python-ldap \
+     ldap-utils \
      libwebp6\
      libpq5 \
      lbzip2 \
@@ -56,6 +58,8 @@ RUN apt-get update \
                 libldap2-dev \
                 libwebp-dev \
                 libsasl2-dev \
+                libldap2-dev \
+                python-ldap-dbg \
                 libsigc++-2.0-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
@@ -76,7 +80,6 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
-  && echo "    solr.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
@@ -102,7 +105,6 @@ COPY --from=builder /usr/local/bin/zint /usr/local/bin/
 
 COPY --chown=imio --from=builder /plone /plone/
 COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh /plone/
-COPY --chown=imio config /plone/config
 
 RUN apt-get update \
   && apt-get full-upgrade -qqy -q \
@@ -124,6 +126,8 @@ RUN apt-get update \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
+     python-ldap \
+     ldap-utils \
      libwebp6\
      libpq5 \
      lbzip2 \
