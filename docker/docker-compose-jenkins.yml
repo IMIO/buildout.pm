@@ -10,9 +10,16 @@ services:
       - vartmp:/var/tmp
     networks:
       - libreoffice
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+        reservations:
+          memory: 200M
 
   instance:
     image: imiobe/iadelib:dev
+    command: bin/testmc
     depends_on:
       - libreoffice
     networks:
@@ -29,7 +36,12 @@ services:
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
-    command: bin/testmc
+    deploy:
+      resources:
+        limits:
+          memory: 1224M
+        reservations:
+          memory: 1124M
 
 volumes:
   tmp:
