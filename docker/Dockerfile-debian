@@ -67,9 +67,9 @@ RUN apt-get update \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
   && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
   && cd /home/imio/zint* \
-  && cmake . \
-  && make \
-  && make install
+  && cmake --log-level=ERROR . \
+  && make --quiet \
+  && make --quiet install
 
 WORKDIR /plone
 
@@ -81,7 +81,6 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
-  && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && su -c "buildout -t 30 -N" -s /bin/sh imio \

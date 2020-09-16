@@ -1,6 +1,6 @@
 version: '2'
 services:
-  libreoffice:
+  my_lo:
     image: imiobe/libreoffice:6.1
     command: soffice --headless --nodefault --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
@@ -9,7 +9,7 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
-      - libreoffice
+      - my_lo
     mem_limit: 200M
     mem_reservation: 200M
 
@@ -17,16 +17,16 @@ services:
     image: imiobe/iadelib:dev
     command: bin/testmc
     depends_on:
-      - libreoffice
+      - my_lo
     networks:
-      - libreoffice
+      - my_lo
     environment:
       - HTTP_PORT=8081
       - ZEO_ADDRESS=db:8100
       - HOSTNAME_HOST=local
       - PROJECT_ID=plone
       - CUSTOM_TMP=/var/tmp
-      - OO_SERVER=libreoffice
+      - OO_SERVER=my_lo
       - OO_PORT=2002
       - USE_STREAM=False
     volumes:
@@ -40,4 +40,4 @@ volumes:
   vartmp:
 
 networks:
-  libreoffice:
+  my_lo:

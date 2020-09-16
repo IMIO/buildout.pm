@@ -48,7 +48,6 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
-  && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && touch /data/filestorage/Data.fs \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
