@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2'
 services:
   loffice:
     image: imiobe/libreoffice:6.1
@@ -10,12 +10,12 @@ services:
       - vartmp:/var/tmp
     networks:
       - loffice
-#    mem_limit: 200M
-#    mem_reservation: 200M
+    mem_limit: 200M
+    mem_reservation: 200M
 
   instance:
     image: imiobe/iadelib:dev
-    command: sleep infinity
+    command: bin/testmc -t testAdvice
     depends_on:
       - loffice
     networks:
@@ -32,8 +32,8 @@ services:
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
-#    mem_limit: 1224M
-#    mem_reservation: 1124M
+    mem_limit: 1224M
+    mem_reservation: 1124M
 
 volumes:
   tmp:
