@@ -19,6 +19,7 @@ services:
     depends_on:
       - loffice
     networks:
+      - default
       - loffice
     environment:
       - HTTP_PORT=8081
