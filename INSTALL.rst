@@ -27,7 +27,7 @@ Needed by documentviewer product:
 > apt-get install poppler-utils
 
 We work in the folder /srv
-> cd /srv
+> cd /srv 
 
 We change the owner of the folder to avoid continue working as root
 > chown -R username:username .
