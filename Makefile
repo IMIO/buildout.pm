@@ -62,8 +62,8 @@ libreoffice:  ## Starts a LibreOffice server daemon process using locally instal
 	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 
 .PHONY: copy-data
-copy-data:  ## Clears local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
-	rm -rf var/blobstorage var/filestorage
+copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
+	mv var var-$(shell date +"%d-%m-%Y-%T")
 	mkdir -p var/blobstorage var/filestorage
 	scripts/copy-data.sh -s=$(server) -b=$(buildout)
 
