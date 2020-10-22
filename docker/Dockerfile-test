@@ -22,4 +22,4 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "Bouildout config :" \
   && cat buildout.cfg \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && buildout -t 30 -N
+  && buildout -t 60
