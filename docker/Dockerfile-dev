@@ -51,4 +51,4 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && touch /data/filestorage/Data.fs \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && buildout -t 30 -N
+  && buildout -t 30
