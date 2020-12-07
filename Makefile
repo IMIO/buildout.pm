@@ -48,7 +48,7 @@ run: buildout  ## Runs buildout if needed and starts instance1 in foregroud
 
 .PHONY: cleanall
 cleanall:  ## Clears build artefacts and virtualenv
-	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg
+	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .git/hooks/pre-commit
 
 .PHONY: jenkins
 jenkins: bootstrap  ## Same as buildout but for jenkins use only
