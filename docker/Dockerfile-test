@@ -29,7 +29,8 @@ RUN echo "[buildout]" > buildout.cfg \
      then echo "Argument PR_NUM not provided" ; \
      else cd src/$PR_REPO \
           && git fetch origin pull/$PR_NUM/head:PR-$PR_NUM \
-          && git checkout PR-$PR_NUM; \
+          && git checkout PR-$PR_NUM \
+          && buildout -t 60; \
      fi
 
 WORKDIR /plone
