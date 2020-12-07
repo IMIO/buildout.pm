@@ -5,8 +5,8 @@ ENV ZC_BUILDOUT=2.13.1 \
     PIP=20.2.2
 
 ARG PROFILE="communes-dev.cfg"
-ARG PR_NUM
-ARG PR_REPO
+ARG PR_NUM=''
+ARG PR_REPO=''
 
 USER root
 WORKDIR /plone
@@ -25,11 +25,12 @@ RUN echo "[buildout]" > buildout.cfg \
   && cat buildout.cfg \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && buildout -t 60 \
-  && if [ -z $PR_NUM ] && [ -z $PR_REPO ] ; \
-     then echo "Argument PR_NUM not provided" ; \
+  && if [ -z $PR_NUM ] || [ -z $PR_REPO ] ; \
+     then echo "Argument PR_NUM or PR_REPO not provided" ; \
      else cd src/$PR_REPO \
           && git fetch origin pull/$PR_NUM/head:PR-$PR_NUM \
           && git checkout PR-$PR_NUM \
+          && cd /plone \
           && buildout -t 60; \
      fi
 
