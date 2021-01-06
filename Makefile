@@ -71,3 +71,7 @@ copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstor
 test:
 	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore &
 	bin/$(test_suite)
+
+.PHONY: vc
+vc:
+	bin/versioncheck -rbo checkversion.html
