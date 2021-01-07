@@ -25,3 +25,6 @@ config/core.properties
 local
 docker/data/blobstorage/*
 docker/data/filestorage/*
+.plone.versioncheck.cache/
+.plone.versioncheck.tracked.json
+checkversion.html
