@@ -68,7 +68,7 @@ libreoffice-docker:  ## Start a LibreOffice server on port 2002
                 --name="oo_server" \
                 -v /tmp:/tmp \
                 -v /var/tmp:/var/tmp \
-                imiobe/libreoffice:6.1
+                imiobe/libreoffice:6.4
 	docker ps
 
 .PHONY: stop-libreoffice-docker
