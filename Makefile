@@ -61,6 +61,22 @@ jenkins: bootstrap  ## Same as buildout but for jenkins use only
 libreoffice:  ## Starts a LibreOffice server daemon process using locally installed LibreOffice
 	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 
+.PHONY: libreoffice-docker
+libreoffice-docker:  ## Start a LibreOffice server on port 2002
+	make stop-libreoffice-docker
+	docker run -p 2002:8997\
+                -d \
+                --rm \
+                --name="oo_server" \
+                -v /tmp:/tmp \
+                -v /var/tmp:/var/tmp \
+                imiobe/libreoffice:6.1
+	docker ps
+
+.PHONY: stop-libreoffice-docker
+stop-libreoffice-docker:  ## Kills the LibreOffice server
+	if docker ps | grep oo_server;then docker stop oo_server;fi
+
 .PHONY: copy-data
 copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
 	mv var var-$(shell date +"%d-%m-%Y-%T")
@@ -69,8 +85,8 @@ copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstor
 
 .PHONY: test
 test:
-	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore &
-	bin/$(test_suite)
+	make libreoffice-docker
+	if test -z "$(args)" ;then bin/$(test_suite);else bin/$(test_suite) -t $(args);fi
 
 .PHONY: vc
 vc:
