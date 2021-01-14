@@ -9,6 +9,8 @@ product:=MeetingCommunes
 
 test_suite:=testmc
 
+args = $(filter-out $@,$(MAKECMDGOALS))
+
 all: run
 
 .DEFAULT_GOAL:=help
@@ -64,13 +66,15 @@ libreoffice:  ## Starts a LibreOffice server daemon process using locally instal
 .PHONY: libreoffice-docker
 libreoffice-docker:  ## Start a LibreOffice server on port 2002
 	make stop-libreoffice-docker
-	docker run -p 2002:2002\
+	docker run -p 127.0.0.1:2002:2002\
                 -d \
                 --rm \
+                -u 0:0 \
                 --name="oo_server" \
                 -v /tmp:/tmp \
                 -v /var/tmp:/var/tmp \
-                imiobe/libreoffice:6.4
+                imiobe/libreoffice:6.4 \
+                soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 	docker ps
 
 .PHONY: stop-libreoffice-docker
