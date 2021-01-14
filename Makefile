@@ -64,7 +64,7 @@ libreoffice:  ## Starts a LibreOffice server daemon process using locally instal
 .PHONY: libreoffice-docker
 libreoffice-docker:  ## Start a LibreOffice server on port 2002
 	make stop-libreoffice-docker
-	docker run -p 2002:8997\
+	docker run -p 2002:2002\
                 -d \
                 --rm \
                 --name="oo_server" \
