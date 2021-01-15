@@ -29,7 +29,7 @@ install-requirements:
 .PHONY: buildout
 buildout:  ## Runs bootstrap if needed and builds the buildout
 	echo "Starting Buildout on $(shell date)"
-	if test -f .installed.cfg;then rm .installed.cfg;fi
+	rm -f .installed.cfg
 	if ! test -f bin/buildout;then make bootstrap; else make install-requirements;fi
 	# reinstall requirements in case it changed since last bootstrap
 	if ! test -f var/filestorage/Data.fs; then make standard-config;fi
