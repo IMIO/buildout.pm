@@ -5,7 +5,8 @@ cluster=$(shell grep cluster port.cfg|cut -c 11-)
 hostname=$(shell hostname)
 instance1_port=$(shell grep instance1-http port.cfg|cut -c 18-)
 profile:=communes
-product:=MeetingCommunes
+package:=Products.MeetingCommunes
+testSuite:=testmc
 
 test_suite:=testmc
 
@@ -33,29 +34,33 @@ buildout:  ## Runs bootstrap if needed and builds the buildout
 	if ! test -f bin/buildout;then make bootstrap; else make install-requirements;fi
 	# reinstall requirements in case it changed since last bootstrap
 	if ! test -f var/filestorage/Data.fs; then make standard-config;fi
-	bin/python bin/buildout -t 120
+	if test -z "$(args)" ;then bin/python bin/buildout;else bin/python bin/buildout -c $(args);fi
 	echo "Finished on $(shell date)"
 
 .PHONY: standard-config
 standard-config:  ## Creates a standard plone site
 	if ! test -f bin/buildout;then make bootstrap;fi
-	bin/python bin/buildout -t 120 -c standard-config.cfg
+	bin/python bin/buildout -c standard-config.cfg
 
 .PHONY: run
-run: buildout  ## Runs buildout if needed and starts instance1 in foregroud
-	#if ! test -f bin/instance1;then make buildout;fi
+run:  ## Runs buildout if needed and starts instance1 in foregroud
+	make buildout "$(args)"
 	bin/zeoserver stop
 	bin/zeoserver start
 	bin/python bin/instance1 fg
 
 .PHONY: cleanall
 cleanall:  ## Clears build artefacts and virtualenv
+	if test -f bin/instance1; then bin/instance1 stop;fi
+	if test -f bin/zeoserver; then bin/zeoserver stop;fi
 	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .git/hooks/pre-commit
 
 .PHONY: jenkins
 jenkins: bootstrap  ## Same as buildout but for jenkins use only
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
+	sed -ie "s#Products.PloneMeeting#$(package)#" jenkins.cfg
+	sed -ie "s#bin/test#bin/$(testSuite)#" jenkins.cfg
 	bin/python bin/buildout -c jenkins.cfg annotate
 	bin/python bin/buildout -c jenkins.cfg
 

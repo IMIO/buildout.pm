@@ -14,8 +14,9 @@ WORKDIR /plone
 COPY --chown=imio *.cfg *.conf Makefile /plone/
 
 USER imio
+ENV PATH="/home/imio/.local/bin:${PATH}"
 
-RUN export PATH="$HOME/.local/bin:$PATH" \
+RUN rm -fr bin include lib local share downloads .installed.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
