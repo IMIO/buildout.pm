@@ -23,7 +23,7 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && echo "Bouildout config :" \
   && cat buildout.cfg \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT coverage coveralls \
   && buildout -t 60 \
   && if [ -z $PR_NUM ] || [ -z $PR_REPO ] ; \
      then echo "Argument PR_NUM or PR_REPO not provided" ; \
