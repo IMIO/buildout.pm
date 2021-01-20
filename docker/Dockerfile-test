@@ -15,7 +15,8 @@ COPY --chown=imio *.cfg *.conf Makefile /plone/
 
 USER imio
 
-RUN echo "[buildout]" > buildout.cfg \
+RUN export PATH="$HOME/.local/bin:$PATH" \
+  && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
@@ -23,7 +24,7 @@ RUN echo "[buildout]" > buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && echo "Bouildout config :" \
   && cat buildout.cfg \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT coverage coveralls \
+  && pip install -U pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT coverage coveralls \
   && buildout -t 60 \
   && if [ -z $PR_NUM ] || [ -z $PR_REPO ] ; \
      then echo "Argument PR_NUM or PR_REPO not provided" ; \
