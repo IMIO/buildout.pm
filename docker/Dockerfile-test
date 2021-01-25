@@ -11,7 +11,7 @@ ARG PR_REPO=''
 USER root
 WORKDIR /plone
 
-COPY --chown=imio *.cfg *.conf Makefile /plone/
+COPY --chown=imio *.cfg *.conf Makefile .coveragerc /plone/
 
 USER imio
 ENV PATH="/home/imio/.local/bin:${PATH}"
