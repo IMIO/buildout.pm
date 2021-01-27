@@ -4,3 +4,6 @@ omit =
     */test*
     */migrations/*
     */upgrades/*
+    */MeetingUser.py
+    */MeetingGroup.py
+    */MeetingCategory.py
