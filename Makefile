@@ -44,9 +44,10 @@ standard-config:  ## Creates a standard plone site
 
 .PHONY: run
 run:  ## Runs buildout if needed and starts instance1 in foregroud
-	make buildout "$(args)"
+	if test -z "$(args)" ;then make buildout;else make buildout "$(args)";fi
 	bin/zeoserver stop
 	bin/zeoserver start
+	make libreoffice-docker
 	bin/python bin/instance1 fg
 
 .PHONY: cleanall
