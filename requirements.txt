@@ -1,2 +1,4 @@
 setuptools==40.8.0
 zc.buildout==2.13.1
+# mccabe fails to install during buildout?
+mccabe==0.6.1
