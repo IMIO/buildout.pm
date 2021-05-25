@@ -35,6 +35,7 @@ RUN apt-get update \
      libwebp6\
      libpq5 \
      lbzip2 \
+     librsvg2-bin\
      libsigc++-2.0-0v5 \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
