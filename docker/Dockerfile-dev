@@ -11,14 +11,12 @@ WORKDIR /plone
 
 RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
+  && devDeps="git subversion" \
   && buildDeps="build-essential \
-                git \
-                subversion \
                 cmake \
                 make \
                 wget \
-                python2.7-dev \
-                virtualenv \
+                python-pip \
                 libpq-dev \
                 libreadline-dev \
                 gcc \
@@ -35,8 +33,11 @@ RUN apt-get update -qqy \
                 libldap2-dev \
                 libwebp-dev \
                 libsasl2-dev \
+                libldap2-dev \
+                python-ldap-dbg \
+                librsvg2-dev \
                 libsigc++-2.0-dev" \
-  && apt-get install -qqy --no-install-recommends $buildDeps \
+  && apt-get install -qqy --no-install-recommends $devDeps $buildDeps \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=imio *.cfg *.conf Makefile /plone/
@@ -46,8 +47,10 @@ USER imio
 RUN echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
+  && echo "    amqp.cfg" >> buildout.cfg \
+  && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && cat buildout.cfg \
   && touch /data/filestorage/Data.fs \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && buildout -t 30 -N
+  && buildout -t 30

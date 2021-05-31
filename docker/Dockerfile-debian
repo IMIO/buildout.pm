@@ -1,12 +1,12 @@
 FROM imiobe/plone-base:4.3.19-debian as builder
 
 ENV DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.20 \
+    DELIB_VERSION=4.1.19 \
     ZC_BUILDOUT=2.13.1 \
     SETUPTOOLS=40.8.0 \
     PIP=20.2.2
 
-ARG PROFILE="communes.cfg restapi.cfg"
+ARG PROFILE="communes.cfg"
 
 WORKDIR /
 USER root
@@ -30,9 +30,12 @@ RUN apt-get update \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
+     python-ldap \
+     ldap-utils \
      libwebp6\
      libpq5 \
      lbzip2 \
+     librsvg2-bin\
      libsigc++-2.0-0v5 \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
@@ -56,6 +59,8 @@ RUN apt-get update \
                 libldap2-dev \
                 libwebp-dev \
                 libsasl2-dev \
+                libldap2-dev \
+                python-ldap-dbg \
                 libsigc++-2.0-dev" \
   && apt-get install -qy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
@@ -63,9 +68,9 @@ RUN apt-get update \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
   && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
   && cd /home/imio/zint* \
-  && cmake . \
-  && make \
-  && make install
+  && cmake --log-level=ERROR . \
+  && make --quiet \
+  && make --quiet install
 
 WORKDIR /plone
 
@@ -75,14 +80,10 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
+  && echo "    amqp.cfg" >> buildout.cfg \
+  && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && echo \
-  && echo "===================================" \
-  && echo "Used buildout.cfg :" \
-  && cat buildout.cfg \
-  && echo "===================================" \
-  && echo \
-  && cat buildout.cfg \
   && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
   && su -c "buildout -t 30 -N" -s /bin/sh imio \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
@@ -126,6 +127,8 @@ RUN apt-get update \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
+     python-ldap \
+     ldap-utils \
      libwebp6\
      libpq5 \
      lbzip2 \

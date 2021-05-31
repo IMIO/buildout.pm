@@ -77,13 +77,12 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
+  && echo "    amqp.cfg" >> buildout.cfg \
+  && echo "    solr.cfg" >> buildout.cfg \
+  && echo "    ldap.cfg" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && echo \
-  && echo "===================================" \
-  && echo "Used buildout.cfg :" \
-  && cat buildout.cfg \
-  && echo "===================================" \
-  && echo \
   && su -c "virtualenv -p python2.7 ." -s /bin/sh imio \
   && su -c "bin/pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT" -s /bin/sh imio \
   && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
@@ -108,6 +107,7 @@ COPY --from=builder /usr/local/bin/zint /usr/local/bin/
 
 COPY --chown=imio --from=builder /plone /plone/
 COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh /plone/
+COPY --chown=imio config /plone/config
 
 RUN apt-get update \
   && apt-get full-upgrade -qqy -q \
