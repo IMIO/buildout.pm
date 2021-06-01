@@ -1,4 +1,4 @@
-version: '2'
+version: "2.4"
 services:
   loffice:
     image: imiobe/libreoffice:6.1
@@ -10,6 +10,9 @@ services:
       - vartmp:/var/tmp
     networks:
       - loffice
+    environment:
+      - DOCKER_CLIENT_TIMEOUT=120
+      - COMPOSE_HTTP_TIMEOUT=120
     mem_limit: 200M
     mem_reservation: 200M
 
@@ -30,6 +33,8 @@ services:
       - OO_SERVER=loffice
       - OO_PORT=2002
       - USE_STREAM=False
+      - DOCKER_CLIENT_TIMEOUT=120
+      - COMPOSE_HTTP_TIMEOUT=120
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
