@@ -5,4 +5,3 @@ pmDockerPipeline {
   unitTestParameter = ''
   testRestapi = true
 }
- 
