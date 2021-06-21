@@ -54,7 +54,7 @@ run:  ## Runs buildout if needed and starts instance1 in foregroud
 cleanall:  ## Clears build artefacts and virtualenv
 	if test -f bin/instance1; then bin/instance1 stop;fi
 	if test -f bin/zeoserver; then bin/zeoserver stop;fi
-	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .git/hooks/pre-commit
+	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .git/hooks/pre-commit var/tmp
 
 .PHONY: jenkins
 jenkins: bootstrap  ## Same as buildout but for jenkins use only
@@ -90,7 +90,7 @@ stop-libreoffice-docker:  ## Kills the LibreOffice server
 .PHONY: copy-data
 copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
 	mv var var-$(shell date +"%d-%m-%Y-%T")
-	mkdir -p var/blobstorage var/filestorage
+	mkdir -p var/{blobstorage,filestorage}
 	scripts/copy-data.sh -s=$(server) -b=$(buildout)
 
 .PHONY: test
@@ -101,3 +101,8 @@ test:
 .PHONY: vc
 vc:
 	bin/versioncheck -rbo checkversion.html
+
+.PHONY: ctop
+ctop:  ## Runs A CTop instance to monitor the running docker container.
+	docker run --rm -ti --pull always -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop:latest
+
