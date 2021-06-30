@@ -26,6 +26,8 @@ bootstrap:  ## Creates virtualenv and installs requirements.txt
 
 install-requirements:
 	bin/python bin/pip install -r requirements.txt
+	# initilize CUSTOM_TMP directory
+	mkdir -p /tmp/appy
 
 .PHONY: buildout
 buildout:  ## Runs bootstrap if needed and builds the buildout
