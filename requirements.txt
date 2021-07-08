@@ -1,3 +1,4 @@
+pip==20.2.2
 setuptools==44.1.1
 zc.buildout==2.13.4
 # mccabe fails to install during buildout?

@@ -1,17 +1,36 @@
-FROM imiobe/iadelib:buster-latest
-
-ENV ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
+FROM imiobe/plone-base:4.3.20-debian as builder
 
 ARG PROFILE="communes-dev.cfg"
 
 USER root
-WORKDIR /plone
-
-RUN apt-get update -qqy \
+RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && devDeps="git subversion" \
+  && mkdir -p /usr/share/man/man1 \
+  && apt-get install -qqy --no-install-recommends \
+     default-jre \
+     libreoffice \
+     libreoffice-script-provider-python \
+     file \
+     imagemagick \
+     graphicsmagick \
+     ghostscript \
+     poppler-data \
+     poppler-utils \
+     ruby \
+     libmagic1 \
+     libjpeg62-turbo \
+     libpng16-16 \
+     libopenjp2-7 \
+     libldap-2.4-2 \
+     python-ldap \
+     ldap-utils \
+     libwebp6\
+     libpq5 \
+     lbzip2 \
+     librsvg2-bin\
+     libsigc++-2.0-0v5 \
+  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
                 cmake \
                 make \
@@ -35,21 +54,30 @@ RUN apt-get update -qqy \
                 libsasl2-dev \
                 libldap2-dev \
                 python-ldap-dbg \
-                librsvg2-dev \
                 libsigc++-2.0-dev" \
   && apt-get install -qqy --no-install-recommends $devDeps $buildDeps \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && gem install docsplit \
+  && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
+  && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
+  && cd /home/imio/zint* \
+  && cmake --log-level=ERROR . \
+  && make --quiet \
+  && make --quiet install
 
-COPY --chown=imio *.cfg *.conf Makefile /plone/
+WORKDIR /plone
 
-USER imio
+COPY --chown=imio *.cfg *.conf requirements.txt Makefile standard-config.py /plone/
 
-RUN echo "[buildout]" > buildout.cfg \
+RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
+  && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && touch /data/filestorage/Data.fs \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && buildout -t 30
+  && pip install -r requirements.txt \
+  && su -c "touch /data/filestorage/Data.fs" -s /bin/sh imio \
+  && su -c "buildout -t 30 -N" -s /bin/sh imio
+
+USER imio

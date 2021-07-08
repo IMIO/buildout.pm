@@ -1,11 +1,5 @@
 FROM imiobe/plone-base:4.3.20-debian as builder
 
-ENV DELIB_MAJOR=4.1 \
-    DELIB_VERSION=4.1.19 \
-    ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
-
 ARG PROFILE="communes.cfg"
 
 WORKDIR /
@@ -83,15 +77,12 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && pip install -r requirements.txt \
   && su -c "buildout -t 30 -N" -s /bin/sh imio \
   && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
 
 FROM imiobe/plone-base:4.3.20-debian
-ENV DELIB_MAJOR=4.2 \
-    ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
+ENV DELIB_MAJOR=4.2
 
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \
@@ -135,7 +126,7 @@ RUN apt-get update \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
+  && pip install -r requirements.txt \
   && chmod +x /plone/docker-entrypoint.sh
 
 WORKDIR /plone
