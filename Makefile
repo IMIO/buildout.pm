@@ -27,7 +27,7 @@ bootstrap:  ## Creates virtualenv and installs requirements.txt
 install-requirements:
 	bin/python bin/pip install -r requirements.txt
 	# initilize CUSTOM_TMP directory
-	mkdir -p /tmp/appy
+	mkdir -p -m 777 /tmp/appy
 
 .PHONY: buildout
 buildout:  ## Runs bootstrap if needed and builds the buildout
@@ -79,8 +79,7 @@ libreoffice-docker:  ## Start a LibreOffice server on port 2002
                 --rm \
                 -u 0:0 \
                 --name="oo_server" \
-                -v /tmp:/tmp \
-                -v /var/tmp:/var/tmp \
+                -v /tmp/appy:/tmp/appy \
                 imiobe/libreoffice:6.4 \
                 soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 	docker ps
