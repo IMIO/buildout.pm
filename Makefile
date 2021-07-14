@@ -21,7 +21,7 @@ help:  ## Displays this help
 
 .PHONY: bootstrap
 bootstrap:  ## Creates virtualenv and installs requirements.txt
-	if test -f /usr/bin/virtualenv-2.7;then virtualenv-2.7 .;else virtualenv -p python2 .;fi
+	virtualenv -p python2 .
 	make install-requirements
 
 install-requirements:
