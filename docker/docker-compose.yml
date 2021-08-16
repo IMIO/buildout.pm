@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2.4'
 services:
   libreoffice:
     image: imiobe/libreoffice:6.1
@@ -10,6 +10,8 @@ services:
       - vartmp:/var/tmp
     networks:
       - libreoffice
+    labels:
+      SERVICE_NAME: "libreoffice"
   zeo:
     image: imiobe/iadelib:dev
     command: zeoserver
@@ -23,6 +25,8 @@ services:
       - vartmp:/var/tmp
     networks:
       - zeo
+    labels:
+      SERVICE_NAME: "zeo"
   instance:
     image: imiobe/iadelib:dev
     ports:
@@ -44,6 +48,8 @@ services:
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "instance"
 
 volumes:
   tmp:
