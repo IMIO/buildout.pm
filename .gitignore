@@ -18,6 +18,7 @@ src
 var
 versions-picked.cfg
 pip-selfcheck.json
+pyvenv.cfg
 uuid.txt
 .idea
 share
