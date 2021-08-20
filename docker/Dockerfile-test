@@ -1,8 +1,8 @@
 FROM imiobe/iadelib:dev
 
-ENV ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
+ENV ZC_BUILDOUT=2.13.3 \
+    SETUPTOOLS=44.1.1 \
+    PIP=20.3.4
 
 ARG PROFILE="communes-dev.cfg"
 ARG PR_NUM=''
