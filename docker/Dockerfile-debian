@@ -37,6 +37,7 @@ RUN apt-get update \
                 make \
                 wget \
                 python-pip \
+                python-wheel \
                 libpq-dev \
                 libreadline-dev \
                 gcc \
