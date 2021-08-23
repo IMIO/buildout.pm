@@ -12,6 +12,10 @@ services:
       - libreoffice
     labels:
       SERVICE_NAME: "libreoffice"
+    restart:
+      unless-stopped
+    mem_limit: 200M
+    mem_reservation: 150M
   zeo:
     image: imiobe/iadelib:dev
     command: zeoserver
@@ -27,6 +31,8 @@ services:
       - zeo
     labels:
       SERVICE_NAME: "zeo"
+    restart:
+      unless-stopped
   instance:
     image: imiobe/iadelib:dev
     ports:
@@ -50,6 +56,8 @@ services:
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "instance"
+    restart:
+      unless-stopped
 
 volumes:
   tmp:
