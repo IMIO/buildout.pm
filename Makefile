@@ -107,3 +107,9 @@ vc:
 ctop:  ## Runs A CTop instance to monitor the running docker container.
 	docker run --rm -ti --pull always -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop:latest
 
+.PHONY: docker-compose
+docker-compose:  ## Docker compose up.
+	mkdir -m 777 -p docker/data/filestorage
+	mkdir -m 777 -p docker/data/blobstorage
+	docker-compose -f docker/docker-compose.yml pull --ignore-pull-failures
+	docker-compose -f docker/docker-compose.yml up --force-recreate --abort-on-container-exit --remove-orphans
