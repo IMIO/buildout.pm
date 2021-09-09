@@ -46,7 +46,7 @@ if [[ $START == *"$1"* ]]; then
 		echo "Application running on pid=$pid"
 		sleep "$HEALTH_CHECK_TIMEOUT"
 		if [[ "$1" == "zeoserver"* ]]; then
-		  bin/instance-debug run update-admin-password.py -p $ADMIN_PASSWORD
+		  bin/instance-debug run update-admin-password.py -p "$ADMIN_PASSWORD"
 		fi
 		while kill -0 "$pid" 2>/dev/null; do
 			sleep "$HEALTH_CHECK_INTERVAL"

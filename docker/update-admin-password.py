@@ -14,11 +14,11 @@ def main(app, user_id):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-p', '--new-password', dest='new_password',
-                        type=str, default='',
+                        type=str,
                         help='New zope admin password for Plone instance'
                         )
     parser.add_argument('-c', '--change_file', dest='change_file',
-                        type=str, default='scripts/update-admin-password.py',
+                        type=str, default='update-admin-password.py',
                         help='File use to zope'
                         )
     args = parser.parse_args()

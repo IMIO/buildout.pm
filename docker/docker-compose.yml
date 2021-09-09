@@ -22,7 +22,7 @@ services:
     environment:
       - HOSTNAME_HOST=local
       - CUSTOM_TMP=/var/tmp
-      - ADMIN_PASSWORD=tololo
+      - ADMIN_PASSWORD=admin
     volumes:
       - ./data/blobstorage:/data/blobstorage
       - ./data/filestorage:/data/filestorage
@@ -47,9 +47,9 @@ services:
     environment:
       - HTTP_PORT=8081
       - ZEO_ADDRESS=zeo:8100
-      - ZEO_CLIENT_CACHE_SIZE=500MB
-      - ZODB_CACHE_SIZE=9999
-      - ADMIN_PASSWORD=tololo
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
       - HOSTNAME_HOST=local
       - CUSTOM_TMP=/var/tmp
       - OO_SERVER=libreoffice
