@@ -79,8 +79,9 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && pip install -r requirements.txt \
-  && su -c "buildout -t 30 -N" -s /bin/sh imio \
-  && rm -rf develop-eggs/ src/ var/filestorage/ var/blobstorage/
+  && su -c "buildout -t 30 -N -c standard-config.cfg" -s /bin/sh imio \
+  && mv /data/filestorage/Data.fs /data/filestorage/async.fs /plone/var/filestorage \
+  && rm -rf develop-eggs/ src/ var/blobstorage/
 
 FROM imiobe/plone-base:4.3.20-debian
 ENV DELIB_MAJOR=4.2
@@ -96,7 +97,7 @@ COPY --from=builder /usr/local/include/zint.h /usr/local/include/
 COPY --from=builder /usr/local/bin/zint /usr/local/bin/
 
 COPY --chown=imio --from=builder /plone /plone/
-COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh /plone/
+COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh docker/update-admin-password.py /plone/
 
 RUN apt-get update \
   && apt-get full-upgrade -qqy -q \

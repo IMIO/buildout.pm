@@ -17,11 +17,12 @@ services:
     mem_limit: 200M
     mem_reservation: 150M
   zeo:
-    image: imiobe/iadelib:dev
+    image: imiobe/iadelib:4.2.5
     command: zeoserver
     environment:
       - HOSTNAME_HOST=local
       - CUSTOM_TMP=/var/tmp
+      - ADMIN_PASSWORD=tololo
     volumes:
       - ./data/blobstorage:/data/blobstorage
       - ./data/filestorage:/data/filestorage
@@ -34,7 +35,7 @@ services:
     restart:
       unless-stopped
   instance:
-    image: imiobe/iadelib:dev
+    image: imiobe/iadelib:4.2.5
     ports:
       - "20080:8081"
     networks:
@@ -46,11 +47,17 @@ services:
     environment:
       - HTTP_PORT=8081
       - ZEO_ADDRESS=zeo:8100
+      - ZEO_CLIENT_CACHE_SIZE=500MB
+      - ZODB_CACHE_SIZE=9999
+      - ADMIN_PASSWORD=tololo
       - HOSTNAME_HOST=local
       - CUSTOM_TMP=/var/tmp
       - OO_SERVER=libreoffice
       - OO_PORT=2002
       - USE_STREAM=False
+      - PUBLIC_URL=http://localhost/Plone
+      - PLONE_PATH
+      - MOUNTPOINT
     volumes:
       - tmp:/tmp
       - vartmp:/var/tmp

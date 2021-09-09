@@ -6,18 +6,14 @@ START="start restart zeoserver"
 CMD="bin/instance1"
 ARGS="$@"
 
-python2.7 docker-initialize.py
-mkdir -p /data/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
-
-if [ -e "custom.cfg" ]; then
-	if [ ! -e "bin/develop" ]; then
-		buildout -c custom.cfg
-		python docker-initialize.py
-	fi
-fi
+mkdir -p -m 777 /data/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
+python docker-initialize.py
 
 if [[ "$1" == "zeoserver"* ]]; then
 	CMD="bin/$1"
+  if ! test -f /data/filestorage/Data.fs; then
+	  cp /plone/var/filestorage/Data.fs /data/filestorage/
+  fi
 fi
 
 if [[ "$1" == "instance-async"* ]]; then
@@ -49,6 +45,9 @@ if [[ $START == *"$1"* ]]; then
 	if [ -n "$pid" ]; then
 		echo "Application running on pid=$pid"
 		sleep "$HEALTH_CHECK_TIMEOUT"
+		if [[ "$1" == "zeoserver"* ]]; then
+		  bin/instance-debug run update-admin-password.py -p $ADMIN_PASSWORD
+		fi
 		while kill -0 "$pid" 2>/dev/null; do
 			sleep "$HEALTH_CHECK_INTERVAL"
 		done
