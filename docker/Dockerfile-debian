@@ -135,10 +135,12 @@ WORKDIR /plone
 
 USER imio
 
-ENV ZEO_HOST=db \
- ZEO_PORT=8100 \
+ENV HTTP_PORT=8081 \
  HOSTNAME_HOST=local \
- PROJECT_ID=plone
+ PROJECT_ID=plone \
+ OO_PORT=2002 \
+ USE_STREAM=False \
+ CUSTOM_TMP=/var/tmp
 
 EXPOSE 8081
 ENTRYPOINT ["/plone/docker-entrypoint.sh"]

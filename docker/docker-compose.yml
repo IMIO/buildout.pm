@@ -45,16 +45,11 @@ services:
       - zeo
       - libreoffice
     environment:
-      - HTTP_PORT=8081
       - ZEO_ADDRESS=zeo:8100
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
-      - HOSTNAME_HOST=local
-      - CUSTOM_TMP=/var/tmp
       - OO_SERVER=libreoffice
-      - OO_PORT=2002
-      - USE_STREAM=False
       - PUBLIC_URL=http://localhost/Plone
       - PLONE_PATH
       - MOUNTPOINT
