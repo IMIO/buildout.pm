@@ -40,6 +40,7 @@ services:
     networks:
       - zeo
       - libreoffice
+      - ex
     depends_on:
       - zeo
       - libreoffice
@@ -68,4 +69,7 @@ volumes:
 
 networks:
   zeo:
+    internal: true
   libreoffice:
+    internal: true
+  ex:
