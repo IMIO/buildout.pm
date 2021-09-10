@@ -20,8 +20,6 @@ services:
     image: imiobe/iadelib:4.2.8
     command: zeoserver
     environment:
-      - HOSTNAME_HOST=local
-      - CUSTOM_TMP=/var/tmp
       - MOUNTPOINT
     volumes:
       - ./data:/data
@@ -45,11 +43,9 @@ services:
       - zeo
       - libreoffice
     environment:
-      - ZEO_ADDRESS=zeo:8100
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
-      - OO_SERVER=libreoffice
       - PUBLIC_URL=http://localhost/PM
       - PLONE_PATH=PM
       - CLUSTER=iadelib_pm42
