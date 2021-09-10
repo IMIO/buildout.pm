@@ -102,7 +102,6 @@ ctop:  ## Runs A CTop instance to monitor the running docker container.
 
 .PHONY: docker-compose
 docker-compose:  ## Docker compose up.
-	mkdir -m 777 -p docker/data/filestorage
-	mkdir -m 777 -p docker/data/blobstorage
+	mkdir -m 777 -p docker/data
 	docker-compose -f docker/docker-compose.yml pull --ignore-pull-failures
 	docker-compose -f docker/docker-compose.yml up --force-recreate --abort-on-container-exit --remove-orphans

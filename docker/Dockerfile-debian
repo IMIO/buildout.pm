@@ -69,7 +69,7 @@ RUN apt-get update \
 
 WORKDIR /plone
 
-COPY --chown=imio *.cfg *.conf requirements.txt Makefile standard-config.py /plone/
+COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
 
 RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
@@ -79,9 +79,8 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && pip install -r requirements.txt \
-  && su -c "buildout -t 30 -N -c standard-config.cfg" -s /bin/sh imio \
-  && mv /data/filestorage/Data.fs /data/filestorage/async.fs /plone/var/filestorage \
-  && rm -rf develop-eggs/ src/ var/blobstorage/
+  && su -c "buildout -t 30 -N" -s /bin/sh imio \
+  && rm -rf develop-eggs/ src/ var/blobstorage/ var/filestorage/
 
 FROM imiobe/plone-base:4.3.20-debian
 ENV DELIB_MAJOR=4.2

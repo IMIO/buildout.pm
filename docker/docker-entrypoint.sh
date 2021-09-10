@@ -11,9 +11,6 @@ python docker-initialize.py
 
 if [[ "$1" == "zeoserver"* ]]; then
 	CMD="bin/$1"
-  if ! test -f /data/filestorage/Data.fs; then
-	  cp /plone/var/filestorage/Data.fs /data/filestorage/
-  fi
 fi
 
 if [[ "$1" == "instance-async"* ]]; then
@@ -45,9 +42,6 @@ if [[ $START == *"$1"* ]]; then
 	if [ -n "$pid" ]; then
 		echo "Application running on pid=$pid"
 		sleep "$HEALTH_CHECK_TIMEOUT"
-		if [[ "$1" == "zeoserver"* ]]; then
-		  bin/instance-debug run update-admin-password.py -p "$ADMIN_PASSWORD"
-		fi
 		while kill -0 "$pid" 2>/dev/null; do
 			sleep "$HEALTH_CHECK_INTERVAL"
 		done
