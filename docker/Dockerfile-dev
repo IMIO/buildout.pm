@@ -32,6 +32,7 @@ RUN apt-get update \
      libsigc++-2.0-0v5 \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
+                python-dev-is-python2 \
                 cmake \
                 make \
                 wget \
@@ -47,7 +48,7 @@ RUN apt-get update \
                 libxslt1-dev \
                 libbz2-dev \
                 libffi-dev \
-                libjpeg62-turbo-dev \
+                libjpeg62-dev \
                 libopenjp2-7-dev \
                 zlib1g-dev \
                 libldap2-dev \
@@ -77,8 +78,9 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && pip install -r requirements.txt \
-  && su -c "touch /data/filestorage/Data.fs" -s /bin/sh imio \
-  && su -c "buildout -t 30 -N" -s /bin/sh imio
+  && su -c "virtualenv -p python2 ." -s /bin/sh imio \
+  && su -c "bin/pip install -r requirements.txt" -s /bin/sh imio \
+  && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
+  && rm -rf develop-eggs/ src/ var/blobstorage/ var/filestorage/
 
 USER imio

@@ -1,7 +1,7 @@
 version: "2.4"
 services:
   loffice:
-    image: imiobe/libreoffice:6.1
+    image: imiobe/libreoffice:still
     command: soffice --headless --nodefault --accept="socket,host=loffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
