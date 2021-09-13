@@ -1,11 +1,13 @@
-FROM imiobe/plone-base:4.3.20-debian as builder
+FROM imiobe/plone-base:4.3.20-ubuntu as builder
 
 ARG PROFILE="communes-dev.cfg"
 
+WORKDIR /
 USER root
-RUN apt-get update \
+RUN add-apt-repository ppa:libreoffice/libreoffice-still \
+  && apt-get update \
   && apt-get full-upgrade -qqy \
-  && devDeps="git subversion" \
+  # needed because of jre installation bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
   && mkdir -p /usr/share/man/man1 \
   && apt-get install -qqy --no-install-recommends \
      default-jre \
@@ -19,11 +21,10 @@ RUN apt-get update \
      poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62-turbo \
+     libjpeg62 \
      libpng16-16 \
      libopenjp2-7 \
      libldap-2.4-2 \
-     python-ldap \
      ldap-utils \
      libwebp6\
      libpq5 \
@@ -36,8 +37,7 @@ RUN apt-get update \
                 cmake \
                 make \
                 wget \
-                python-pip \
-                python-wheel \
+                python3-pip \
                 libpq-dev \
                 libreadline-dev \
                 gcc \
@@ -55,14 +55,14 @@ RUN apt-get update \
                 libwebp-dev \
                 libsasl2-dev \
                 libldap2-dev \
-                python-ldap-dbg \
                 libsigc++-2.0-dev" \
-  && apt-get install -qqy --no-install-recommends $devDeps $buildDeps \
+  && apt-get install -qqy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
+  && pip install "virtualenv>=20.7.2" \
   && gem install docsplit \
   && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
   && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
-  && cd /home/imio/zint* \
+  && cd /home/imio/zint-* \
   && cmake --log-level=ERROR . \
   && make --quiet \
   && make --quiet install
