@@ -75,6 +75,7 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
