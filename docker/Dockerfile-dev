@@ -1,14 +1,10 @@
-FROM imiobe/plone-base:4.3.20-ubuntu as builder
+FROM imiobe/iadelib:latest as builder
 
 ARG PROFILE="communes-dev.cfg"
 
 WORKDIR /
 USER root
-RUN add-apt-repository ppa:libreoffice/libreoffice-still \
-  && apt-get update \
-  && apt-get full-upgrade -qqy \
-  # needed because of jre installation bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
-  && mkdir -p /usr/share/man/man1 \
+RUN apt-get update \
   && apt-get install -qqy --no-install-recommends \
      default-jre \
      libreoffice \
@@ -56,7 +52,7 @@ RUN add-apt-repository ppa:libreoffice/libreoffice-still \
                 libsasl2-dev \
                 libldap2-dev \
                 libsigc++-2.0-dev" \
-  && apt-get install -qqy --no-install-recommends $buildDeps \
+  && apt-get install -qqy --no-install-recommends $buildDeps git subversion \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
   && gem install docsplit \
