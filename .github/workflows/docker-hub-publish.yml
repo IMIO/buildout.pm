@@ -24,7 +24,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile-ubuntu-20.04
-          tags: imiobe/iadelib:buster-latest
+          tags: imiobe/iadelib:latest
           pull: true
           push: true
       - name: Build dev image
