@@ -27,10 +27,17 @@ install-requirements:
 .PHONY: buildout
 buildout:  ## Runs bootstrap if needed and builds the buildout
 	echo "Starting Buildout on $(shell date)"
-	rm -f .installed.cfg
+	if test -f .installed.cfg;then rm .installed.cfg;fi
 	if ! test -f bin/buildout;then make bootstrap; else make install-requirements;fi
+	# reinstall requirements in case it changed since last bootstrap
+	if ! test -f var/filestorage/Data.fs; then make standard-config;fi
 	bin/python bin/buildout -t 120
 	echo "Finished on $(shell date)"
+
+.PHONY: standard-config
+standard-config:  ## Creates a standard plone site
+	if ! test -f bin/buildout;then make bootstrap;fi
+	bin/python bin/buildout -t 120 -c standard-config.cfg
 
 .PHONY: run
 run: buildout  ## Runs buildout if needed and starts instance1 in foregroud
