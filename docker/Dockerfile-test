@@ -34,3 +34,4 @@ RUN rm -fr bin include lib local share downloads .installed.cfg \
      fi
 
 WORKDIR /plone
+ENTRYPOINT ["/plone/bin/python"]
