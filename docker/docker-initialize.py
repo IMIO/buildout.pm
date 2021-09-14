@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 import os
+import re
 
 
 class Environment(object):
@@ -12,42 +13,65 @@ class Environment(object):
         env=os.environ,
     ):
         self.env = env
-        self.parts = "/plone/parts/"
+        self.server = env.get("ZEO_ADDRESS", '8100')
+        self.url = env.get("PUBLIC_URL", 'http://localhost/PM')
+        self.zeo_client_cache_size = env.get("ZEO_CLIENT_CACHE_SIZE", "2000MB")
+        self.zodb_cache_size = env.get("ZODB_CACHE_SIZE", "300000")
+        self.admin_password = env.get("ADMIN_PASSWORD", "admin")
+        self.plone_path = env.get("PLONE_PATH", "PM")
+        self.mq_client_id = env.get("MQ_CLIENT_ID", "019999")
+        self.mq_ws_url = env.get("MQ_WS_URL", "019999")
+        self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
+        self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
+
+        self.instance1_conf = '/plone/parts/instance1/etc/zope.conf'
+        self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
+        self.instance_async_conf = '/plone/parts/instance-async/etc/zope.conf'
+        self.instance_cron_conf = '/plone/parts/instance-cron/etc/zope.conf'
+        self.instance_debug_conf = '/plone/parts/instance-debug/etc/zope.conf'
+        self.zeoserver_conf = '/plone/parts/zeoserver/etc/zeo.conf'
+
+    def _fix(self, path, activate_big_bang):
+        with open(path) as file:
+            filedata = file.read()
+        filedata = re.sub(r'server.*?8100', 'server ' + self.server, filedata, 99)
+        filedata = filedata.replace('http://localhost/Plone', self.url)
+        filedata = re.sub(r'ZEOADDRESS.*?8100', 'ZEOADDRESS ' + self.server, filedata, 99)
+        filedata = filedata.replace('$(ZEO_ADDRESS)', self.server)
+        filedata = re.sub(r'cache-size.*?1000MB', 'cache-size ' + self.zeo_client_cache_size, filedata, 99)
+        filedata = re.sub(r'cache-size.*?100000', 'cache-size ' + self.zodb_cache_size, filedata, 99)
+        filedata = filedata.replace('Plone/@@cron-tick', self.plone_path + '/@@cron-tick ')
+        filedata = re.sub(r'ACTIVE_BIGBANG.*?(True|False)', 'ACTIVE_BIGBANG ' + str(activate_big_bang), filedata, 99)
+        return filedata
+
+    def _fix_conf(self, path, activate_big_bang):
+        filedata = self._fix(path, activate_big_bang)
+        filedata = re.sub(r'password.*?admin', 'password ' + self.admin_password, filedata, 99)
+        with open(path, 'w') as file:
+            file.write(filedata)
+
+    def _fix_amqp(self, activate_big_bang=False):
+        filedata = self._fix(self.instance_amqp_conf, activate_big_bang)
+        filedata = re.sub(r'site_id.*?Plone', 'site_id ' + self.plone_path, filedata, 99)
+        filedata = re.sub(r'client_id.*?019999', 'client_id ' + self.mq_client_id, filedata, 99)
+        filedata = re.sub(r'routing_key.*?019999', 'routing_key ' + self.mq_client_id, filedata, 99)
+
+        filedata = re.sub(r'ws_url.*?http://localhost:6543', 'ws_url ' + self.mq_ws_url, filedata, 99)
+        filedata = re.sub(r'ws_login.*?testuser', 'ws_login ' + self.mq_ws_login, filedata, 99)
+        filedata = re.sub(r'ws_password.*?test', 'ws_password ' + self.mq_ws_password, filedata, 99)
+
+        with open(self.instance_amqp_conf, 'w') as file:
+            file.write(filedata)
 
     def fixtures(self):
         """ ZEO Client
         """
-        server = self.env.get("ZEO_ADDRESS", '8100')
-        url = self.env.get("PUBLIC_URL", 'http://localhost/PM')
-        zeo_client_cache_size = self.env.get("ZEO_CLIENT_CACHE_SIZE", "2000MB")
-        zodb_cache_size = self.env.get("ZODB_CACHE_SIZE", "300000")
-        admin_password = self.env.get("ADMIN_PASSWORD", "admin")
-        plone_path = self.env.get("PLONE_PATH", "PM")
-
-        directories = ['instance1/etc/zope.conf',
-                       'instance2/etc/zope.conf',
-                       'instance3/etc/zope.conf',
-                       'instance4/etc/zope.conf',
-                       'instance-debug/etc/zope.conf',
-                       'instance-async/etc/zope.conf',
-                       'instance-amqp/etc/zope.conf',
-                       'zeoserver/etc/zeo.conf',
-                       ]
-        for directory in directories:
-            file_path = self.parts + directory
-            with open(file_path) as file:
-                filedata = file.read()
-            filedata = filedata.replace('server 8100', 'server ' + server)
-            filedata = filedata.replace('http://localhost/Plone', url)
-            filedata = filedata.replace('ZEOADDRESS 8100', 'ZEOADDRESS ' + server)
-            filedata = filedata.replace('$(ZEO_ADDRESS)', server)
-            filedata = filedata.replace('cache-size 1000MB', 'cache-size ' + zeo_client_cache_size)
-            filedata = filedata.replace('cache-size 100000', 'cache-size ' + zodb_cache_size)
-            filedata = filedata.replace('password admin', 'password ' + admin_password)
-            filedata = filedata.replace('Plone/@@cron-tick', plone_path + '/@@cron-tick ')
-
-            with open(file_path, 'w') as file:
-                file.write(filedata)
+        self._fix_conf(self.instance1_conf, False)
+        self._fix_conf(self.instance_async_conf, False)
+        self._fix_conf(self.instance_cron_conf, True)
+        self._fix_conf(self.instance_debug_conf, False)
+        self._fix_conf(self.zeoserver_conf, False)
+        self._fix_amqp()
 
     def mountpoint(self):
         mountpoint = self.env.get("MOUNTPOINT", "")

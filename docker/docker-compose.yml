@@ -17,7 +17,7 @@ services:
     mem_limit: 200M
     mem_reservation: 150M
   zeo:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:latest
     command: zeoserver
     environment:
       - MOUNTPOINT
@@ -29,10 +29,11 @@ services:
       - zeo
     labels:
       SERVICE_NAME: "zeo"
-#    restart:
-#      unless-stopped
+    restart:
+      unless-stopped
   instance:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:latest
+    command: instance1
     ports:
       - "20080:8081"
     networks:
@@ -42,6 +43,32 @@ services:
     depends_on:
       - zeo
       - libreoffice
+      - worker-cron
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+      - ACTIVE_BIGBANG=False
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "instance"
+    restart:
+      unless-stopped
+  worker-cron:
+    image: imiobe/iadelib:latest
+    command: instance-cron
+    ports:
+      - "20081:8286"
+    networks:
+      - zeo
+      - ex
+    depends_on:
+      - zeo
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
@@ -55,9 +82,64 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
-      SERVICE_NAME: "instance"
-#    restart:
-#      unless-stopped
+      SERVICE_NAME: "worker-cron"
+    restart:
+      unless-stopped
+  worker-async:
+    image: imiobe/iadelib:latest
+    command: instance-async
+    networks:
+      - zeo
+      - libreoffice
+    depends_on:
+      - zeo
+      - libreoffice
+      - worker-cron
+      - instance
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+      - ACTIVE_BIGBANG=False
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "worker-async"
+    restart:
+      unless-stopped
+  worker-amqp:
+    image: imiobe/iadelib:latest
+    command: instance-amqp
+    networks:
+      - zeo
+    depends_on:
+      - zeo
+      - worker-cron
+      - instance
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+      - PLONE_PATH
+      - MQ_CLIENT_ID
+      - MQ_WS_URL
+      - MQ_WS_LOGIN
+      - MQ_WS_PASSWORD
+      - ACTIVE_BIGBANG=False
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "worker-cron"
+    restart:
+      unless-stopped
 
 volumes:
   tmp:
