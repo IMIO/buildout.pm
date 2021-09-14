@@ -22,7 +22,7 @@ RUN rm -fr bin include lib local share downloads .installed.cfg \
   && echo "Bouildout config :" \
   && cat buildout.cfg \
   && virtualenv -p python2 . \
-  && bin/pip install -U coverage coveralls -r requirements.txt \
+  && bin/pip install -U coverage coveralls python-ldap -r requirements.txt \
   && bin/buildout -t 60 \
   && if [ -z $PR_NUM ] || [ -z $PR_REPO ] ; \
      then echo "Argument PR_NUM or PR_REPO not provided" ; \
