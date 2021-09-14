@@ -1,9 +1,5 @@
 FROM imiobe/iadelib:dev
 
-ENV ZC_BUILDOUT=2.13.3 \
-    SETUPTOOLS=44.1.1 \
-    PIP=20.3.4
-
 ARG PROFILE="communes-dev.cfg"
 ARG PR_NUM=''
 ARG PR_REPO=''
@@ -11,7 +7,7 @@ ARG PR_REPO=''
 USER root
 WORKDIR /plone
 
-COPY --chown=imio *.cfg *.conf Makefile .coveragerc /plone/
+COPY --chown=imio *.cfg *.conf Makefile .coveragerc requirements.txt /plone/
 
 USER imio
 ENV PATH="/home/imio/.local/bin:${PATH}"
@@ -25,8 +21,9 @@ RUN rm -fr bin include lib local share downloads .installed.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && echo "Bouildout config :" \
   && cat buildout.cfg \
-  && bin/pip install -U pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT coverage coveralls \
-  && buildout -t 60 \
+  && virtualenv -p python2 . \
+  && bin/pip install -U coverage coveralls -r requirements.txt \
+  && bin/buildout -t 60 \
   && if [ -z $PR_NUM ] || [ -z $PR_REPO ] ; \
      then echo "Argument PR_NUM or PR_REPO not provided" ; \
      else cd src/$PR_REPO \
