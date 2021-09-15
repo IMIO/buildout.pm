@@ -29,8 +29,8 @@ services:
       - zeo
     labels:
       SERVICE_NAME: "zeo"
-    restart:
-      unless-stopped
+#    restart:
+#      unless-stopped
   instance:
     image: imiobe/iadelib:latest
     command: instance1
@@ -57,13 +57,13 @@ services:
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "instance"
-    restart:
-      unless-stopped
+#    restart:
+#      unless-stopped
   worker-cron:
     image: imiobe/iadelib:latest
     command: instance-cron
     ports:
-      - "20081:8286"
+      - "8287"
     networks:
       - zeo
       - ex
@@ -109,8 +109,8 @@ services:
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-async"
-    restart:
-      unless-stopped
+#    restart:
+#      unless-stopped
   worker-amqp:
     image: imiobe/iadelib:latest
     command: instance-amqp
@@ -138,8 +138,8 @@ services:
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-cron"
-    restart:
-      unless-stopped
+#    restart:
+#      unless-stopped
 
 volumes:
   tmp:
