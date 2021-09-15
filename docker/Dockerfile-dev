@@ -73,7 +73,7 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
-  && echo "    docker.cfg" >> buildout.cfg \
+  && echo "    docker-dev.cfg" >> buildout.cfg \
   && su -c "virtualenv -p python2 ." -s /bin/sh imio \
   && su -c "bin/pip install python-ldap -r requirements.txt" -s /bin/sh imio \
   && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \

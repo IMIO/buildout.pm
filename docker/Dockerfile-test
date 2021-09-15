@@ -18,7 +18,7 @@ RUN rm -fr bin include lib local share downloads .installed.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
-  && echo "    docker.cfg" >> buildout.cfg \
+  && echo "    docker-dev.cfg" >> buildout.cfg \
   && echo "Bouildout config :" \
   && cat buildout.cfg \
   && virtualenv -p python2 . \
