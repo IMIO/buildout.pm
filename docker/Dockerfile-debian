@@ -91,7 +91,7 @@ LABEL delib=$DELIB_VERSION \
       maintainer="iMio"
 
 COPY --from=builder /usr/local/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
-COPY --from=builder /usr/local/lib/libzint.so.2.9.0 /usr/local/lib/libzint.so.2.9 /usr/local/lib/libzint.so /usr/local/lib/
+COPY --from=builder /usr/local/lib/libzint.so* /usr/local/lib/
 COPY --from=builder /usr/local/include/zint.h /usr/local/include/
 COPY --from=builder /usr/local/bin/zint /usr/local/bin/
 
