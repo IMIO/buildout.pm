@@ -60,7 +60,7 @@ RUN apt-get update \
   && apt-get install -qy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
-  && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
+  && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.10.0/zint-2.10.0-src.tar.gz/download \
   && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
   && cd /home/imio/zint* \
   && cmake --log-level=ERROR . \

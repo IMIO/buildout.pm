@@ -55,13 +55,7 @@ RUN apt-get update \
   && apt-get install -qqy --no-install-recommends $buildDeps git subversion \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
-  && gem install docsplit \
-  && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.9.1/zint-2.9.1-src.tar.gz/download \
-  && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
-  && cd /home/imio/zint-* \
-  && cmake --log-level=ERROR . \
-  && make --quiet \
-  && make --quiet install
+  && gem install docsplit
 
 WORKDIR /plone
 
