@@ -6,28 +6,6 @@ WORKDIR /
 USER root
 RUN apt-get update \
   && apt-get install -qqy --no-install-recommends \
-     default-jre \
-     libreoffice \
-     libreoffice-script-provider-python \
-     file \
-     imagemagick \
-     graphicsmagick \
-     ghostscript \
-     poppler-data \
-     poppler-utils \
-     ruby \
-     libmagic1 \
-     libjpeg62 \
-     libpng16-16 \
-     libopenjp2-7 \
-     libldap-2.4-2 \
-     ldap-utils \
-     libwebp6\
-     libpq5 \
-     lbzip2 \
-     librsvg2-bin\
-     libsigc++-2.0-0v5 \
-  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
                 python-dev-is-python2 \
                 cmake \

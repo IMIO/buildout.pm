@@ -2,15 +2,14 @@ FROM imiobe/plone-base:4.3.20-ubuntu as builder
 
 ARG PROFILE="communes.cfg"
 
-WORKDIR /
+WORKDIR /plone
 USER root
-RUN add-apt-repository ppa:libreoffice/libreoffice-still \
-  && apt-get update \
+COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
+RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
   && apt-get full-upgrade -qqy \
-  # needed because of jre installation bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
-  && mkdir -p /usr/share/man/man1 \
   && apt-get install -qqy --no-install-recommends \
-     default-jre \
+     python-is-python2 \
+     openjdk-16-jre-headless \
      libreoffice \
      libreoffice-script-provider-python \
      file \
@@ -26,7 +25,8 @@ RUN add-apt-repository ppa:libreoffice/libreoffice-still \
      libopenjp2-7 \
      libldap-2.4-2 \
      ldap-utils \
-     libwebp6\
+     libwebp6 \
+     libgif7 \
      libpq5 \
      lbzip2 \
      librsvg2-bin\
@@ -65,13 +65,9 @@ RUN add-apt-repository ppa:libreoffice/libreoffice-still \
   && cd /home/imio/zint-* \
   && cmake --log-level=ERROR . \
   && make --quiet \
-  && make --quiet install
-
-WORKDIR /plone
-
-COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
-
-RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
+  && make --quiet install \
+  && cd /plone \
+  && sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
@@ -99,14 +95,13 @@ COPY --from=builder /usr/local/bin/zint /usr/local/bin/
 COPY --chown=imio --from=builder /plone /plone/
 COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh docker/update-admin-password.py /plone/
 
-RUN add-apt-repository ppa:libreoffice/libreoffice-still \
-  && apt-get update \
-  && apt-get full-upgrade -qqy -q \
-  # needed because of jre installation bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
-  && mkdir -p /usr/share/man/man1 \
+WORKDIR /plone
+
+RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+  && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      python-is-python2 \
-     default-jre \
+     openjdk-16-jre-headless \
      libreoffice \
      libreoffice-script-provider-python \
      file \
@@ -122,17 +117,17 @@ RUN add-apt-repository ppa:libreoffice/libreoffice-still \
      libopenjp2-7 \
      libldap-2.4-2 \
      ldap-utils \
-     libwebp6\
+     libwebp6 \
+     libgif7 \
      libpq5 \
      lbzip2 \
+     librsvg2-bin \
      libsigc++-2.0-0v5 \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
   && bin/pip install python-ldap -r requirements.txt \
   && chmod +x /plone/docker-entrypoint.sh
-
-WORKDIR /plone
 
 USER imio
 
