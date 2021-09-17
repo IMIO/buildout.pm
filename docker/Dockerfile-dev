@@ -1,22 +1,17 @@
-FROM imiobe/iadelib:4.1-latest
-
-ENV ZC_BUILDOUT=2.13.1 \
-    SETUPTOOLS=40.8.0 \
-    PIP=20.2.2
+FROM imiobe/iadelib:latest as builder
 
 ARG PROFILE="communes-dev.cfg"
 
+WORKDIR /
 USER root
-WORKDIR /plone
-
-RUN apt-get update -qqy \
-  && apt-get full-upgrade -qqy \
-  && devDeps="git subversion" \
+RUN apt-get update \
+  && apt-get install -qqy --no-install-recommends \
   && buildDeps="build-essential \
+                python-dev-is-python2 \
                 cmake \
                 make \
                 wget \
-                python-pip \
+                python3-pip \
                 libpq-dev \
                 libreadline-dev \
                 gcc \
@@ -27,30 +22,34 @@ RUN apt-get update -qqy \
                 libxslt1-dev \
                 libbz2-dev \
                 libffi-dev \
-                libjpeg62-turbo-dev \
+                libjpeg62-dev \
                 libopenjp2-7-dev \
                 zlib1g-dev \
                 libldap2-dev \
                 libwebp-dev \
                 libsasl2-dev \
                 libldap2-dev \
-                python-ldap-dbg \
-                librsvg2-dev \
                 libsigc++-2.0-dev" \
-  && apt-get install -qqy --no-install-recommends $devDeps $buildDeps \
-  && rm -rf /var/lib/apt/lists/*
+  && apt-get install -qqy --no-install-recommends $buildDeps git subversion \
+  && rm -rf /var/lib/apt/lists/* \
+  && pip install "virtualenv>=20.7.2" \
+  && gem install docsplit
 
-COPY --chown=imio *.cfg *.conf Makefile /plone/
+WORKDIR /plone
 
-USER imio
+COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
 
-RUN echo "[buildout]" > buildout.cfg \
+RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
+  && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
-  && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
-  && echo "    docker.cfg" >> buildout.cfg \
-  && touch /data/filestorage/Data.fs \
-  && pip install pip==$PIP setuptools==$SETUPTOOLS zc.buildout==$ZC_BUILDOUT \
-  && buildout -t 30
+  && echo "    docker-dev.cfg" >> buildout.cfg \
+  && su -c "virtualenv -p python2 ." -s /bin/sh imio \
+  && su -c "bin/pip install python-ldap -r requirements.txt" -s /bin/sh imio \
+  && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
+  && rm -rf develop-eggs/ src/ var/blobstorage/ var/filestorage/
+
+USER imio
+ENTRYPOINT ["bash"]

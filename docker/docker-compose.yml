@@ -1,7 +1,7 @@
-version: '3.4'
+version: '2.4'
 services:
   libreoffice:
-    image: imiobe/libreoffice:6.1
+    image: imiobe/libreoffice:still
     command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
@@ -10,40 +10,140 @@ services:
       - vartmp:/var/tmp
     networks:
       - libreoffice
+    labels:
+      SERVICE_NAME: "libreoffice"
+    restart:
+      unless-stopped
+    mem_limit: 200M
+    mem_reservation: 150M
   zeo:
-    image: imiobe/iadelib:dev
+    image: imiobe/iadelib:4.2.8
     command: zeoserver
     environment:
-      - HOSTNAME_HOST=local
-      - CUSTOM_TMP=/var/tmp
+      - MOUNTPOINT
     volumes:
-      - ./data/blobstorage:/data/blobstorage
-      - ./data/filestorage:/data/filestorage
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
       - zeo
+    labels:
+      SERVICE_NAME: "zeo"
+#    restart:
+#      unless-stopped
   instance:
-    image: imiobe/iadelib:dev
+    image: imiobe/iadelib:4.2.8
+    command: instance
     ports:
       - "20080:8081"
+    networks:
+      - zeo
+      - libreoffice
+      - ex
+    depends_on:
+      - zeo
+      - libreoffice
+      - worker-cron
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "instance"
+#    restart:
+#      unless-stopped
+  worker-cron:
+    image: imiobe/iadelib:4.2.8
+    command: instance-cron
+    ports:
+      - "8287"
+    networks:
+      - zeo
+      - ex
+    depends_on:
+      - zeo
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - PUBLIC_URL=http://localhost/PM
+      - PLONE_PATH=PM
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "worker-cron"
+    restart:
+      unless-stopped
+  worker-async:
+    image: imiobe/iadelib:4.2.8
+    command: instance-async
     networks:
       - zeo
       - libreoffice
     depends_on:
       - zeo
       - libreoffice
+      - worker-cron
+      - instance
     environment:
-      - HTTP_PORT=8081
-      - ZEO_ADDRESS=zeo:8100
-      - HOSTNAME_HOST=local
-      - CUSTOM_TMP=/var/tmp
-      - OO_SERVER=libreoffice
-      - OO_PORT=2002
-      - USE_STREAM=False
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
     volumes:
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "worker-async"
+#    restart:
+#      unless-stopped
+  worker-amqp:
+    image: imiobe/iadelib:4.2.8
+    command: instance-amqp
+    ports:
+      - "20082:8081"
+    networks:
+      - zeo
+      - ex
+    depends_on:
+      - zeo
+      - worker-cron
+      - instance
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+      - PLONE_PATH
+      - MQ_CLIENT_ID
+      - MQ_WS_URL
+      - MQ_WS_LOGIN
+      - MQ_WS_PASSWORD
+      - MQ_HOST
+      - MQ_PORT
+      - MQ_LOGIN
+      - MQ_PASSWORD
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "worker-cron"
+#    restart:
+#      unless-stopped
 
 volumes:
   tmp:
@@ -51,4 +151,7 @@ volumes:
 
 networks:
   zeo:
+    internal: true
   libreoffice:
+    internal: true
+  ex:
