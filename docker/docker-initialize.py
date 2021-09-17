@@ -52,6 +52,11 @@ class Environment(object):
 
     def _fix_amqp(self, activate_big_bang=False):
         filedata = self._fix(self.instance_amqp_conf, activate_big_bang)
+        mq_host = self.env.get('MQ_HOST')
+        mq_port = self.env.get('MQ_PORT')
+        mq_login = self.env.get('MQ_LOGIN')
+        mq_password = self.env.get('MQ_PASSWORD')
+
         filedata = re.sub(r'site_id.*?Plone', 'site_id ' + self.plone_path, filedata, 99)
         filedata = re.sub(r'client_id.*?019999', 'client_id ' + self.mq_client_id, filedata, 99)
         filedata = re.sub(r'routing_key.*?019999', 'routing_key ' + self.mq_client_id, filedata, 99)
@@ -59,6 +64,11 @@ class Environment(object):
         filedata = re.sub(r'ws_url.*?http://localhost:6543', 'ws_url ' + self.mq_ws_url, filedata, 99)
         filedata = re.sub(r'ws_login.*?testuser', 'ws_login ' + self.mq_ws_login, filedata, 99)
         filedata = re.sub(r'ws_password.*?test', 'ws_password ' + self.mq_ws_password, filedata, 99)
+
+        filedata = re.sub(r'hostname.*?127.0.0.1', 'hostname ' + mq_host, filedata, 99)
+        filedata = re.sub(r'port.*?5672', 'port ' + mq_port, filedata, 99)
+        filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata, 99)
+        filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata, 99)
 
         with open(self.instance_amqp_conf, 'w') as file:
             file.write(filedata)
