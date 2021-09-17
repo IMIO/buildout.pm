@@ -4,7 +4,9 @@ ARG PROFILE="communes.cfg"
 
 WORKDIR /plone
 USER root
+COPY --chown=imio docker/zint-2.10.0-src.tar.gz /home/imio/
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
+
 RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
@@ -60,8 +62,8 @@ RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
   && gem install docsplit \
-  && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.10.0/zint-2.10.0-src.tar.gz/download \
-  && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
+  && tar -x -C /home/imio -f /home/imio/zint-2.10.0-src.tar.gz \
+  && rm /home/imio/zint-2.10.0-src.tar.gz \
   && cd /home/imio/zint-* \
   && cmake --log-level=ERROR . \
   && make --quiet \
@@ -71,6 +73,7 @@ RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
+  && echo "    restapi.cfg" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
