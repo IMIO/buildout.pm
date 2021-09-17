@@ -4,6 +4,7 @@ ARG PROFILE="communes.cfg"
 
 WORKDIR /plone
 USER root
+COPY --chown=imio docker/zint-2.10.0-src.tar.gz /home/imio/
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
 RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
   && apt-get full-upgrade -qqy \
@@ -31,7 +32,7 @@ RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
      lbzip2 \
      librsvg2-bin\
      libsigc++-2.0-0v5 \
-  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
+  && apt-get purge -qqy libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
                 python-dev-is-python2 \
                 cmake \
@@ -60,8 +61,8 @@ RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
   && gem install docsplit \
-  && wget -nv -O /home/imio/zint.tar.gz https://sourceforge.net/projects/zint/files/zint/2.10.0/zint-2.10.0-src.tar.gz/download \
-  && tar -x -C /home/imio -f /home/imio/zint.tar.gz \
+  && tar -x -C /home/imio -f /home/imio/zint-2.10.0-src.tar.gz \
+  && rm /home/imio/zint-2.10.0-src.tar.gz \
   && cd /home/imio/zint-* \
   && cmake --log-level=ERROR . \
   && make --quiet \
