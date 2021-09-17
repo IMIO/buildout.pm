@@ -7,7 +7,7 @@ CURL="curl --write-out '%{http_code}' -so /dev/null worker-cron:8087/standard/@@
 mkdir -p -m 777 /data/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
 python docker-initialize.py
 
-if [[ ! $PRIORIY == *"$1"* ]]
+if [[ "instance" == "$1" || ! $PRIORIY == *"$1"* ]]
 then
   echo "Wating instance-cron ..."
   sleep 20

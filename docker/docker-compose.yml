@@ -17,7 +17,7 @@ services:
     mem_limit: 200M
     mem_reservation: 150M
   zeo:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.8
     command: zeoserver
     environment:
       - MOUNTPOINT
@@ -32,8 +32,8 @@ services:
 #    restart:
 #      unless-stopped
   instance:
-    image: imiobe/iadelib:latest
-    command: instance1
+    image: imiobe/iadelib:4.2.8
+    command: instance
     ports:
       - "20080:8081"
     networks:
@@ -59,7 +59,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-cron:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.8
     command: instance-cron
     ports:
       - "8287"
@@ -85,7 +85,7 @@ services:
     restart:
       unless-stopped
   worker-async:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.8
     command: instance-async
     networks:
       - zeo
@@ -110,8 +110,10 @@ services:
 #    restart:
 #      unless-stopped
   worker-amqp:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.8
     command: instance-amqp
+    ports:
+      - "20082:8081"
     networks:
       - zeo
       - ex

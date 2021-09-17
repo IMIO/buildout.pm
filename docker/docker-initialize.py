@@ -24,7 +24,7 @@ class Environment(object):
         self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
         self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
 
-        self.instance1_conf = '/plone/parts/instance1/etc/zope.conf'
+        self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
         self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
         self.instance_async_conf = '/plone/parts/instance-async/etc/zope.conf'
         self.instance_cron_conf = '/plone/parts/instance-cron/etc/zope.conf'
@@ -52,10 +52,10 @@ class Environment(object):
 
     def _fix_amqp(self, activate_big_bang=False):
         filedata = self._fix(self.instance_amqp_conf, activate_big_bang)
-        mq_host = self.env.get('MQ_HOST')
-        mq_port = self.env.get('MQ_PORT')
-        mq_login = self.env.get('MQ_LOGIN')
-        mq_password = self.env.get('MQ_PASSWORD')
+        mq_host = self.env.get('MQ_HOST', '127.0.0.1')
+        mq_port = self.env.get('MQ_PORT', '5672')
+        mq_login = self.env.get('MQ_LOGIN', 'guest')
+        mq_password = self.env.get('MQ_PASSWORD', 'guest')
 
         filedata = re.sub(r'site_id.*?Plone', 'site_id ' + self.plone_path, filedata, 99)
         filedata = re.sub(r'client_id.*?019999', 'client_id ' + self.mq_client_id, filedata, 99)
