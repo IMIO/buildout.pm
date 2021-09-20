@@ -62,7 +62,7 @@ services:
     image: imiobe/iadelib:4.2.8
     command: instance-cron
     ports:
-      - "8287"
+      - "8087"
     networks:
       - zeo
       - ex
