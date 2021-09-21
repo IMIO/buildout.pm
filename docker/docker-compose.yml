@@ -9,7 +9,7 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
-      - libreoffice
+      - internal
     labels:
       SERVICE_NAME: "libreoffice"
     restart:
@@ -26,7 +26,7 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
-      - zeo
+      - internal
     labels:
       SERVICE_NAME: "zeo"
 #    restart:
@@ -37,8 +37,7 @@ services:
     ports:
       - "20080:8081"
     networks:
-      - zeo
-      - libreoffice
+      - internal
       - ex
     depends_on:
       - zeo
@@ -64,7 +63,7 @@ services:
     ports:
       - "8087"
     networks:
-      - zeo
+      - internal
       - ex
     depends_on:
       - zeo
@@ -88,8 +87,7 @@ services:
     image: imiobe/iadelib:4.2.8
     command: instance-async
     networks:
-      - zeo
-      - libreoffice
+      - internal
     depends_on:
       - zeo
       - libreoffice
@@ -115,7 +113,7 @@ services:
     ports:
       - "20082:8081"
     networks:
-      - zeo
+      - internal
       - ex
     depends_on:
       - zeo
@@ -150,8 +148,6 @@ volumes:
   vartmp:
 
 networks:
-  zeo:
-    internal: true
-  libreoffice:
+  internal:
     internal: true
   ex:
