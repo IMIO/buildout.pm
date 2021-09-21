@@ -1,4 +1,8 @@
-setuptools==40.8.0
-zc.buildout==2.13.1
+pip==20.3.4
+setuptools==44.1.1
+zc.buildout==2.13.3
+wheel
 # mccabe fails to install during buildout?
 mccabe==0.6.1
+# python-ldap not available in OS package index ?
+#python-ldap==2.4.15
