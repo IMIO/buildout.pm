@@ -31,14 +31,14 @@ services:
       SERVICE_NAME: "zeo"
 #    restart:
 #      unless-stopped
-  instance:
+  instance1:
     image: imiobe/iadelib:4.2.8
     command: instance
     ports:
-      - "20080:8081"
+      - "20081:8081"
     networks:
       - internal
-      - ex
+      - external
     depends_on:
       - zeo
       - libreoffice
@@ -54,7 +54,55 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
-      SERVICE_NAME: "instance"
+      SERVICE_NAME: "instance1"
+  instance2:
+    image: imiobe/iadelib:4.2.8
+    command: instance
+    ports:
+      - "20082:8081"
+    networks:
+      - internal
+      - external
+    depends_on:
+      - zeo
+      - libreoffice
+      - worker-cron
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "instance2"
+  instance3:
+    image: imiobe/iadelib:4.2.8
+    command: instance
+    ports:
+      - "20083:8081"
+    networks:
+      - internal
+      - external
+    depends_on:
+      - zeo
+      - libreoffice
+      - worker-cron
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "instance3"
 #    restart:
 #      unless-stopped
   worker-cron:
@@ -64,7 +112,7 @@ services:
       - "8087"
     networks:
       - internal
-      - ex
+      - external
     depends_on:
       - zeo
     environment:
@@ -92,7 +140,6 @@ services:
       - zeo
       - libreoffice
       - worker-cron
-      - instance
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
@@ -111,18 +158,17 @@ services:
     image: imiobe/iadelib:4.2.8
     command: instance-amqp
     ports:
-      - "20082:8081"
+      - "20085:8081"
     networks:
       - internal
-      - ex
+      - external
     depends_on:
       - zeo
       - worker-cron
-      - instance
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=Trololo
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
       - PLONE_PATH
@@ -150,4 +196,4 @@ volumes:
 networks:
   internal:
     internal: true
-  ex:
+  external:
