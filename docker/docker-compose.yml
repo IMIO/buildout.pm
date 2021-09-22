@@ -188,7 +188,30 @@ services:
       SERVICE_NAME: "worker-cron"
 #    restart:
 #      unless-stopped
-
+  debug:
+    image: imiobe/iadelib:4.2.8
+    entrypoint: bash
+    ports:
+      - "20089:8081"
+    networks:
+      - internal
+      - external
+    depends_on:
+      - zeo
+      - libreoffice
+      - worker-cron
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - ADMIN_PASSWORD=admin
+      - CLUSTER=iadelib_pm42
+      - MOUNTPOINT
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    labels:
+      SERVICE_NAME: "instance1"
 volumes:
   tmp:
   vartmp:
