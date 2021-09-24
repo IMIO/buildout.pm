@@ -23,6 +23,7 @@ class Environment(object):
         self.mq_ws_url = env.get("MQ_WS_URL", "019999")
         self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
         self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
+        self.hostname = env.get('HOSTNAME')
 
         self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
         self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
@@ -69,6 +70,11 @@ class Environment(object):
         filedata = re.sub(r'port.*?5672', 'port ' + mq_port, filedata, 99)
         filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata, 99)
         filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata, 99)
+
+        filedata = re.sub(r'path /data/log/instance.*.log', 'path /data/log/' + self.hostname + '.log', filedata, 99)
+        filedata = re.sub(r'path /plone/var/log/instance.*.log',
+                          'path /data/log/' + self.hostname + '.log',
+                          filedata, 99)
 
         with open(self.instance_amqp_conf, 'w') as file:
             file.write(filedata)
