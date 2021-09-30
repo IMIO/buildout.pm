@@ -20,7 +20,7 @@ services:
     image: imiobe/iadelib:4.2.9
     command: zeoserver
     environment:
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=zeo
     volumes:
       - ../var/:/data
@@ -49,7 +49,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=instance1
     volumes:
       - ../var/:/data
@@ -74,7 +74,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=instance2
     volumes:
       - ../var/:/data
@@ -99,7 +99,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=instance3
     volumes:
       - ../var/:/data
@@ -126,7 +126,7 @@ services:
       - PUBLIC_URL=http://localhost/PM
       - PLONE_PATH=PM
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=worker-cron
     volumes:
       - ../var/:/data
@@ -150,7 +150,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=worker-async
     volumes:
       - ../var/:/data
@@ -176,7 +176,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=Trololo
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - PLONE_PATH
       - MQ_CLIENT_ID
       - MQ_WS_URL
@@ -212,7 +212,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT
+      - MOUNTPOINT=demo
       - HOSTNAME=debug
     volumes:
       - ../var/:/data

@@ -83,8 +83,7 @@ LABEL delib=$DELIB_VERSION \
 COPY --from=builder /usr/local/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
 
 COPY --chown=imio --from=builder /plone /plone/
-COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh docker/update-admin-password.py /plone/
-
+COPY --chown=imio docker/docker-initialize.py docker/*.sh /plone/
 WORKDIR /plone
 USER imio
 

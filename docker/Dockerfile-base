@@ -94,7 +94,7 @@ COPY --from=builder /usr/local/include/zint.h /usr/local/include/
 COPY --from=builder /usr/local/bin/zint /usr/local/bin/
 
 COPY --chown=imio --from=builder /plone /plone/
-COPY --chown=imio docker/docker-initialize.py docker/docker-entrypoint.sh docker/pack_zeo.sh docker/update-admin-password.py /plone/
+COPY --chown=imio docker/docker-initialize.py docker/*.sh /plone/
 
 WORKDIR /plone
 USER root
