@@ -35,19 +35,23 @@ class Environment(object):
     def _fix(self, path, activate_big_bang):
         with open(path) as file:
             filedata = file.read()
-        filedata = re.sub(r'server.*?8100', 'server ' + self.server, filedata, 99)
+        filedata = re.sub(r'server.*?8100', 'server ' + self.server, filedata)
         filedata = filedata.replace('http://localhost/Plone', self.url)
-        filedata = re.sub(r'ZEOADDRESS.*?8100', 'ZEOADDRESS ' + self.server, filedata, 99)
+        filedata = re.sub(r'ZEOADDRESS.*?8100', 'ZEOADDRESS ' + self.server, filedata)
         filedata = filedata.replace('$(ZEO_ADDRESS)', self.server)
-        filedata = re.sub(r'cache-size.*?1000MB', 'cache-size ' + self.zeo_client_cache_size, filedata, 99)
-        filedata = re.sub(r'cache-size.*?100000', 'cache-size ' + self.zodb_cache_size, filedata, 99)
+        filedata = re.sub(r'cache-size.*?1000MB', 'cache-size ' + self.zeo_client_cache_size, filedata)
+        filedata = re.sub(r'cache-size.*?100000', 'cache-size ' + self.zodb_cache_size, filedata)
         filedata = filedata.replace('Plone/@@cron-tick', self.plone_path + '/@@cron-tick ')
-        filedata = re.sub(r'ACTIVE_BIGBANG.*?(True|False)', 'ACTIVE_BIGBANG ' + str(activate_big_bang), filedata, 99)
+        filedata = re.sub(r'ACTIVE_BIGBANG.*?(True|False)', 'ACTIVE_BIGBANG ' + str(activate_big_bang), filedata)
+        filedata = re.sub(r'path /data/log/instance.*.log', 'path /data/log/' + self.hostname + '.log', filedata)
+        filedata = re.sub(r'path /plone/var/log/instance.*-Z2.log',
+                          'path /data/log/' + self.hostname + '-Z2.log',
+                          filedata)
         return filedata
 
     def _fix_conf(self, path, activate_big_bang):
         filedata = self._fix(path, activate_big_bang)
-        filedata = re.sub(r'password.*?admin', 'password ' + self.admin_password, filedata, 99)
+        filedata = re.sub(r'password.*?admin', 'password ' + self.admin_password, filedata)
         with open(path, 'w') as file:
             file.write(filedata)
 
@@ -58,23 +62,18 @@ class Environment(object):
         mq_login = self.env.get('MQ_LOGIN', 'guest')
         mq_password = self.env.get('MQ_PASSWORD', 'guest')
 
-        filedata = re.sub(r'site_id.*?Plone', 'site_id ' + self.plone_path, filedata, 99)
-        filedata = re.sub(r'client_id.*?019999', 'client_id ' + self.mq_client_id, filedata, 99)
-        filedata = re.sub(r'routing_key.*?019999', 'routing_key ' + self.mq_client_id, filedata, 99)
+        filedata = re.sub(r'site_id.*?Plone', 'site_id ' + self.plone_path, filedata)
+        filedata = re.sub(r'client_id.*?019999', 'client_id ' + self.mq_client_id, filedata)
+        filedata = re.sub(r'routing_key.*?019999', 'routing_key ' + self.mq_client_id, filedata)
 
-        filedata = re.sub(r'ws_url.*?http://localhost:6543', 'ws_url ' + self.mq_ws_url, filedata, 99)
-        filedata = re.sub(r'ws_login.*?testuser', 'ws_login ' + self.mq_ws_login, filedata, 99)
-        filedata = re.sub(r'ws_password.*?test', 'ws_password ' + self.mq_ws_password, filedata, 99)
+        filedata = re.sub(r'ws_url.*?http://localhost:6543', 'ws_url ' + self.mq_ws_url, filedata)
+        filedata = re.sub(r'ws_login.*?testuser', 'ws_login ' + self.mq_ws_login, filedata)
+        filedata = re.sub(r'ws_password.*?test', 'ws_password ' + self.mq_ws_password, filedata)
 
-        filedata = re.sub(r'hostname.*?127.0.0.1', 'hostname ' + mq_host, filedata, 99)
-        filedata = re.sub(r'port.*?5672', 'port ' + mq_port, filedata, 99)
-        filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata, 99)
-        filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata, 99)
-
-        filedata = re.sub(r'path /data/log/instance.*.log', 'path /data/log/' + self.hostname + '.log', filedata, 99)
-        filedata = re.sub(r'path /plone/var/log/instance.*.log',
-                          'path /data/log/' + self.hostname + '.log',
-                          filedata, 99)
+        filedata = re.sub(r'hostname.*?127.0.0.1', 'hostname ' + mq_host, filedata)
+        filedata = re.sub(r'port.*?5672', 'port ' + mq_port, filedata)
+        filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata)
+        filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata)
 
         with open(self.instance_amqp_conf, 'w') as file:
             file.write(filedata)

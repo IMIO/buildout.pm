@@ -17,12 +17,13 @@ services:
     mem_limit: 200M
     mem_reservation: 150M
   zeo:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: zeoserver
     environment:
       - MOUNTPOINT
+      - HOSTNAME=zeo
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
@@ -32,7 +33,7 @@ services:
 #    restart:
 #      unless-stopped
   instance1:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: instance
     ports:
       - "20081:8081"
@@ -49,14 +50,15 @@ services:
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
+      - HOSTNAME=instance1
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "instance1"
   instance2:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: instance
     ports:
       - "20082:8081"
@@ -73,14 +75,15 @@ services:
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
+      - HOSTNAME=instance2
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "instance2"
   instance3:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: instance
     ports:
       - "20083:8081"
@@ -97,8 +100,9 @@ services:
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
+      - HOSTNAME=instance3
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -106,7 +110,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-cron:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: instance-cron
     ports:
       - "8087"
@@ -123,8 +127,9 @@ services:
       - PLONE_PATH=PM
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
+      - HOSTNAME=worker-cron
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -132,7 +137,7 @@ services:
     restart:
       unless-stopped
   worker-async:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: instance-async
     networks:
       - internal
@@ -146,8 +151,9 @@ services:
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
+      - HOSTNAME=worker-async
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -155,7 +161,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-amqp:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     command: instance-amqp
     ports:
       - "20085:8081"
@@ -180,8 +186,9 @@ services:
       - MQ_PORT
       - MQ_LOGIN
       - MQ_PASSWORD
+      - HOSTNAME=worker-amqp
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -189,7 +196,7 @@ services:
 #    restart:
 #      unless-stopped
   debug:
-    image: imiobe/iadelib:4.2.8
+    image: imiobe/iadelib:4.2.9
     entrypoint: bash
     ports:
       - "20089:8081"
@@ -206,8 +213,9 @@ services:
       - ADMIN_PASSWORD=admin
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT
+      - HOSTNAME=debug
     volumes:
-      - ./data:/data
+      - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
