@@ -51,10 +51,13 @@ services:
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance1
+      - PLONE_PATH=demo/demo
     volumes:
       - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
+    healthcheck:
+      test: "curl -f localhost:8081/$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "instance1"
   instance2:
@@ -76,10 +79,13 @@ services:
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance2
+      - PLONE_PATH=demo/demo
     volumes:
       - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
+    healthcheck:
+      test: "curl -f localhost:8081/$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "instance2"
   instance3:
@@ -101,6 +107,9 @@ services:
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance3
+      - PLONE_PATH=demo/demo
+    healthcheck:
+      test: "curl -f localhost:8081/$PLONE_PATH/@@ok"
     volumes:
       - ../var/:/data
       - tmp:/tmp
@@ -124,7 +133,7 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=admin
       - PUBLIC_URL=http://localhost/PM
-      - PLONE_PATH=PM
+      - PLONE_PATH=demo/demo
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=worker-cron
@@ -132,6 +141,8 @@ services:
       - ../var/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
+    healthcheck:
+      test: "curl -f localhost:8087/$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "worker-cron"
     restart:
@@ -152,6 +163,9 @@ services:
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=worker-async
+      - PLONE_PATH=demo/demo
+    healthcheck:
+      test: "curl -f localhost:8089/$PLONE_PATH/@@ok"
     volumes:
       - ../var/:/data
       - tmp:/tmp
@@ -164,7 +178,7 @@ services:
     image: imiobe/iadelib:4.2.9
     command: instance-amqp
     ports:
-      - "20085:8081"
+      - "20085:8286"
     networks:
       - internal
       - external
@@ -177,7 +191,7 @@ services:
       - ADMIN_PASSWORD=Trololo
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
-      - PLONE_PATH
+      - PLONE_PATH=demo/demo
       - MQ_CLIENT_ID
       - MQ_WS_URL
       - MQ_WS_LOGIN
@@ -187,6 +201,8 @@ services:
       - MQ_LOGIN
       - MQ_PASSWORD
       - HOSTNAME=worker-amqp
+    healthcheck:
+      test: "curl -f localhost:8286/$PLONE_PATH/@@ok"
     volumes:
       - ../var/:/data
       - tmp:/tmp
@@ -199,7 +215,7 @@ services:
     image: imiobe/iadelib:4.2.9
     entrypoint: bash
     ports:
-      - "20089:8081"
+      - "20089:8080"
     networks:
       - internal
       - external
@@ -214,6 +230,9 @@ services:
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=debug
+      - PLONE_PATH=demo/demo
+    healthcheck:
+      test: "curl -f localhost:8080/$PLONE_PATH/@@ok"
     volumes:
       - ../var/:/data
       - tmp:/tmp
