@@ -47,7 +47,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance1
@@ -75,7 +75,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance2
@@ -103,7 +103,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance3
@@ -122,7 +122,7 @@ services:
     image: imiobe/iadelib:4.2.9
     command: instance-cron
     ports:
-      - "8087"
+      - "8087:8087"
     networks:
       - internal
       - external
@@ -131,7 +131,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=tata
       - PUBLIC_URL=http://localhost/PM
       - PLONE_PATH=demo/demo
       - CLUSTER=iadelib_pm42
@@ -159,7 +159,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=worker-async
@@ -188,7 +188,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=Trololo
+      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - PLONE_PATH=demo/demo
@@ -226,7 +226,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=admin
+      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=debug
