@@ -17,7 +17,7 @@ services:
     mem_limit: 200M
     mem_reservation: 150M
   zeo:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: zeoserver
     environment:
       - MOUNTPOINT=demo
@@ -33,7 +33,7 @@ services:
 #    restart:
 #      unless-stopped
   instance1:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: instance
     ports:
       - "20081:8081"
@@ -47,7 +47,6 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance1
@@ -61,7 +60,7 @@ services:
     labels:
       SERVICE_NAME: "instance1"
   instance2:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: instance
     ports:
       - "20082:8081"
@@ -75,7 +74,6 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance2
@@ -89,7 +87,7 @@ services:
     labels:
       SERVICE_NAME: "instance2"
   instance3:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: instance
     ports:
       - "20083:8081"
@@ -119,7 +117,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-cron:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: instance-cron
     ports:
       - "8087:8087"
@@ -148,7 +146,7 @@ services:
     restart:
       unless-stopped
   worker-async:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: instance-async
     networks:
       - internal
@@ -175,7 +173,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-amqp:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     command: instance-amqp
     ports:
       - "20085:8286"
@@ -212,7 +210,7 @@ services:
 #    restart:
 #      unless-stopped
   debug:
-    image: imiobe/iadelib:4.2.9
+    image: imiobe/iadelib:latest
     entrypoint: bash
     ports:
       - "20089:8080"
