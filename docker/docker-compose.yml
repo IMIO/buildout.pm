@@ -16,6 +16,7 @@ services:
       unless-stopped
     mem_limit: 200M
     mem_reservation: 150M
+    mem_swappiness: 0
   zeo:
     image: imiobe/iadelib:latest
     command: zeoserver

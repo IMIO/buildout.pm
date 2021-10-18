@@ -15,6 +15,7 @@ services:
       - COMPOSE_HTTP_TIMEOUT=120
     mem_limit: 200M
     mem_reservation: 200M
+    mem_swappiness: 0
 
   instance:
     image: imiobe/iadelib:dev
