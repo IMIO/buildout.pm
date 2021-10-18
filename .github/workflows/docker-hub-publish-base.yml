@@ -1,5 +1,6 @@
 name: Update base image
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 2 * * *' # Daily at 02:00
 jobs:
@@ -25,5 +26,3 @@ jobs:
           tags: imiobe/iadelib:base
           pull: true
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max

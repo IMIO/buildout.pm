@@ -1,5 +1,6 @@
 name: Update images
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
 jobs:
@@ -25,8 +26,6 @@ jobs:
           tags: imiobe/iadelib:latest
           pull: true
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
       - name: Build dev image
         uses: docker/build-push-action@v2.5.0
         with:
@@ -35,5 +34,3 @@ jobs:
           tags: imiobe/iadelib:dev
           pull: true
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
