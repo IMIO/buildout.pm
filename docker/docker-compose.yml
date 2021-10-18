@@ -209,7 +209,7 @@ services:
       SERVICE_NAME: "worker-cron"
 #    restart:
 #      unless-stopped
-  debug:
+  maintainance:
     image: imiobe/iadelib:latest
     entrypoint: bash
     ports:
@@ -227,7 +227,7 @@ services:
       - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
-      - HOSTNAME=debug
+      - HOSTNAME=maintainance
       - PLONE_PATH=demo/demo
     healthcheck:
       test: "curl -f localhost:8080/$PLONE_PATH/@@ok"
@@ -236,7 +236,7 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
-      SERVICE_NAME: "instance1"
+      SERVICE_NAME: "maintainance"
 volumes:
   tmp:
   vartmp:
