@@ -1,9 +1,6 @@
 pmDockerPipeline {
   profileName = 'prod-test'
   activateSolr = false
-  testSuiteName = 'testmc'
+  testSuiteName = 'testprod'
   unitTestParameter = ''
-  testRestapi = true
-  testRestapi = true
-  testRestapiMustPass = true
 }
