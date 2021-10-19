@@ -1,8 +1,9 @@
 pmDockerPipeline {
-  profileName = 'communes'
+  profileName = 'prod-test'
   activateSolr = false
   testSuiteName = 'testmc'
   unitTestParameter = ''
   testRestapi = true
+  testRestapi = true
+  testRestapiMustPass = true
 }
- 
