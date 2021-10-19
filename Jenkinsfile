@@ -3,5 +3,6 @@ pmDockerPipeline {
   activateSolr = false
   testSuiteName = 'testmc'
   unitTestParameter = ''
-  buildoutBranch = '4.1.x'
+  testRestapi = true
+  testRestapiMustPass = true
 }
