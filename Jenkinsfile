@@ -1,5 +1,5 @@
 pmDockerPipeline {
-  profileName = 'communes'
+  profileName = 'communes-dev'
   activateSolr = false
   testSuiteName = 'testmc'
   unitTestParameter = ''
