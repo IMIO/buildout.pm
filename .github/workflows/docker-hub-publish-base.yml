@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v2.5.0
         with:
           context: .
-          file: ./docker/Dockerfile-ubuntu-20.04
+          file: ./docker/Dockerfile-base
           tags: imiobe/iadelib:base
           platforms: linux/amd64
           pull: true
