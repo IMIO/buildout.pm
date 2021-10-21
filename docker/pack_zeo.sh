@@ -1,18 +1,49 @@
 #!/bin/bash
+
+function check() {
+  if [[ ! -f /data/filestorage/$1.fs ]]
+  then
+    echo "FAILURE : /data/filestorage/$1.fs not found"
+    ls -l /data/filestorage/
+    exit 1
+  fi
+  if [[ ! -d /data/$2 ]]
+  then
+    echo "FAILURE : /data/$2 not found"
+    ls -l /data/
+    exit 1
+  fi
+}
+
+function pack() {
+  if [[ $# -eq 0 ]]
+  then
+    db="1"
+    blob="blobstorage"
+    echo "Packing default database"
+    check "Data" "$blob"
+  else
+    db="$1"
+    blob="$2"
+    echo "Packing $db database"
+    check "$db" "$blob"
+  fi
+  CMD="/plone/bin/python /plone/bin/zeopack -S $db -B /data/$blob"
+  echo "Executing $CMD"
+  eval "$CMD"
+  echo
+}
+
 echo "----------Start of Databases packing $(date --rfc-2822)----------"
 echo
-CMD="/plone/bin/python /plone/bin/zeopack"
-echo "Executing $CMD"
-eval "$CMD"
+pack
+pack "async" "blobstorage"
 
 if [ "$MOUNTPOINT" ]
 then
   echo "Found mountpoint = $MOUNTPOINT"
-  CMD="/plone/bin/python /plone/bin/zeopack -S $MOUNTPOINT -B /data/blobstorage-$MOUNTPOINT"
-  echo "Executing $CMD"
-  eval "$CMD"
+  pack "$MOUNTPOINT" "blobstorage-$MOUNTPOINT"
 else
   echo "Mountpoint not found"
 fi
-echo
 echo "----------End of Databases packing $(date --rfc-2822)----------"
