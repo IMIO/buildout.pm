@@ -24,5 +24,6 @@ jobs:
           context: .
           file: ./docker/Dockerfile-ubuntu-20.04
           tags: imiobe/iadelib:base
+          platforms: linux/amd64
           pull: true
           push: true
