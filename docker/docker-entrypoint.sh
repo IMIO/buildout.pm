@@ -1,38 +1,47 @@
 #!/bin/bash
 set -e
 
-PRIORIY="instance-cron zeoserver"
-CURL="curl --write-out '%{http_code}' -so /dev/null worker-cron:8087/standard/@@ok"
+function setup() {
+  mkdir -pvm 777 /data/{log,filestorage,blobstorage}
+  python docker-initialize.py
 
-mkdir -p -m 777 /data/{log,filestorage,blobstorage}
-python docker-initialize.py
+  if [[ $MOUNTPOINT ]]; then
+    mkdir -pvm 777 "/data/blobstorage-$MOUNTPOINT"
+  fi
 
-if [[ $MOUNTPOINT ]]
-then
-  mkdir -p -m 777 "/data/blobstorage-$MOUNTPOINT"
-fi
-
-if [[ "instance" == "$1" || ! $PRIORIY == *"$1"* ]]
-then
+  if [[ "instance-cron" == "$1" ]]; then
+    echo "Setting ACTIVE_BIGBANG"
+    export ACTIVE_BIGBANG="True"
+  fi
+}
+function wait_for_cron() {
+  CURL="curl --write-out '%{http_code}' -so /dev/null worker-cron:8087/standard/@@ok"
   echo "Waiting instance-cron ..."
   sleep 20
   response=$($CURL)
   echo "received response  $response"
-  while [[ "$response" != "'200'" ]]
-  do
+  while [[ "$response" != "'200'" ]]; do
     echo "Waiting instance-cron ..."
     sleep 10
     response=$($CURL)
     echo "received response  $response"
   done
+}
+
+
+setup "$1"
+
+PRIORIY="instance-cron instance-debug maintenance zeoserver"
+if [[ "instance" == "$1" || ! $PRIORIY == *"$1"* ]]; then
+  wait_for_cron "$1"
 fi
 
-if [[ "instance-cron" == "$1" ]]
-then
-  echo "Setting ACTIVE_BIGBANG"
-  export ACTIVE_BIGBANG="True"
-fi
-
-echo "Starting $1"
-exec "bin/python" "bin/$1" "fg"
-
+case "$1" in
+"maintenance")
+  exec "bash"
+  ;;
+*)
+  echo "Starting $1"
+  exec "bin/python" "bin/$1" "fg"
+  ;;
+esac

@@ -212,7 +212,7 @@ services:
 #      unless-stopped
   maintenance:
     image: imiobe/iadelib:latest
-    entrypoint: bash
+    command: maintenance
     ports:
       - "20089:8080"
     networks:
