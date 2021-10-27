@@ -79,3 +79,4 @@ We start the zeo server.
 > bin/zeoserver start
 Then the zope instance.
 > bin/instance1 fg
+
