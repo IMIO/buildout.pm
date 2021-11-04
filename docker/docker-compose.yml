@@ -31,6 +31,8 @@ services:
       - internal
     labels:
       SERVICE_NAME: "zeo"
+    healthcheck:
+      test: "/plone/zeo_healthcheck.sh"
 #    restart:
 #      unless-stopped
   instance1:
