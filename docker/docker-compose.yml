@@ -104,7 +104,6 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=instance3
@@ -132,7 +131,7 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
+      - ADMIN_PASSWORD=test
       - PUBLIC_URL=http://localhost/PM
       - PLONE_PATH=demo/demo
       - CLUSTER=iadelib_pm42
@@ -160,7 +159,6 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=worker-async
@@ -189,7 +187,6 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - PLONE_PATH=demo/demo
@@ -227,7 +224,6 @@ services:
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=tata
       - CLUSTER=iadelib_pm42
       - MOUNTPOINT=demo
       - HOSTNAME=maintenance
