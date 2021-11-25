@@ -27,7 +27,29 @@ function wait_for_cron() {
     echo "received response  $response"
   done
 }
+function start() {
+  echo "Starting $1"
+  cmd="bin/$1"
+  _stop() {
+    echo "Forcing to stop"
+    $cmd stop
+    case "$cmd" in
+    "bin/zeoserver")
+      if [[ -f /data/filestorage/Data.fs.lock ]]; then
+        kill -TERM "$(cat /data/filestorage/Data.fs.lock)" 2>/dev/null
+      fi
+      ;;
+    *)
+      ;;
+    esac
+	}
 
+	trap _stop SIGTERM SIGINT
+	$cmd start
+	# ensure file xists otherwise logtail returns 1
+	touch "/data/log/$HOSTNAME.log"
+	exec "$cmd" "logtail"
+}
 
 setup "$1"
 
@@ -41,7 +63,6 @@ case "$1" in
   exec "bash"
   ;;
 *)
-  echo "Starting $1"
-  exec "bin/python" "bin/$1" "fg"
+  start "$1"
   ;;
 esac

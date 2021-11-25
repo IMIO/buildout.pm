@@ -18,7 +18,7 @@ services:
     mem_reservation: 150M
     mem_swappiness: 0
   zeo:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: zeoserver
     environment:
       - MOUNTPOINT=demo
@@ -36,7 +36,7 @@ services:
 #    restart:
 #      unless-stopped
   instance1:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: instance
     ports:
       - "20081:8081"
@@ -63,7 +63,7 @@ services:
     labels:
       SERVICE_NAME: "instance1"
   instance2:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: instance
     ports:
       - "20082:8081"
@@ -90,7 +90,7 @@ services:
     labels:
       SERVICE_NAME: "instance2"
   instance3:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: instance
     ports:
       - "20083:8081"
@@ -119,7 +119,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-cron:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: instance-cron
     ports:
       - "8087:8087"
@@ -145,10 +145,10 @@ services:
       test: "curl -f localhost:8087/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "worker-cron"
-    restart:
-      unless-stopped
+#    restart:
+#      unless-stopped
   worker-async:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: instance-async
     networks:
       - internal
@@ -174,7 +174,7 @@ services:
 #    restart:
 #      unless-stopped
   worker-amqp:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: instance-amqp
     ports:
       - "20085:8286"
@@ -210,7 +210,7 @@ services:
 #    restart:
 #      unless-stopped
   maintenance:
-    image: imiobe/iadelib:latest
+    image: imiobe/iadelib:4.2.10
     command: maintenance
     ports:
       - "20089:8080"
