@@ -8,6 +8,7 @@ RUN apt-get update \
   && apt-get install -qqy --no-install-recommends \
   && buildDeps="build-essential \
                 python-dev-is-python2 \
+                lynx \
                 cmake \
                 make \
                 wget \

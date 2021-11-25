@@ -9,6 +9,7 @@ RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      python-is-python2 \
+     lynx \
      openjdk-16-jre-headless \
      libreoffice \
      libreoffice-script-provider-python \
