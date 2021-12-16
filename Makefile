@@ -72,8 +72,8 @@ libreoffice-docker:  ## Start a LibreOffice server on port 2002
                 --rm \
                 -u 0:0 \
                 --name="oo_server" \
-                -v /tmp/appy:/tmp/appy \
-                imiobe/libreoffice:6.4 \
+                -v /tmp:/tmp/ \
+                imiobe/libreoffice:still \
                 soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 	docker ps
 
