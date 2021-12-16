@@ -24,7 +24,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile-ubuntu-20.04
-          tags: "imiobe/iadelib:communes-${{GITHUB_REF#refs/tags/}}"
+          tags: "imiobe/iadelib:communes-${{ env.GITHUB_REF_NAME }}"
           platforms: linux/amd64
           pull: true
           push: true
@@ -33,7 +33,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile-ubuntu-20.04
-          tags: "imiobe/iadelib:hainaut-prov-${{GITHUB_REF#refs/tags/}}"
+          tags: "imiobe/iadelib:hainaut-prov-${{ env.GITHUB_REF_NAME }}"
           platforms: linux/amd64
           push: true
           build-args: PROFILE=hainaut-prov
