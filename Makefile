@@ -19,21 +19,16 @@ all: run
 help:  ## Displays this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-.PHONY: bootstrap
-bootstrap:  ## Creates virtualenv and installs requirements.txt
-	virtualenv -p python2 .
-	make install-requirements
-
 install-requirements:
+	rm -f .installed.cfg .mr.developer.cfg
+	virtualenv -p python2 .
 	bin/python bin/pip install -r requirements.txt
 	# initilize CUSTOM_TMP directory
 	mkdir -p -m 777 /tmp/appy
 
 .PHONY: buildout
-buildout:  ## Runs bootstrap if needed and builds the buildout
+buildout: install-requirements  ## Runs bootstrap if needed and builds the buildout
 	echo "Starting Buildout on $(shell date)"
-	rm -f .installed.cfg
-	if ! test -f bin/buildout;then make bootstrap; else make install-requirements;fi
 	if test -z "$(args)" ;then bin/python bin/buildout;else bin/python bin/buildout -c $(args);fi
 	echo "Finished on $(shell date)"
 
@@ -49,10 +44,10 @@ run:  ## Runs buildout if needed and starts instance1 in foregroud
 cleanall:  ## Clears build artefacts and virtualenv
 	if test -f bin/instance1; then bin/instance1 stop;fi
 	if test -f bin/zeoserver; then bin/zeoserver stop;fi
-	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .git/hooks/pre-commit var/tmp
+	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp
 
 .PHONY: jenkins
-jenkins: bootstrap  ## Same as buildout but for jenkins use only
+jenkins: install-requirements  ## Same as buildout but for jenkins use only
 	# can be run by example with: make jenkins profile='communes'
 	sed -ie "s#communes#$(profile)#" jenkins.cfg
 	sed -ie "s#Products.PloneMeeting#$(package)#" jenkins.cfg
