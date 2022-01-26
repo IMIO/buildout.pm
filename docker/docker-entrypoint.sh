@@ -15,17 +15,25 @@ function setup() {
   fi
 }
 function wait_for_cron() {
-  CURL="curl --write-out '%{http_code}' -so /dev/null worker-cron:8087/$PLONE_PATH/@@ok"
-  echo "Waiting instance-cron ..."
-  sleep 20
-  response=$($CURL)
-  echo "received response  $response"
-  while [[ "$response" != "'200'" ]]; do
-    echo "Waiting instance-cron ..."
-    sleep 10
+  URL="worker-cron:8087/$PLONE_PATH"
+  CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
+  MAX_TRIES=240
+  INTERVAL=1
+  SECONDS=0
+  response="$($CURL)"
+  tries=1
+  while [[ $response != "200" && $tries -lt $MAX_TRIES ]]
+  do
+    sleep $INTERVAL
     response=$($CURL)
-    echo "received response  $response"
+    ((tries+=1))
   done
+  if [[ $tries == "$MAX_TRIES" ]]; then
+    echo "Failed to reach $URL after $SECONDS s"
+    exit 1
+  else
+    echo "$URL is up. Waited $SECONDS s"
+  fi
 }
 function start() {
   echo "Starting $1"
