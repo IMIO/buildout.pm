@@ -140,8 +140,7 @@ ENV ZEO_ADDRESS=zeo:8100 \
  OO_PORT=2002 \
  USE_STREAM=False \
  CUSTOM_TMP=/var/tmp \
- ACTIVE_BIGBANG=True \
- SITE_ID=standard
+ ACTIVE_BIGBANG=True
 
 EXPOSE 8081
 ENTRYPOINT ["/plone/docker-entrypoint.sh"]

@@ -15,7 +15,7 @@ function setup() {
   fi
 }
 function wait_for_cron() {
-  CURL="curl --write-out '%{http_code}' -so /dev/null worker-cron:8087/standard/@@ok"
+  CURL="curl --write-out '%{http_code}' -so /dev/null worker-cron:8087/$PLONE_PATH/@@ok"
   echo "Waiting instance-cron ..."
   sleep 20
   response=$($CURL)
@@ -60,7 +60,9 @@ fi
 
 case "$1" in
 "maintenance")
-  exec "bash"
+  shift
+  echo "Executing maintenance command : $@"
+  exec "$@"
   ;;
 *)
   start "$1"

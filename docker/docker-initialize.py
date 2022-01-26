@@ -47,6 +47,7 @@ class Environment(object):
         filedata = re.sub(r'path /plone/var/log/instance.*-Z2.log',
                           'path /data/log/' + self.hostname + '-Z2.log',
                           filedata)
+        filedata = re.sub(r'SITE_ID .*', 'SITE_ID ' + self.plone_path, filedata)
         return filedata
 
     def _fix_conf(self, path, activate_big_bang):

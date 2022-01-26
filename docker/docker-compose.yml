@@ -9,7 +9,7 @@ services:
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
-      - internal
+      - delib_internal
     labels:
       SERVICE_NAME: "libreoffice"
     restart:
@@ -18,31 +18,28 @@ services:
     mem_reservation: 150M
     mem_swappiness: 0
   zeo:
-    image: imiobe/iadelib:4.2.10
+    image: imiobe/iadelib:demo-latest
     command: zeoserver
     environment:
-      - MOUNTPOINT=demo
       - HOSTNAME=zeo
     volumes:
-      - ../var/:/data
+      - ../data/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
-      - internal
+      - delib_internal
     labels:
       SERVICE_NAME: "zeo"
     healthcheck:
       test: "/plone/zeo_healthcheck.sh"
-#    restart:
-#      unless-stopped
-  instance1:
-    image: imiobe/iadelib:4.2.10
+  instance:
+    image: imiobe/iadelib:demo-latest
     command: instance
     ports:
       - "20081:8081"
     networks:
-      - internal
-      - external
+      - delib_internal
+      - delib_external
     depends_on:
       - zeo
       - libreoffice
@@ -51,81 +48,24 @@ services:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
       - HOSTNAME=instance1
-      - PLONE_PATH=demo/demo
+      - PLONE_PATH=demo
     volumes:
-      - ../var/:/data
+      - ../data/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     healthcheck:
       test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "instance1"
-  instance2:
-    image: imiobe/iadelib:4.2.10
-    command: instance
-    ports:
-      - "20082:8081"
-    networks:
-      - internal
-      - external
-    depends_on:
-      - zeo
-      - libreoffice
-      - worker-cron
-    environment:
-      - ZEO_CLIENT_CACHE_SIZE=1000MB
-      - ZODB_CACHE_SIZE=100000
-      - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
-      - HOSTNAME=instance2
-      - PLONE_PATH=demo/demo
-    volumes:
-      - ../var/:/data
-      - tmp:/tmp
-      - vartmp:/var/tmp
-    healthcheck:
-      test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
-    labels:
-      SERVICE_NAME: "instance2"
-  instance3:
-    image: imiobe/iadelib:4.2.10
-    command: instance
-    ports:
-      - "20083:8081"
-    networks:
-      - internal
-      - external
-    depends_on:
-      - zeo
-      - libreoffice
-      - worker-cron
-    environment:
-      - ZEO_CLIENT_CACHE_SIZE=1000MB
-      - ZODB_CACHE_SIZE=100000
-      - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
-      - HOSTNAME=instance3
-      - PLONE_PATH=demo/demo
-    healthcheck:
-      test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
-    volumes:
-      - ../var/:/data
-      - tmp:/tmp
-      - vartmp:/var/tmp
-    labels:
-      SERVICE_NAME: "instance3"
-#    restart:
-#      unless-stopped
   worker-cron:
-    image: imiobe/iadelib:4.2.10
+    image: imiobe/iadelib:demo-latest
     command: instance-cron
     ports:
       - "8087:8087"
     networks:
-      - internal
-      - external
+      - delib_internal
+      - delib_external
     depends_on:
       - zeo
     environment:
@@ -133,25 +73,22 @@ services:
       - ZODB_CACHE_SIZE=100000
       - ADMIN_PASSWORD=test
       - PUBLIC_URL=http://localhost/PM
-      - PLONE_PATH=demo/demo
+      - PLONE_PATH=demo
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
       - HOSTNAME=worker-cron
     volumes:
-      - ../var/:/data
+      - ../data/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     healthcheck:
       test: "curl -f localhost:8087/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "worker-cron"
-#    restart:
-#      unless-stopped
   worker-async:
-    image: imiobe/iadelib:4.2.10
+    image: imiobe/iadelib:demo-latest
     command: instance-async
     networks:
-      - internal
+      - delib_internal
     depends_on:
       - zeo
       - libreoffice
@@ -160,27 +97,24 @@ services:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
       - HOSTNAME=worker-async
-      - PLONE_PATH=demo/demo
+      - PLONE_PATH=demo
     healthcheck:
       test: "curl -f localhost:8089/$$PLONE_PATH/@@ok"
     volumes:
-      - ../var/:/data
+      - ../data/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-async"
-#    restart:
-#      unless-stopped
   worker-amqp:
-    image: imiobe/iadelib:4.2.10
+    image: imiobe/iadelib:demo-latest
     command: instance-amqp
     ports:
       - "20085:8286"
     networks:
-      - internal
-      - external
+      - delib_internal
+      - delib_external
     depends_on:
       - zeo
       - worker-cron
@@ -188,8 +122,7 @@ services:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
-      - PLONE_PATH=demo/demo
+      - PLONE_PATH=demo
       - MQ_CLIENT_ID
       - MQ_WS_URL
       - MQ_WS_LOGIN
@@ -202,21 +135,19 @@ services:
     healthcheck:
       test: "curl -f localhost:8286/$$PLONE_PATH/@@ok"
     volumes:
-      - ../var/:/data
+      - ../data/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-cron"
-#    restart:
-#      unless-stopped
   maintenance:
-    image: imiobe/iadelib:4.2.10
+    image: imiobe/iadelib:demo-latest
     command: maintenance
     ports:
       - "20089:8080"
     networks:
-      - internal
-      - external
+      - delib_internal
+      - delib_external
     depends_on:
       - zeo
       - libreoffice
@@ -225,13 +156,12 @@ services:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
       - CLUSTER=iadelib_pm42
-      - MOUNTPOINT=demo
       - HOSTNAME=maintenance
-      - PLONE_PATH=demo/demo
+      - PLONE_PATH=demo
     healthcheck:
       test: "curl -f localhost:8080/$$PLONE_PATH/@@ok"
     volumes:
-      - ../var/:/data
+      - ../data/:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -241,6 +171,6 @@ volumes:
   vartmp:
 
 networks:
-  internal:
+  delib_internal:
     internal: true
-  external:
+  delib_external:
