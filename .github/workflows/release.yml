@@ -15,7 +15,7 @@ jobs:
         with:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          tags: "imiobe/iadelib:communes-${{ env.GITHUB_REF_NAME }}"
+          tags: "imiobe/iadelib:communes-${{ github.ref }}"
   demo:
     runs-on: ubuntu-latest
     steps:
@@ -27,7 +27,7 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           dockerfile: ./docker/Dockerfile-demo
-          tags: "imiobe/iadelib:demo-latest,imiobe/iadelib:demo-${{ env.GITHUB_REF_NAME }}"
+          tags: "imiobe/iadelib:demo-latest,imiobe/iadelib:demo-${{ github.ref.name }}"
   hainaut-prov:
     runs-on: ubuntu-latest
     steps:
@@ -39,4 +39,4 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: hainaut-prov
-          tags: "imiobe/iadelib:hainaut-prov-${{ env.GITHUB_REF_NAME }}"
+          tags: "imiobe/iadelib:hainaut-prov-${{ github.ref_name }}"
