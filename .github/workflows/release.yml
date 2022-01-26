@@ -15,7 +15,7 @@ jobs:
         with:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          tags: "imiobe/iadelib:communes-${{ github.ref_name }}"
+          tags: "imiobe/iadelib:${{ github.ref_name }},imiobe/iadelib:communes-${{ github.ref_name }}"
   demo:
     runs-on: ubuntu-latest
     steps:
