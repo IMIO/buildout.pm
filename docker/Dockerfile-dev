@@ -1,4 +1,4 @@
-FROM imiobe/iadelib:latest as builder
+FROM imiobe/iadelib:latest
 
 ARG PROFILE="communes-dev.cfg"
 
@@ -38,8 +38,6 @@ RUN apt-get update \
   && gem install docsplit
 
 WORKDIR /plone
-
-COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
 
 RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
