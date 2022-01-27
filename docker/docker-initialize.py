@@ -85,7 +85,9 @@ class Environment(object):
         self._fix_conf(self.instance1_conf, False)
         self._fix_conf(self.instance_async_conf, False)
         self._fix_conf(self.instance_cron_conf, True)
-        self._fix_conf(self.instance_debug_conf, False)
+        # instance debug doesn't exist in dev env
+        if os.path.exists(self.instance_debug_conf):
+            self._fix_conf(self.instance_debug_conf, False)
         self._fix_conf(self.zeoserver_conf, False)
         self._fix_amqp()
 

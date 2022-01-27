@@ -15,10 +15,12 @@ function setup() {
   fi
 }
 function wait_for_cron() {
+  echo "Waiting for cron"
   URL="worker-cron:8087/$PLONE_PATH"
   CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
   MAX_TRIES=240
   INTERVAL=1
+  set +e
   SECONDS=0
   response="$($CURL)"
   tries=1
@@ -28,6 +30,7 @@ function wait_for_cron() {
     response=$($CURL)
     ((tries+=1))
   done
+  set -e
   if [[ $tries == "$MAX_TRIES" ]]; then
     echo "Failed to reach $URL after $SECONDS s"
     exit 1
