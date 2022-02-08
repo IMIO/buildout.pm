@@ -67,7 +67,6 @@ RUN apt-get update \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
-  && echo "    logging.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && sed -ie "s#Products.MeetingCommunes:zcity#Products.MeetingCommunes:demo#" base.cfg \
   && su -c "virtualenv -p python2 ." -s /bin/sh imio \
