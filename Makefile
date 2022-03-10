@@ -78,7 +78,7 @@ stop-libreoffice-docker:  ## Kills the LibreOffice server
 
 .PHONY: copy-data
 copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
-	mv var var-$(shell date +"%d-%m-%Y-%T")
+	if [[ -d var ]];then mv var var-$(shell date +"%d-%m-%Y-%T");fi;
 	mkdir -p var/{blobstorage,filestorage}
 	scripts/copy-data.sh -s=$(server) -b=$(buildout)
 
