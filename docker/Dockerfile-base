@@ -137,6 +137,7 @@ USER imio
 ENV ZEO_ADDRESS=zeo:8100 \
  OO_SERVER=libreoffice \
  OO_PORT=2002 \
+ PYTHON_UNO=/usr/bin/python3 \
  USE_STREAM=False \
  CUSTOM_TMP=/var/tmp \
  ACTIVE_BIGBANG=True
