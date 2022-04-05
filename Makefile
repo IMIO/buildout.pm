@@ -1,5 +1,7 @@
 #!/usr/bin/make
 #
+SHELL := /bin/bash
+
 plone=$(shell grep plone-path port.cfg|cut -c 14-)
 cluster=$(shell grep cluster port.cfg|cut -c 11-)
 hostname=$(shell hostname)
@@ -28,9 +30,7 @@ install-requirements:
 
 .PHONY: buildout
 buildout: install-requirements  ## Runs bootstrap if needed and builds the buildout
-	echo "Starting Buildout on $(shell date)"
-	if test -z "$(args)" ;then bin/python bin/buildout;else bin/python bin/buildout -c $(args);fi
-	echo "Finished on $(shell date)"
+	if test -z $(args) ; then time bin/python bin/buildout ; else time bin/python bin/buildout -c $(args) ; fi
 
 .PHONY: run
 run:  ## Runs buildout if needed and starts instance1 in foregroud
