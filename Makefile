@@ -42,8 +42,8 @@ run:  ## Runs buildout if needed and starts instance1 in foregroud
 
 .PHONY: cleanall
 cleanall:  ## Clears build artefacts and virtualenv
-	if test -f bin/instance1; then bin/instance1 stop;fi
-	if test -f bin/zeoserver; then bin/zeoserver stop;fi
+	if test -f var/zeoserver.pid; then kill -15 $(cat var/zeoserver.pid);fi
+	if test -f var/instance1.pid; then kill -15 $(cat var/instance1.pid);fi
 	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp
 
 .PHONY: jenkins
