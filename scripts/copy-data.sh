@@ -4,7 +4,7 @@ for i in "$@"; do
   case $i in
   -s=* | --server=*)
     echo "source found ${i#*=}"
-    SOURCE_HOST="${i#*=}.imio.be"
+    SOURCE_HOST="${i#*=}"
     shift # past argument=value
     ;;
   -b=* | --buildout=*)

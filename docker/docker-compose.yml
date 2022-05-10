@@ -23,7 +23,7 @@ services:
     environment:
       - HOSTNAME=zeo
     volumes:
-      - ./data/:/data
+      - data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
@@ -51,7 +51,7 @@ services:
       - HOSTNAME=instance1
       - PLONE_PATH=demo
     volumes:
-      - ./data/:/data
+      - data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     healthcheck:
@@ -77,7 +77,7 @@ services:
       - CLUSTER=iadelib_pm42
       - HOSTNAME=worker-cron
     volumes:
-      - ./data/:/data
+      - data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     healthcheck:
@@ -101,7 +101,7 @@ services:
     healthcheck:
       test: "curl -f localhost:8089/$$PLONE_PATH/@@ok"
     volumes:
-      - ./data/:/data
+      - data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -134,14 +134,15 @@ services:
     healthcheck:
       test: "curl -f localhost:8286/$$PLONE_PATH/@@ok"
     volumes:
-      - ./data/:/data
+      - data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-cron"
   maintenance:
     image: imiobe/iadelib:demo-latest
-    command: maintenance
+    # command: maintenance
+    entrypoint: bash
     ports:
       - "20089:8080"
     networks:
@@ -160,7 +161,7 @@ services:
     healthcheck:
       test: "curl -f localhost:8080/$$PLONE_PATH/@@ok"
     volumes:
-      - ./data/:/data
+      - data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -168,6 +169,7 @@ services:
 volumes:
   tmp:
   vartmp:
+  data:
 
 networks:
   delib_internal:

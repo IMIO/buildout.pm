@@ -18,14 +18,15 @@ function wait_for_cron() {
   echo "Waiting for cron"
   URL="worker-cron:8087/$PLONE_PATH"
   CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
-  MAX_TRIES=240
-  INTERVAL=1
+  MAX_TRIES=250
+  INTERVAL=5
   set +e
   SECONDS=0
   response="$($CURL)"
   tries=1
   while [[ $response != "200" && $tries -lt $MAX_TRIES ]]
   do
+    echo "Waiting for cron"
     sleep $INTERVAL
     response=$($CURL)
     ((tries+=1))
@@ -72,7 +73,7 @@ fi
 case "$1" in
 "maintenance")
   shift
-  echo "Executing maintenance command : $@"
+  echo "Executing maintenance command : '$*'"
   exec "$@"
   ;;
 *)
