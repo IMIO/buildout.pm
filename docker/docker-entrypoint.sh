@@ -2,11 +2,13 @@
 set -e
 
 function setup() {
-  mkdir -pvm 777 /data/{log,filestorage,blobstorage}
+  mkdir -pv /data/{log,filestorage,blobstorage}
+  chmod 777 /data /data/log /data/filestorage /data/blobstorage
   python docker-initialize.py
 
   if [[ $MOUNTPOINT ]]; then
-    mkdir -pvm 777 "/data/blobstorage-$MOUNTPOINT"
+    mkdir -pv "/data/blobstorage-$MOUNTPOINT"
+    chmod 777 "/data/blobstorage-$MOUNTPOINT"
   fi
 
   if [[ "instance-cron" == "$1" ]]; then
