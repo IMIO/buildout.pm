@@ -8,30 +8,34 @@ COPY --chown=imio *.cfg *.conf requirements.txt Makefile docker/docker-initializ
 RUN apt-get update \
   && apt-get install -qqy --no-install-recommends \
   && buildDeps="build-essential \
-                python-dev-is-python2 \
-                lynx \
-                cmake \
-                make \
-                wget \
-                python3-pip \
-                libpq-dev \
-                libreadline-dev \
-                gcc \
-                libc6-dev \
-                libpcre3-dev \
-                libssl-dev \
-                libxml2-dev \
-                libxslt1-dev \
-                libbz2-dev \
-                libffi-dev \
-                libjpeg62-dev \
-                libopenjp2-7-dev \
-                zlib1g-dev \
-                libldap2-dev \
-                libwebp-dev \
-                libsasl2-dev \
-                libldap2-dev \
-                libsigc++-2.0-dev" \
+        python2-dev \
+        cmake \
+        make \
+        python3-pip \
+        wget \
+        git \
+        gcc \
+        libpq-dev \
+        libreadline-dev \
+        libc6-dev \
+        libpcre3-dev \
+        libssl-dev \
+        libssl-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        libbz2-dev \
+        zlib1g-dev \
+        libldap2-dev \
+        libsasl2-dev \
+        libldap2-dev \
+        libsigc++-2.0-dev \
+        libffi-dev \
+        libjpeg62-dev \
+        libopenjp2-7-dev \
+        libwebp-dev \
+        libgif-dev \
+        zlib1g-dev \
+        libwebp-dev" \
   && apt-get install -qqy --no-install-recommends $buildDeps git subversion \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
