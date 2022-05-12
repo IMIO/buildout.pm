@@ -4,7 +4,7 @@ set -e
 function setup() {
   mkdir -pv /data/{log,filestorage,blobstorage}
   chmod 777 /data /data/log /data/filestorage /data/blobstorage
-  python docker-initialize.py
+  bin/python docker-initialize.py
 
   if [[ $MOUNTPOINT ]]; then
     mkdir -pv "/data/blobstorage-$MOUNTPOINT"
