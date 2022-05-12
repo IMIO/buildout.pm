@@ -6,12 +6,12 @@ WORKDIR /plone
 USER root
 COPY --chown=imio docker/zint-2.10.0-src.tar.gz /home/imio/
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
-RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+# RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
-     python-is-python2 \
      lynx \
-     openjdk-16-jre-headless \
+     openjdk-18-jre-headless \
      libreoffice \
      libreoffice-script-provider-python \
      file \
@@ -19,45 +19,43 @@ RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
      graphicsmagick \
      ghostscript \
      poppler-data \
-     poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62 \
-     libpng16-16 \
-     libopenjp2-7 \
-     libldap-2.4-2 \
+     libldap-2.5-0 \
      ldap-utils \
-     libwebp6 \
-     libgif7 \
      libpq5 \
      lbzip2 \
-     librsvg2-bin\
      libsigc++-2.0-0v5 \
   && apt-get purge -qqy libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
-                python-dev-is-python2 \
-                cmake \
-                make \
-                wget \
-                python3-pip \
-                libpq-dev \
-                libreadline-dev \
-                gcc \
-                libc6-dev \
-                libpcre3-dev \
-                libssl-dev \
-                libxml2-dev \
-                libxslt1-dev \
-                libbz2-dev \
-                libffi-dev \
-                libjpeg62-dev \
-                libopenjp2-7-dev \
-                zlib1g-dev \
-                libldap2-dev \
-                libwebp-dev \
-                libsasl2-dev \
-                libldap2-dev \
-                libsigc++-2.0-dev" \
+        python2-dev \
+        cmake \
+        make \
+        python3-pip \
+        wget \
+        git \
+        gcc \
+        libpq-dev \
+        libreadline-dev \
+        libc6-dev \
+        libpcre3-dev \
+        libssl-dev \
+        libssl-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        libbz2-dev \
+        zlib1g-dev \
+        libldap2-dev \
+        libsasl2-dev \
+        libldap2-dev \
+        libsigc++-2.0-dev \
+        libffi-dev \
+        libjpeg62-dev \
+        libopenjp2-7-dev \
+        libwebp-dev \
+        libgif-dev \
+        zlib1g-dev \
+        libwebp-dev" \
   && apt-get install -qqy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
@@ -99,12 +97,12 @@ COPY --chown=imio docker/docker-initialize.py docker/*.sh /plone/
 
 WORKDIR /plone
 USER root
-RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+# RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
-     python-is-python2 \
      lynx \
-     openjdk-16-jre-headless \
+     openjdk-18-jre-headless \
      libreoffice \
      libreoffice-script-provider-python \
      file \
@@ -112,19 +110,12 @@ RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
      graphicsmagick \
      ghostscript \
      poppler-data \
-     poppler-utils \
      ruby \
      libmagic1 \
-     libjpeg62 \
-     libpng16-16 \
-     libopenjp2-7 \
-     libldap-2.4-2 \
+     libldap-2.5-0 \
      ldap-utils \
-     libwebp6 \
-     libgif7 \
      libpq5 \
      lbzip2 \
-     librsvg2-bin \
      libsigc++-2.0-0v5 \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && rm -rf /var/lib/apt/lists/* \
