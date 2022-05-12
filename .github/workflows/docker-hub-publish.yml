@@ -15,7 +15,7 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           tags: imiobe/iadelib:latest
-          dockerfile: ./docker/Dockerfile-ubuntu-20.04
+          dockerfile: ./docker/Dockerfile-latest
       - name: Build dev image
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
