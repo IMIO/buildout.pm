@@ -3,7 +3,7 @@ set -e
 
 function setup() {
   mkdir -pv /data/{log,filestorage,blobstorage}
-  chmod 777 /data /data/log /data/filestorage /data/blobstorage
+  chmod 777 /data/log /data/filestorage /data/blobstorage
   bin/python docker-initialize.py
 
   if [[ $MOUNTPOINT ]]; then
