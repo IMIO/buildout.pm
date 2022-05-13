@@ -24,10 +24,8 @@ uuid.txt
 share
 config/core.properties
 local
-docker/data/blobstorage/*
-docker/data/filestorage/*
-docker/data/log
-docker/data/async-uuid.txt
+docker/data
 .plone.versioncheck.cache/
 .plone.versioncheck.tracked.json
 checkversion.html
+.vscode

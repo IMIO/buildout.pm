@@ -3,18 +3,17 @@ set -e
 
 function setup() {
   mkdir -pv /data/{log,filestorage,blobstorage}
-  chmod 777 /data/log /data/filestorage /data/blobstorage
   bin/python docker-initialize.py
 
   if [[ $MOUNTPOINT ]]; then
     mkdir -pv "/data/blobstorage-$MOUNTPOINT"
-    chmod 777 "/data/blobstorage-$MOUNTPOINT"
   fi
 
   if [[ "instance-cron" == "$1" ]]; then
     echo "Setting ACTIVE_BIGBANG"
     export ACTIVE_BIGBANG="True"
   fi
+  chmod 777 /data/*
 }
 function wait_for_cron() {
   echo "Waiting for cron"
