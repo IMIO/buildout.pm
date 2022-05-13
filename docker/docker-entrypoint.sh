@@ -20,7 +20,7 @@ function wait_for_cron() {
   echo "Waiting for cron"
   URL="worker-cron:8087/$PLONE_PATH"
   CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
-  MAX_TRIES=250
+  MAX_TRIES=50
   INTERVAL=5
   set +e
   SECONDS=0
