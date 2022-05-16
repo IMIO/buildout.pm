@@ -1,5 +1,6 @@
 version: '2.4'
 services:
+
   libreoffice:
     image: imiobe/libreoffice:7.3
     command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
@@ -14,16 +15,17 @@ services:
       SERVICE_NAME: "libreoffice"
     restart:
       unless-stopped
-    mem_limit: 200M
+    mem_limit: 500M
     mem_reservation: 150M
     mem_swappiness: 0
+
   zeo:
     image: imiobe/iadelib:demo-latest
     command: zeoserver
     environment:
       - HOSTNAME=zeo
     volumes:
-      - data:/data
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     networks:
@@ -32,6 +34,7 @@ services:
       SERVICE_NAME: "zeo"
     healthcheck:
       test: "/plone/zeo_healthcheck.sh"
+
   instance:
     image: imiobe/iadelib:demo-latest
     command: instance
@@ -51,13 +54,14 @@ services:
       - HOSTNAME=instance1
       - PLONE_PATH=demo
     volumes:
-      - data:/data
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     healthcheck:
       test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "instance1"
+
   worker-cron:
     image: imiobe/iadelib:demo-latest
     command: instance-cron
@@ -77,13 +81,14 @@ services:
       - CLUSTER=iadelib_pm42
       - HOSTNAME=worker-cron
     volumes:
-      - data:/data
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     healthcheck:
       test: "curl -f localhost:8087/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "worker-cron"
+
   worker-async:
     image: imiobe/iadelib:demo-latest
     command: instance-async
@@ -101,11 +106,12 @@ services:
     healthcheck:
       test: "curl -f localhost:8089/$$PLONE_PATH/@@ok"
     volumes:
-      - data:/data
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-async"
+
   worker-amqp:
     image: imiobe/iadelib:demo-latest
     command: instance-amqp
@@ -134,11 +140,12 @@ services:
     healthcheck:
       test: "curl -f localhost:8286/$$PLONE_PATH/@@ok"
     volumes:
-      - data:/data
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-cron"
+
   maintenance:
     image: imiobe/iadelib:demo-latest
     # command: maintenance
@@ -161,7 +168,7 @@ services:
     healthcheck:
       test: "curl -f localhost:8080/$$PLONE_PATH/@@ok"
     volumes:
-      - data:/data
+      - ./data:/data
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
@@ -169,7 +176,6 @@ services:
 volumes:
   tmp:
   vartmp:
-  data:
 
 networks:
   delib_internal:

@@ -13,7 +13,7 @@ services:
     environment:
       - DOCKER_CLIENT_TIMEOUT=120
       - COMPOSE_HTTP_TIMEOUT=120
-    mem_limit: 300M
+    mem_limit: 500M
     mem_reservation: 200M
     mem_swappiness: 0
 

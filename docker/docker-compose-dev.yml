@@ -14,7 +14,7 @@ services:
       SERVICE_NAME: "libreoffice"
     restart:
       unless-stopped
-    mem_limit: 200M
+    mem_limit: 500M
     mem_reservation: 150M
     mem_swappiness: 0
   zeo:
