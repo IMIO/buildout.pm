@@ -8,11 +8,6 @@ function setup() {
   if [[ $MOUNTPOINT ]]; then
     mkdir -pv "/data/blobstorage-$MOUNTPOINT"
   fi
-
-  if [[ "instance-cron" == "$1" ]]; then
-    echo "Setting ACTIVE_BIGBANG"
-    export ACTIVE_BIGBANG="True"
-  fi
   chmod 777 /data/*
 }
 function wait_for_cron() {

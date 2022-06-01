@@ -53,6 +53,7 @@ class Environment(object):
     def _fix_conf(self, path, activate_big_bang):
         filedata = self._fix(path, activate_big_bang)
         filedata = re.sub(r'password.*?admin', 'password ' + self.admin_password, filedata)
+        filedata = re.sub(r'ADMIN_PASSWORD.*?admin', 'ADMIN_PASSWORD ' + self.admin_password, filedata)
         with open(path, 'w') as file:
             file.write(filedata)
 
