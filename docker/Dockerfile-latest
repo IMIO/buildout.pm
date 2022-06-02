@@ -94,4 +94,4 @@ ENV ZEO_ADDRESS=zeo:8100 \
 
 EXPOSE 8081
 ENTRYPOINT ["/plone/docker-entrypoint.sh"]
-CMD ["instance"]
+CMD [""]

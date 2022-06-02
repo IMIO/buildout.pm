@@ -59,4 +59,4 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
 USER imio
 EXPOSE 8081
 ENTRYPOINT ["/plone/docker-entrypoint.sh"]
-CMD ["instance"]
+CMD [""]

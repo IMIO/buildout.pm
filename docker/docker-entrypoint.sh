@@ -18,12 +18,12 @@ function wait_for_cron() {
   INTERVAL=5
   set +e
   SECONDS=0
-  response="$($CURL)"
-  tries=1
+  response="404"
+  tries=0
   while [[ $response != "200" && $tries -lt $MAX_TRIES ]]
   do
-    echo "Waiting for cron"
     sleep $INTERVAL
+    echo "Waiting for cron"
     response=$($CURL)
     ((tries+=1))
   done
@@ -54,7 +54,7 @@ function start() {
 
 	trap _stop SIGTERM SIGINT
 	$cmd start
-	# ensure file xists otherwise logtail returns 1
+	# ensure file exists otherwise logtail returns 1
 	touch "/data/log/$HOSTNAME.log"
 	exec "$cmd" "logtail"
 }
@@ -62,11 +62,14 @@ function start() {
 setup "$1"
 
 PRIORIY="instance-cron instance-debug maintenance zeoserver"
-if [[ "instance" == "$1" || ! $PRIORIY == *"$1"* ]]; then
+if [[ "instance" == "$1" || ( ! $PRIORIY == *"$1"* && $# -gt 0 ) ]]; then
   wait_for_cron "$1"
 fi
 
 case "$1" in
+"")
+  exit 0
+  ;;
 "maintenance")
   shift
   echo "Executing maintenance command : '$*'"

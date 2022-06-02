@@ -148,8 +148,6 @@ services:
 
   maintenance:
     image: imiobe/iadelib:demo-latest
-    # command: maintenance
-    entrypoint: bash
     ports:
       - "20089:8080"
     networks:

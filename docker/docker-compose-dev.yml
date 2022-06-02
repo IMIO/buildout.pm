@@ -142,7 +142,6 @@ services:
 #      SERVICE_NAME: "worker-cron"
   maintenance:
     image: imiobe/iadelib:dev
-    command: maintenance
     ports:
       - "20089:8080"
     networks:
