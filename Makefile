@@ -25,7 +25,7 @@ install-requirements:
 	rm -f .installed.cfg .mr.developer.cfg
 	virtualenv -p python2 .
 	bin/python bin/pip install -r requirements.txt
-	# initilize CUSTOM_TMP directory
+	# initialize CUSTOM_TMP directory
 	mkdir -p -m 777 /tmp/appy
 
 .PHONY: buildout
@@ -42,8 +42,8 @@ run:  ## Runs buildout if needed and starts instance1 in foregroud
 
 .PHONY: cleanall
 cleanall:  ## Clears build artefacts and virtualenv
-	if test -f var/zeoserver.pid; then kill -15 $(cat var/zeoserver.pid);fi
-	if test -f var/instance1.pid; then kill -15 $(cat var/instance1.pid);fi
+	if test -f var/zeoserver.pid; then kill -15 $(shell cat var/zeoserver.pid);fi
+	if test -f var/instance1.pid; then kill -15 $(shell cat var/instance1.pid);fi
 	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp
 
 .PHONY: jenkins
@@ -82,7 +82,7 @@ test:
 
 .PHONY: vc
 vc:
-	bin/versioncheck -rbo checkversion.html
+	bin/versioncheck -rnbpo checkversion.html
 
 .PHONY: ctop
 ctop:  ## Runs A CTop instance to monitor the running docker container.
