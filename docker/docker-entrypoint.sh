@@ -73,6 +73,7 @@ case "$1" in
 "maintenance")
   shift
   echo "Executing maintenance command : '$*'"
+  set -x
   exec "$@"
   ;;
 *)
