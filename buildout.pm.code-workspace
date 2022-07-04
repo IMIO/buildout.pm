@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "/srv/zinstances/buildout.pm/src/Products.PloneMeeting"
+		},
+		{
+			"path": "/srv/zinstances/buildout.pm/src/Products.MeetingCommunes"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"makefile.extensionOutputFolder": "./.vscode",
+		"python.analysis.extraPaths": [
+			"./parts/omelette/*",
+			"./src/*"
+		],
+		"python.defaultInterpreterPath": "/srv/zinstances/buildout.pm/bin/python",
+		"python.analysis.indexing": true
+	}
+}

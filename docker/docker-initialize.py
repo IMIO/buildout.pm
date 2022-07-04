@@ -1,9 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
-
-import re
 import os
-import warnings
+import re
 
 
 class Environment(object):
@@ -13,167 +11,128 @@ class Environment(object):
     def __init__(
         self,
         env=os.environ,
-        zope_conf="/plone/parts/instance1/etc/zope.conf",
-        custom_conf="/plone/custom.cfg",
-        zeopack_conf="/plone/bin/zeopack",
-        zeoserver_conf="/plone/parts/zeoserver/etc/zeo.conf",
-        async_conf="/plone/parts/instance-async/etc/zope.conf",
     ):
         self.env = env
-        self.zope_conf = zope_conf
-        self.custom_conf = custom_conf
-        self.zeopack_conf = zeopack_conf
-        self.zeoserver_conf = zeoserver_conf
-        self.async_conf = async_conf
+        self.server = env.get("ZEO_ADDRESS", '8100')
+        self.url = env.get("PUBLIC_URL", 'http://localhost/PM')
+        self.zeo_client_cache_size = env.get("ZEO_CLIENT_CACHE_SIZE", "2000MB")
+        self.zodb_cache_size = env.get("ZODB_CACHE_SIZE", "300000")
+        self.admin_password = env.get("ADMIN_PASSWORD", "admin")
+        self.plone_path = env.get("PLONE_PATH", "PM")
+        self.mq_client_id = env.get("MQ_CLIENT_ID", "019999")
+        self.mq_ws_url = env.get("MQ_WS_URL", "019999")
+        self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
+        self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
+        self.hostname = env.get('HOSTNAME')
 
-    def zeoclient(self, fname):
+        self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
+        self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
+        self.instance_async_conf = '/plone/parts/instance-async/etc/zope.conf'
+        self.instance_cron_conf = '/plone/parts/instance-cron/etc/zope.conf'
+        self.instance_debug_conf = '/plone/parts/instance-debug/etc/zope.conf'
+        self.zeoserver_conf = '/plone/parts/zeoserver/etc/zeo.conf'
+
+    def _fix(self, path, activate_big_bang):
+        with open(path) as file:
+            filedata = file.read()
+        filedata = re.sub(r'server.*?8100', 'server ' + self.server, filedata)
+        filedata = filedata.replace('http://localhost/Plone', self.url)
+        filedata = re.sub(r'ZEOADDRESS.*?8100', 'ZEOADDRESS ' + self.server, filedata)
+        filedata = filedata.replace('$(ZEO_ADDRESS)', self.server)
+        filedata = re.sub(r'cache-size.*?1000MB', 'cache-size ' + self.zeo_client_cache_size, filedata)
+        filedata = re.sub(r'cache-size.*?100000', 'cache-size ' + self.zodb_cache_size, filedata)
+        filedata = filedata.replace('Plone/@@cron-tick', self.plone_path + '/@@cron-tick ')
+        filedata = re.sub(r'ACTIVE_BIGBANG.*?(True|False)', 'ACTIVE_BIGBANG ' + str(activate_big_bang), filedata)
+        filedata = re.sub(r'path /data/log/instance.*.log', 'path /data/log/' + self.hostname + '.log', filedata)
+        filedata = re.sub(r'path /plone/var/log/instance.*-Z2.log',
+                          'path /data/log/' + self.hostname + '-Z2.log',
+                          filedata)
+        filedata = re.sub(r'SITE_ID .*', 'SITE_ID ' + self.plone_path, filedata)
+        return filedata
+
+    def _fix_conf(self, path, activate_big_bang):
+        filedata = self._fix(path, activate_big_bang)
+        filedata = re.sub(r'password.*?admin', 'password ' + self.admin_password, filedata)
+        filedata = re.sub(r'ADMIN_PASSWORD.*?admin', 'ADMIN_PASSWORD ' + self.admin_password, filedata)
+        with open(path, 'w') as file:
+            file.write(filedata)
+
+    def _fix_amqp(self, activate_big_bang=False):
+        filedata = self._fix(self.instance_amqp_conf, activate_big_bang)
+        mq_host = self.env.get('MQ_HOST', '127.0.0.1')
+        mq_port = self.env.get('MQ_PORT', '5672')
+        mq_login = self.env.get('MQ_LOGIN', 'guest')
+        mq_password = self.env.get('MQ_PASSWORD', 'guest')
+
+        filedata = re.sub(r'site_id.*?Plone', 'site_id ' + self.plone_path, filedata)
+        filedata = re.sub(r'client_id.*?019999', 'client_id ' + self.mq_client_id, filedata)
+        filedata = re.sub(r'routing_key.*?019999', 'routing_key ' + self.mq_client_id, filedata)
+
+        filedata = re.sub(r'ws_url.*?http://localhost:6543', 'ws_url ' + self.mq_ws_url, filedata)
+        filedata = re.sub(r'ws_login.*?testuser', 'ws_login ' + self.mq_ws_login, filedata)
+        filedata = re.sub(r'ws_password.*?test', 'ws_password ' + self.mq_ws_password, filedata)
+
+        filedata = re.sub(r'hostname.*?127.0.0.1', 'hostname ' + mq_host, filedata)
+        filedata = re.sub(r'port.*?5672', 'port ' + mq_port, filedata)
+        filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata)
+        filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata)
+
+        with open(self.instance_amqp_conf, 'w') as file:
+            file.write(filedata)
+
+    def fixtures(self):
         """ ZEO Client
         """
-        server = self.env.get("ZEO_ADDRESS", None)
-        if not server:
+        self._fix_conf(self.instance1_conf, False)
+        self._fix_conf(self.instance_async_conf, False)
+        self._fix_conf(self.instance_cron_conf, True)
+        # instance debug doesn't exist in dev env
+        if os.path.exists(self.instance_debug_conf):
+            self._fix_conf(self.instance_debug_conf, False)
+        self._fix_conf(self.zeoserver_conf, False)
+        self._fix_amqp()
+
+    def mountpoint(self):
+        mountpoint = self.env.get("MOUNTPOINT", "")
+        if not mountpoint:
             return
 
-        config = ""
-        with open(fname, "r") as cfile:
-            config = cfile.read()
+        with open("/plone/zeo_add.conf", 'w') as file:
+            file.write(ZEO_ADD.format(mountpoint=mountpoint))
 
-        read_only = self.env.get("ZEO_READ_ONLY", "false")
-        zeo_ro_fallback = self.env.get("ZEO_CLIENT_READ_ONLY_FALLBACK", "false")
-        shared_blob_dir = self.env.get("ZEO_SHARED_BLOB_DIR", "off")
-        zeo_storage = self.env.get("ZEO_STORAGE", "1")
-        zeo_client_cache_size = self.env.get("ZEO_CLIENT_CACHE_SIZE", "128MB")
-        zeo_conf = ZEO_TEMPLATE.format(
-            zeo_address=server,
-            read_only=read_only,
-            zeo_client_read_only_fallback=zeo_ro_fallback,
-            shared_blob_dir=shared_blob_dir,
-            zeo_storage=zeo_storage,
-            zeo_client_cache_size=zeo_client_cache_size,
-        )
-
-        pattern = re.compile(r"<zeoclient>.+</zeoclient>", re.DOTALL)
-        config = re.sub(pattern, zeo_conf, config)
-        pattern = re.compile(r"%define ZEOADDRESS 8100", re.DOTALL)
-        config = re.sub(pattern, "%define ZEOADDRESS {}".format(server), config)
-
-        with open(fname, "w") as cfile:
-            cfile.write(config)
-
-    def zeopack(self):
-        """ ZEO Pack
-        """
-        server = self.env.get("ZEO_ADDRESS", None)
-        if not server:
-            return
-
-        if ":" in server:
-            host, port = server.split(":")
-        else:
-            host, port = (server, "8100")
-
-        with open(self.zeopack_conf, "r") as cfile:
-            text = cfile.read()
-            text = text.replace('address = "8100"', 'address = "%s"' % server)
-            text = text.replace('host = "127.0.0.1"', 'host = "%s"' % host)
-            text = text.replace('port = "8100"', 'port = "%s"' % port)
-
-        with open(self.zeopack_conf, "w") as cfile:
-            cfile.write(text)
-
-    def zeoserver(self):
-        """ ZEO Server
-        """
-        pack_keep_old = self.env.get("ZEO_PACK_KEEP_OLD", "")
-        if pack_keep_old.lower() in ("false", "no", "0", "n", "f"):
-            with open(self.zeoserver_conf, "r") as cfile:
-                text = cfile.read()
-                if "pack-keep-old" not in text:
-                    text = text.replace(
-                        "</filestorage>", "  pack-keep-old false\n</filestorage>"
-                    )
-
-            with open(self.zeoserver_conf, "w") as cfile:
-                cfile.write(text)
-
-    def buildout(self):
-        """ Buildout from environment variables
-        """
-        # Already configured
-        if os.path.exists(self.custom_conf):
-            return
-
-        eggs = self.env.get("PLONE_ADDONS", self.env.get("ADDONS", "")).strip().split()
-        if not eggs:
-            eggs = self.env.get("BUILDOUT_EGGS", "").strip().split()
-            if eggs:
-                warnings.warn(
-                    "BUILDOUT_EGGS is deprecated. Please use "
-                    "PLONE_ADDONS instead !!!",
-                    DeprecationWarning,
-                )
-
-        zcml = self.env.get("PLONE_ZCML", self.env.get("ZCML", "")).strip().split()
-        if not zcml:
-            zcml = self.env.get("BUILDOUT_ZCML", "").strip().split()
-            if zcml:
-                warnings.warn(
-                    "BUILDOUT_ZCML is deprecated. Please use " "PLONE_ZCML instead !!!",
-                    DeprecationWarning,
-                )
-
-        develop = (
-            self.env.get("PLONE_DEVELOP", self.env.get("DEVELOP", "")).strip().split()
-        )
-        if not develop:
-            develop = self.env.get("BUILDOUT_DEVELOP", "").strip().split()
-            if develop:
-                warnings.warn(
-                    "BUILDOUT_DEVELOP is deprecated. Please use "
-                    "PLONE_DEVELOP instead !!!",
-                    DeprecationWarning,
-                )
-
-        if not (eggs or zcml or develop):
-            return
-
-        buildout = BUILDOUT_TEMPLATE.format(
-            eggs="\n\t".join(eggs), zcml="\n\t".join(zcml), develop="\n\t".join(develop)
-        )
-
-        with open(self.custom_conf, "w") as cfile:
-            cfile.write(buildout)
+        zodb_cache_size = self.env.get("ZEO_CLIENT_CACHE_SIZE", "1000MB")
+        with open("/plone/zope_add_zeo.conf", 'w') as file:
+            file.write(ZOPE_ADD_ZEO.format(mountpoint=mountpoint, cache=zodb_cache_size))
 
     def setup(self, **kwargs):
-        self.buildout()
-        self.zeoclient(self.zope_conf)
-        self.zeoclient(self.async_conf)
-        self.zeopack()
-        self.zeoserver()
+        self.fixtures()
+        self.mountpoint()
 
     __call__ = setup
 
 
-ZEO_TEMPLATE = """
-    <zeoclient>
-      read-only {read_only}
-      read-only-fallback {zeo_client_read_only_fallback}
-      blob-dir /plone/var/blobstorage
-      shared-blob-dir {shared_blob_dir}
-      server {zeo_address}
-      storage {zeo_storage}
-      name zeostorage
-      var /plone/parts/instance1/var
-      cache-size {zeo_client_cache_size}
-    </zeoclient>
+ZEO_ADD = """
+<filestorage {mountpoint}>\n
+  path $FILESTORAGE/{mountpoint}.fs\n
+  blob-dir $BLOBSTORAGE-{mountpoint}\n
+</filestorage>\n
 """.strip()
 
-BUILDOUT_TEMPLATE = """
-[buildout]
-extends = develop.cfg
-develop += {develop}
-eggs += {eggs}
-zcml += {zcml}
-"""
+
+ZOPE_ADD_ZEO = """
+<zodb_db {mountpoint}>\n
+  <zeoclient>\n
+    blob-dir $BLOBSTORAGE-{mountpoint}\n
+    shared-blob-dir on\n
+    server $ZEOADDRESS\n
+    storage {mountpoint}\n
+    name {mountpoint}_zeostorage\n
+    var $ZEOINSTANCE/var\n
+    cache-size {cache}\n
+  </zeoclient>\n
+  mount-point /{mountpoint}\n
+</zodb_db>\n
+""".strip()
 
 
 def initialize():

@@ -1,7 +1,7 @@
 version: "2.4"
 services:
   loffice:
-    image: imiobe/libreoffice:6.1
+    image: imiobe/libreoffice:7.3
     command: soffice --headless --nodefault --accept="socket,host=loffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
@@ -13,8 +13,9 @@ services:
     environment:
       - DOCKER_CLIENT_TIMEOUT=120
       - COMPOSE_HTTP_TIMEOUT=120
-    mem_limit: 200M
+    mem_limit: 500M
     mem_reservation: 200M
+    mem_swappiness: 0
 
   instance:
     image: imiobe/iadelib:dev

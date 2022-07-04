@@ -1,64 +1,82 @@
 #!/bin/bash
 set -e
 
-COMMANDS="debug help logtail show stop adduser fg kill quit run wait console foreground logreopen reload shell status"
-START="start restart zeoserver"
-CMD="bin/instance1"
-ARGS="$@"
+function setup() {
+  mkdir -pv /data/{log,filestorage,blobstorage}
+  bin/python docker-initialize.py
 
-python2.7 docker-initialize.py
-mkdir -p /data/{log,instance-debug,filestorage,blobstorage,instance-async,instance-amqp,instance1}
-
-if [ -e "custom.cfg" ]; then
-	if [ ! -e "bin/develop" ]; then
-		buildout -c custom.cfg
-		python docker-initialize.py
-	fi
-fi
-
-if [[ "$1" == "zeoserver"* ]]; then
-	CMD="bin/$1"
-fi
-
-if [[ "$1" == "instance-async"* ]]; then
-	CMD="bin/instance-async"
-	ARGS="$CMD $2"
-fi
-
-if [ -z "$HEALTH_CHECK_TIMEOUT" ]; then
-	HEALTH_CHECK_TIMEOUT=1
-fi
-
-if [ -z "$HEALTH_CHECK_INTERVAL" ]; then
-	HEALTH_CHECK_INTERVAL=1
-fi
-
-if [[ $START == *"$1"* ]]; then
-	_stop() {
-		$CMD stop
-		kill -TERM "$child" 2>/dev/null
+  if [[ $MOUNTPOINT ]]; then
+    mkdir -pv "/data/blobstorage-$MOUNTPOINT"
+  fi
+  chmod 777 /data/*
+}
+function wait_for_cron() {
+  echo "Waiting for cron"
+  URL="worker-cron:8087/$PLONE_PATH"
+  CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
+  MAX_TRIES=50
+  INTERVAL=5
+  set +e
+  SECONDS=0
+  response="404"
+  tries=0
+  while [[ $response != "200" && $tries -lt $MAX_TRIES ]]
+  do
+    sleep $INTERVAL
+    echo "Waiting for cron"
+    response=$($CURL)
+    ((tries+=1))
+  done
+  set -e
+  if [[ $tries == "$MAX_TRIES" ]]; then
+    echo "Failed to reach $URL after $SECONDS s"
+    exit 1
+  else
+    echo "$URL is up. Waited $SECONDS s"
+  fi
+}
+function start() {
+  echo "Starting $1"
+  cmd="bin/$1"
+  _stop() {
+    echo "Forcing to stop"
+    $cmd stop
+    case "$cmd" in
+    "bin/zeoserver")
+      if [[ -f /data/filestorage/Data.fs.lock ]]; then
+        kill -TERM "$(cat /data/filestorage/Data.fs.lock)" 2>/dev/null
+      fi
+      ;;
+    *)
+      ;;
+    esac
 	}
 
 	trap _stop SIGTERM SIGINT
-	$CMD start
-    sleep 3
-	$CMD logtail &
-	child=$!
+	$cmd start
+	# ensure file exists otherwise logtail returns 1
+	touch "/data/log/$HOSTNAME.log"
+	exec "$cmd" "logtail"
+}
 
-	pid=$($CMD status | sed 's/[^0-9]*//g')
-	if [ -n "$pid" ]; then
-		echo "Application running on pid=$pid"
-		sleep "$HEALTH_CHECK_TIMEOUT"
-		while kill -0 "$pid" 2>/dev/null; do
-			sleep "$HEALTH_CHECK_INTERVAL"
-		done
-	else
-		echo "Application didn't start normally. Shutting down!"
-		_stop
-	fi
-else
-	if [[ $COMMANDS == *"$1"* ]]; then
-		exec $CMD "$ARGS"
-	fi
-	exec $ARGS
+setup "$1"
+
+PRIORIY="instance-cron instance-debug maintenance zeoserver"
+if [[ "instance" == "$1" || ( ! $PRIORIY == *"$1"* && $# -gt 0 ) ]]; then
+  wait_for_cron "$1"
 fi
+
+case "$1" in
+"")
+  exit 0
+  ;;
+"maintenance")
+  shift
+  echo "Executing maintenance command : '$*'"
+  set -x
+  exec "$@"
+  ;;
+*)
+  start "$1"
+  ;;
+esac

@@ -1,8 +1,8 @@
+@Library('jenkins-pipeline-scripts') _
+
 pmDockerPipeline {
-  profileName = 'communes'
+  profileName = 'prod-test'
   activateSolr = false
-  testSuiteName = 'testmc'
+  testSuiteName = 'testprod'
   unitTestParameter = ''
-  testRestapi = true
 }
- 

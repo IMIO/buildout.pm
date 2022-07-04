@@ -14,6 +14,7 @@ logrotate.conf
 make.log
 parts
 python-eggs
+pyvenv.cfg
 src
 var*
 versions-picked.cfg
@@ -23,8 +24,8 @@ uuid.txt
 share
 config/core.properties
 local
-docker/data/blobstorage/*
-docker/data/filestorage/*
+docker/data
 .plone.versioncheck.cache/
 .plone.versioncheck.tracked.json
 checkversion.html
+.vscode
