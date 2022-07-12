@@ -74,9 +74,9 @@ RUN apt-get update -qqy \
   && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
-  && su -c "virtualenv -p python2 ." -s /bin/sh imio \
-  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/sh imio \
-  && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
+  && su -c "virtualenv -p python2 ." -s /bin/bash imio \
+  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
+  && su -c "bin/buildout -t 30 -N" -s /bin/bash imio \
   && rm -rf develop-eggs/ src/ var/blobstorage/ var/filestorage/ parts/instance? bin/instance?
 
 FROM imiobe/plone-base:4.3.20-ubuntu
@@ -120,7 +120,7 @@ RUN apt-get update \
   && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
-  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/sh imio \
+  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
   && chmod +x /plone/*.sh
 
 USER imio

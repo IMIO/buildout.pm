@@ -51,9 +51,9 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker-dev.cfg" >> buildout.cfg \
   && sed -ie "s#Products.MeetingCommunes:zcity#Products.MeetingCommunes:demo#" base.cfg \
-  && su -c "virtualenv -p python2 ." -s /bin/sh imio \
-  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/sh imio \
-  && su -c "bin/buildout -t 30 -N" -s /bin/sh imio \
+  && su -c "virtualenv -p python2 ." -s /bin/bash imio \
+  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
+  && su -c "bin/buildout -t 30 -N" -s /bin/bash imio \
   && rm -rf develop-eggs/ var/blobstorage/ var/filestorage/
 
 USER imio
