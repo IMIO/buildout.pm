@@ -1,6 +1,6 @@
 pip==20.3.4
 setuptools==44.1.1
-zc.buildout==2.13.3
+zc.buildout==2.13.7
 wheel
 # mccabe fails to install during buildout?
 mccabe==0.6.1
