@@ -29,8 +29,13 @@ install-requirements:
 	mkdir -p -m 777 /tmp/appy
 
 .PHONY: buildout
+ifeq ($(shell test -f buildout.cfg && echo -n yes),yes)
 buildout: install-requirements  ## Runs bootstrap if needed and builds the buildout
 	if test -z $(args) ; then time bin/python bin/buildout ; else time bin/python bin/buildout -c $(args) ; fi
+else
+buildout:
+	echo "buildout.cfg not found"
+endif
 
 .PHONY: run
 run:  ## Runs buildout if needed and starts instance1 in foregroud
