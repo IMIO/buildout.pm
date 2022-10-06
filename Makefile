@@ -94,5 +94,15 @@ vc:
 	bin/versioncheck -rnbpo checkversion.htmlqcc
 
 .PHONY: ctop
-ctop:  ## Runs A CTop instance to monitor the running docker container.
-	docker run --rm -ti --pull always -v /var/run/docker.sock:/var/run/docker.sock --name="ctop" quay.io/vektorlab/ctop:latest
+ifeq ($(shell test -f ~/.ctop && echo -n yes),yes)
+ctop:  ## Runs a CTop instance to monitor the running docker container.
+	docker run --rm -ti --pull always --name=ctop \
+		-v /var/run/docker.sock:/var/run/docker.sock:ro \
+		-v ~/.ctop://.ctop \
+		quay.io/vektorlab/ctop:latest
+else
+ctop:  ## Runs a CTop instance to monitor the running docker container.
+	docker run --rm -ti --pull always --name=ctop \
+		-v /var/run/docker.sock:/var/run/docker.sock:ro \
+		quay.io/vektorlab/ctop:latest
+endif
