@@ -47,8 +47,8 @@ run:  ## Runs buildout if needed and starts instance1 in foregroud
 
 .PHONY: cleanall
 cleanall:  ## Clears build artefacts and virtualenv
-	if test -f var/zeoserver.pid; then kill -15 $(shell cat var/zeoserver.pid);fi
-	if test -f var/instance1.pid; then kill -15 $(shell cat var/instance1.pid);fi
+	if test -f var/zeoserver.pid; then kill -15 $(shell cat var/zeoserver.pid) || true;fi
+	if test -f var/instance1.pid; then kill -15 $(shell cat var/instance1.pid) || true;fi
 	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp
 
 .PHONY: jenkins
@@ -79,7 +79,7 @@ stop-libreoffice:  ## Kills the LibreOffice server
 	if docker ps | grep oo_server;then docker stop oo_server;fi
 
 .PHONY: copy-data
-copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm41"
+copy-data:  ## Makes a back up of local data and copies the Data.fs and blobstorage from a production server. I.E. to copy the demo instance use "make copy-data server=pm-prod24 buildout=demo_pm42"
 	if [[ -d var ]];then mv var var-$(shell date +"%d-%m-%Y-%T");fi;
 	mkdir -p var/{blobstorage,filestorage}
 	scripts/copy-data.sh -s=$(server) -b=$(buildout)
