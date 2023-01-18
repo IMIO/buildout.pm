@@ -36,7 +36,7 @@ class Environment(object):
         with open(path) as file:
             filedata = file.read()
         filedata = re.sub(r'server.*?8100', 'server ' + self.server, filedata)
-        filedata = filedata.replace('http://localhost/Plone', self.url)
+        filedata = filedata.replace('http://localhost:8081/Plone', self.url)
         filedata = re.sub(r'ZEOADDRESS.*?8100', 'ZEOADDRESS ' + self.server, filedata)
         filedata = filedata.replace('$(ZEO_ADDRESS)', self.server)
         filedata = re.sub(r'cache-size.*?1000MB', 'cache-size ' + self.zeo_client_cache_size, filedata)
