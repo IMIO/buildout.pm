@@ -24,6 +24,7 @@ RUN apt-get update \
      libpq5 \
      lbzip2 \
      libsigc++-2.0-0v5 \
+     zint \
   && apt-get purge -qqy libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
         python2-dev \
