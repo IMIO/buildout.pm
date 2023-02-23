@@ -40,3 +40,15 @@ jobs:
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: hainaut-prov
           tags: "imiobe/iadelib:hainaut-prov-${{ github.ref_name }}"
+  bep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and publish to dockerhub
+        uses: IMIO/buildout.pm/actions/dockerhub@master
+        with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          profile: bep
+          tags: "imiobe/iadelib:bep-${{ github.ref_name }}"

@@ -61,7 +61,7 @@ function start() {
 
 setup "$1"
 
-PRIORIY="instance-cron instance-debug maintenance zeoserver"
+PRIORIY="instance-cron instance-debug maintenance script zeoserver"
 if [[ "instance" == "$1" || ( ! $PRIORIY == *"$1"* && $# -gt 0 ) ]]; then
   wait_for_cron "$1"
 fi
@@ -75,6 +75,15 @@ case "$1" in
   echo "Executing maintenance command : '$*'"
   set -x
   exec "$@"
+  ;;
+"script")
+  shift
+  script=$1
+  shift
+  command="bin/instance-debug -O $PLONE_PATH run scripts/$script.py $*"
+  echo "Executing script : $command'"
+  set -x
+  eval "$command"
   ;;
 *)
   start "$1"
