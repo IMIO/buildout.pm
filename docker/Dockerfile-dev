@@ -47,7 +47,6 @@ RUN sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
-  && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker-dev.cfg" >> buildout.cfg \
   && sed -ie "s#Products.MeetingCommunes:zcity#Products.MeetingCommunes:demo#" base.cfg \

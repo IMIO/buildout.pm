@@ -65,7 +65,6 @@ RUN apt-get update -qqy \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
-  && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && su -c "virtualenv -p python2 ." -s /bin/bash imio \

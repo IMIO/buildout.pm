@@ -16,7 +16,6 @@ RUN rm -fr bin include lib local share downloads .installed.cfg \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
-  && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker-dev.cfg" >> buildout.cfg \
   && echo "Buildout config :" \

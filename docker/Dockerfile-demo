@@ -63,7 +63,6 @@ RUN apt-get update \
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
-  && echo "    amqp.cfg" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
   && sed -ie "s#Products.MeetingCommunes:zcity#Products.MeetingCommunes:demo#" *.cfg \
