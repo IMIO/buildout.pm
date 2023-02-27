@@ -96,13 +96,13 @@ vc:
 .PHONY: ctop
 ifeq ($(shell test -f ~/.ctop && echo -n yes),yes)
 ctop:  ## Runs a CTop instance to monitor the running docker container.
-	docker run --rm -ti --pull always --name=ctop \
+	docker run --rm -ti --name=ctop \
 		-v /var/run/docker.sock:/var/run/docker.sock:ro \
 		-v ~/.ctop://.ctop \
 		quay.io/vektorlab/ctop:latest
 else
 ctop:  ## Runs a CTop instance to monitor the running docker container.
-	docker run --rm -ti --pull always --name=ctop \
+	docker run --rm -ti --name=ctop \
 		-v /var/run/docker.sock:/var/run/docker.sock:ro \
 		quay.io/vektorlab/ctop:latest
 endif
