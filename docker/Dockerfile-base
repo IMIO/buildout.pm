@@ -10,8 +10,6 @@ RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      lynx \
-     openjdk-18-jre-headless \
-     libreoffice \
      libreoffice-script-provider-python \
      file \
      imagemagick \
@@ -26,7 +24,6 @@ RUN apt-get update -qqy \
      lbzip2 \
      libsigc++-2.0-0v5 \
      zint \
-  && apt-get purge -qqy libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && buildDeps="build-essential \
         python2-dev \
         cmake \
@@ -92,8 +89,6 @@ RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      lynx \
-     openjdk-18-jre-headless \
-     libreoffice \
      libreoffice-script-provider-python \
      file \
      imagemagick \
@@ -108,7 +103,6 @@ RUN apt-get update \
      lbzip2 \
      libsigc++-2.0-0v5 \
      zint \
-  && apt-get purge libreoffice-gnome libreoffice-gtk* libreoffice-help* libreoffice-kde* \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
   && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \

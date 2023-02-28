@@ -20,7 +20,7 @@ services:
     mem_swappiness: 0
 
   zeo:
-    image: imiobe/iadelib:demo-latest
+    image: imiobe/iadelib:latest
     command: zeoserver
     environment:
       - HOSTNAME=zeo
@@ -36,7 +36,7 @@ services:
       test: "/plone/zeo_healthcheck.sh"
 
   instance:
-    image: imiobe/iadelib:demo-latest
+    image: imiobe/iadelib:latest
     command: instance
     ports:
       - "20081:8081"
@@ -63,7 +63,7 @@ services:
       SERVICE_NAME: "instance1"
 
   worker-cron:
-    image: imiobe/iadelib:demo-latest
+    image: imiobe/iadelib:latest
     command: instance-cron
     ports:
       - "8087:8087"
@@ -90,7 +90,7 @@ services:
       SERVICE_NAME: "worker-cron"
 
   worker-async:
-    image: imiobe/iadelib:demo-latest
+    image: imiobe/iadelib:latest
     command: instance-async
     networks:
       - delib_internal
@@ -113,7 +113,7 @@ services:
       SERVICE_NAME: "worker-async"
 
   worker-amqp:
-    image: imiobe/iadelib:demo-latest
+    image: imiobe/iadelib:latest
     command: instance-amqp
     ports:
       - "20085:8286"
@@ -147,7 +147,7 @@ services:
       SERVICE_NAME: "worker-cron"
 
   maintenance:
-    image: imiobe/iadelib:demo-latest
+    image: imiobe/iadelib:latest
     ports:
       - "20089:8080"
     networks:

@@ -16,18 +16,6 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           tags: "imiobe/iadelib:${{ github.ref_name }},imiobe/iadelib:communes-${{ github.ref_name }}"
-  demo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
-        with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          dockerfile: ./docker/Dockerfile-demo
-          tags: "imiobe/iadelib:demo-latest,imiobe/iadelib:demo-${{ github.ref_name }}"
   hainaut-prov:
     runs-on: ubuntu-latest
     steps:
