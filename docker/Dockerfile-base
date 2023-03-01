@@ -5,11 +5,17 @@ ARG PROFILE="communes.cfg"
 WORKDIR /plone
 USER root
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
+# Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
+
 # RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
 RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      lynx \
+     default-jre-headless \
+     libreoffice-java-common \
+     libreoffice-writer \
+     libreoffice-calc \
      libreoffice-script-provider-python \
      file \
      imagemagick \
@@ -84,11 +90,17 @@ COPY --chown=imio docker/docker-initialize.py docker/*.sh /plone/
 
 WORKDIR /plone
 USER root
+# Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
+
 # RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      lynx \
+     default-jre-headless \
+     libreoffice-java-common \
+     libreoffice-writer \
+     libreoffice-calc \
      libreoffice-script-provider-python \
      file \
      imagemagick \
