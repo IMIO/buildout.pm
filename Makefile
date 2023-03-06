@@ -91,7 +91,7 @@ test:
 
 .PHONY: vc
 vc:
-	bin/versioncheck -rnbpo checkversion.htmlqcc
+	bin/versioncheck -rnbpo checkversion.html
 
 .PHONY: ctop
 ifeq ($(shell test -f ~/.ctop && echo -n yes),yes)
