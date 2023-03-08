@@ -12,7 +12,7 @@ COPY --chown=imio *.cfg *.conf Makefile .coveragerc requirements.txt /plone/
 USER imio
 ENV PATH="/home/imio/.local/bin:${PATH}"
 
-RUN rm -fr bin include lib local share downloads .installed.cfg \
+RUN rm -fr rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp
   && echo "[buildout]" > buildout.cfg \
   && echo "extends =" >> buildout.cfg \
   && echo "    $PROFILE" >> buildout.cfg \
