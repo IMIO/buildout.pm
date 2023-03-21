@@ -117,6 +117,7 @@ RUN apt-get update \
      zint \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
+  && echo -e "TLS_REQCERT\tallow" >> /etc/ldap.conf \
   && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
   && chmod +x /plone/*.sh
 
