@@ -57,7 +57,8 @@ RUN apt-get update -qqy \
         libwebp-dev \
         libgif-dev \
         zlib1g-dev \
-        libwebp-dev" \
+        libwebp-dev \
+        libffi-dev" \
   && apt-get install -qqy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
   && pip install "virtualenv>=20.7.2" \
@@ -69,6 +70,7 @@ RUN apt-get update -qqy \
   && echo "    $PROFILE" >> buildout.cfg \
   && echo "    ldap.cfg" >> buildout.cfg \
   && echo "    docker.cfg" >> buildout.cfg \
+  && echo "    wca.cfg" >> buildout.cfg \
   && rm -fr bin include lib local share develop-eggs downloads parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp \
   && su -c "virtualenv -p python2 ." -s /bin/bash imio \
   && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
