@@ -100,9 +100,10 @@ class Environment(object):
         with open("/plone/zeo_add.conf", 'w') as file:
             file.write(ZEO_ADD.format(mountpoint=mountpoint))
 
-        zodb_cache_size = self.env.get("ZEO_CLIENT_CACHE_SIZE", "1000MB")
         with open("/plone/zope_add_zeo.conf", 'w') as file:
-            file.write(ZOPE_ADD_ZEO.format(mountpoint=mountpoint, cache=zodb_cache_size))
+            file.write(ZOPE_ADD_ZEO.format(mountpoint=mountpoint,
+                                           cache_obj=self.zodb_cache_size,
+                                           cache_mb=self.zeo_client_cache_size))
 
     def setup(self, **kwargs):
         self.fixtures()
@@ -121,6 +122,7 @@ ZEO_ADD = """
 
 ZOPE_ADD_ZEO = """
 <zodb_db {mountpoint}>\n
+  cache-size {cache_obj}\n
   <zeoclient>\n
     blob-dir $BLOBSTORAGE-{mountpoint}\n
     shared-blob-dir on\n
@@ -128,7 +130,7 @@ ZOPE_ADD_ZEO = """
     storage {mountpoint}\n
     name {mountpoint}_zeostorage\n
     var $ZEOINSTANCE/var\n
-    cache-size {cache}\n
+    cache-size {cache_mb}\n
   </zeoclient>\n
   mount-point /{mountpoint}\n
 </zodb_db>\n
