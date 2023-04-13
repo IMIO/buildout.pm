@@ -28,7 +28,7 @@ function pack() {
     echo "Packing $db database"
     check "$db" "$blob"
   fi
-  CMD="/plone/bin/python /plone/bin/zeopack -S $db -B /data/$blob"
+  CMD="/plone/bin/python /plone/bin/zeopack -D 0 -S $db -B /data/$blob"
   echo "Executing $CMD"
   eval "$CMD"
   echo
