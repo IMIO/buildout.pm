@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "/srv/zinstances/buildout.pm/src/Products.PloneMeeting"
+			"path": "src/Products.PloneMeeting"
 		},
 		{
-			"path": "/srv/zinstances/buildout.pm/src/Products.MeetingCommunes"
+			"path": "src/Products.MeetingCommunes"
 		},
 		{
 			"path": "."
