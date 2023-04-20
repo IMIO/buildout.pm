@@ -38,7 +38,7 @@ RUN apt-get update \
         libwebp-dev" \
   && apt-get install -qqy --no-install-recommends $buildDeps git subversion \
   && rm -rf /var/lib/apt/lists/* \
-  && pip install "virtualenv>=20.7.2" \
+  && pip install "virtualenv==20.21.1" \
   && gem install docsplit
 
 WORKDIR /plone

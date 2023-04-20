@@ -61,7 +61,7 @@ RUN apt-get update -qqy \
         libffi-dev" \
   && apt-get install -qqy --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
-  && pip install "virtualenv>=20.7.2" \
+  && pip install "virtualenv==20.21.1" \
   && gem install docsplit \
   && cd /plone \
   && sed -i "s/\${buildout:directory}\/var/\/data/g" *.cfg \
