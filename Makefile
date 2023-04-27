@@ -67,7 +67,7 @@ libreoffice-local:  ## Starts a LibreOffice server daemon process using locally 
 .PHONY: libreoffice
 libreoffice:  ## Start a LibreOffice server on port 2002
 	make start-libreoffice
-	make ctop
+	docker ps
 
 .PHONY: start-libreoffice
 start-libreoffice:  ## Start a LibreOffice server on port 2002
