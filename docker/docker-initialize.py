@@ -57,8 +57,9 @@ class Environment(object):
         with open(path, 'w') as file:
             file.write(filedata)
 
-    def _fix_amqp(self, activate_big_bang=False):
-        filedata = self._fix(self.instance_amqp_conf, activate_big_bang)
+    def _fix_amqp(self, path):
+        with open(path) as file:
+            filedata = file.read()
         mq_host = self.env.get('MQ_HOST', '127.0.0.1')
         mq_port = self.env.get('MQ_PORT', '5672')
         mq_login = self.env.get('MQ_LOGIN', 'guest')
@@ -77,7 +78,7 @@ class Environment(object):
         filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata)
         filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata)
 
-        with open(self.instance_amqp_conf, 'w') as file:
+        with open(path, 'w') as file:
             file.write(filedata)
 
     def fixtures(self):
@@ -85,12 +86,15 @@ class Environment(object):
         """
         self._fix_conf(self.instance1_conf, False)
         self._fix_conf(self.instance_async_conf, False)
+        self._fix_conf(self.instance_amqp_conf, False)
         self._fix_conf(self.instance_cron_conf, True)
         # instance debug doesn't exist in dev env
         if os.path.exists(self.instance_debug_conf):
             self._fix_conf(self.instance_debug_conf, False)
+            self._fix_amqp(self.instance_debug_conf)
         self._fix_conf(self.zeoserver_conf, False)
-        self._fix_amqp()
+        self._fix_amqp(self.instance1_conf)
+        self._fix_amqp(self.instance_amqp_conf)
 
     def mountpoint(self):
         mountpoint = self.env.get("MOUNTPOINT", "")
