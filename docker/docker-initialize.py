@@ -75,7 +75,7 @@ class Environment(object):
 
         filedata = re.sub(r'hostname.*?127.0.0.1', 'hostname ' + mq_host, filedata)
         filedata = re.sub(r'port.*?5672', 'port ' + mq_port, filedata)
-        filedata = re.sub(r'^ *password*?guest', 'password ' + mq_password, filedata)
+        filedata = re.sub(r'password.*?guest', 'password ' + mq_password, filedata)
         filedata = re.sub(r'username.*?guest', 'username ' + mq_login, filedata)
 
         with open(path, 'w') as file:
