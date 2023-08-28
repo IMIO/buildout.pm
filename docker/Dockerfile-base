@@ -113,13 +113,14 @@ RUN apt-get update \
      libmagic1 \
      libldap-2.5-0 \
      ldap-utils \
+     libldap-common \
      libpq5 \
      lbzip2 \
      libsigc++-2.0-0v5 \
      zint \
   && rm -rf /var/lib/apt/lists/* \
   && gem install docsplit \
-  && echo -e "TLS_REQCERT\tallow" >> /etc/ldap.conf \
+  && echo "TLS_REQCERT	allow" >> /etc/ldap/ldap.conf \
   && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
   && chmod +x /plone/*.sh
 
