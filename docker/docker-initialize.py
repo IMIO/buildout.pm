@@ -20,7 +20,7 @@ class Environment(object):
         self.admin_password = env.get("ADMIN_PASSWORD", "admin")
         self.plone_path = env.get("PLONE_PATH", "PM")
         self.mq_client_id = env.get("MQ_CLIENT_ID", "019999")
-        self.mq_ws_url = env.get("MQ_WS_URL", "019999")
+        self.mq_ws_url = "https://" + env.get("MQ_WS_URL", "019999")
         self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
         self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
         self.hostname = env.get('HOSTNAME')
