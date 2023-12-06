@@ -12,6 +12,11 @@ jobs:
       - name: Build and publish base image to harbor
         uses: IMIO/buildout.pm/actions/harbor@mod-gh-actions-PMIND-47
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           tags: |
             imiobe/iadelib:base
             "${{ secrets.HARBOR_URL }}/delib/iadelib:base"

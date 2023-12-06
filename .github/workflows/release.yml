@@ -11,6 +11,11 @@ jobs:
       - name: Build and publish communes image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           tags: | 
             "imiobe/iadelib:${{ github.ref_name }}"
             "imiobe/iadelib:communes-${{ github.ref_name }}"
@@ -23,6 +28,11 @@ jobs:
       - name: Build and publish bep image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: bep
           tags: |
             "imiobe/iadelib:bep-${{ github.ref_name }}"
@@ -34,6 +44,11 @@ jobs:
       - name: Build and publish charleroi image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: charleroi
           tags: |
             "imiobe/iadelib:charleroi-${{ github.ref_name }}"
@@ -45,6 +60,11 @@ jobs:
       - name: Build and publish hainaut-prov image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: hainaut-prov
           tags: |
             "imiobe/iadelib:hainaut-prov-${{ github.ref_name }}"
@@ -56,6 +76,11 @@ jobs:
       - name: Build and publish lalouviere image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: lalouviere
           tags: |
             "imiobe/iadelib:lalouviere-${{ github.ref_name }}"
@@ -67,6 +92,11 @@ jobs:
       - name: Build and publish lalouviere-cpas image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: lalouviere-cpas
           tags: |
             "imiobe/iadelib:lalouviere-cpas-${{ github.ref_name }}"
@@ -78,6 +108,11 @@ jobs:
       - name: Build and publish liege image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: liege
           tags: |
             "imiobe/iadelib:liege-${{ github.ref_name }}"
@@ -89,6 +124,11 @@ jobs:
       - name: Build and publish mons image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: mons
           tags: |
             "imiobe/iadelib:mons-${{ github.ref_name }}"
@@ -100,6 +140,11 @@ jobs:
       - name: Build and publish namur image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: namur
           tags: | 
             "imiobe/iadelib:namur-${{ github.ref_name }}"
@@ -111,6 +156,11 @@ jobs:
       - name: Build and publish seraing image to harbor
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           profile: seraing
           tags: |
             "imiobe/iadelib:seraing-${{ github.ref_name }}"

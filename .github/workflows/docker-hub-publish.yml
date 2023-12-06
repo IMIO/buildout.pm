@@ -10,6 +10,11 @@ jobs:
       - name: Build latest
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           tags: |
             imiobe/iadelib:latest
             "${{ secrets.HARBOR_URL }}/delib/iadelib:latest"
@@ -17,6 +22,11 @@ jobs:
       - name: Build and publish dev image
         uses: IMIO/buildout.pm/actions/harbor@master
         with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
           tags: imiobe/iadelib:dev
           dockerfile: ./docker/Dockerfile-dev
           profile: communes-dev
