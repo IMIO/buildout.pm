@@ -7,20 +7,16 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build latest
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          tags: imiobe/iadelib:latest
+          tags: |
+            imiobe/iadelib:latest
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:latest"
           dockerfile: ./docker/Dockerfile-latest
       - name: Build dev image
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           tags: imiobe/iadelib:dev
           dockerfile: ./docker/Dockerfile-dev
           profile: communes-dev

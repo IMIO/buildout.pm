@@ -7,12 +7,10 @@ jobs:
   base:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          tags: imiobe/iadelib:base
+          tags: |
+            imiobe/iadelib:base
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:base"
           dockerfile: ./docker/Dockerfile-base

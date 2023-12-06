@@ -8,131 +8,110 @@ jobs:
   communes:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          tags: "imiobe/iadelib:${{ github.ref_name }},imiobe/iadelib:communes-${{ github.ref_name }}"
+          tags: | 
+            "imiobe/iadelib:${{ github.ref_name }}"
+            "imiobe/iadelib:communes-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:${{ github.ref_name }}"
+  
   bep:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: bep
-          tags: "imiobe/iadelib:bep-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:bep-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:bep-${{ github.ref_name }}"
+
   charleroi:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: charleroi
-          tags: "imiobe/iadelib:charleroi-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:charleroi-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:charleroi-${{ github.ref_name }}"
+
   hainaut-prov:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: hainaut-prov
-          tags: "imiobe/iadelib:hainaut-prov-${{ github.ref_name }}"
-#  idea:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Build and publish to dockerhub
-#        uses: IMIO/buildout.pm/actions/dockerhub@master
-#        with:
-#          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-#          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-#          profile: idea
-#          tags: "imiobe/iadelib:idea-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:hainaut-prov-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:hainaut-prov-${{ github.ref_name }}"
+  
   lalouviere:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: lalouviere
-          tags: "imiobe/iadelib:lalouviere-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:lalouviere-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:lalouviere-${{ github.ref_name }}"
+  
   lalouviere-cpas:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: lalouviere-cpas
-          tags: "imiobe/iadelib:lalouviere-cpas-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:lalouviere-cpas-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:lalouviere-cpas-${{ github.ref_name }}"
+  
   liege:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: liege
-          tags: "imiobe/iadelib:liege-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:liege-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:liege-${{ github.ref_name }}"
+
   mons:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: mons
-          tags: "imiobe/iadelib:mons-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:mons-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:mons-${{ github.ref_name }}"
+
   namur:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: namur
-          tags: "imiobe/iadelib:namur-${{ github.ref_name }}"
+          tags: | 
+            "imiobe/iadelib:namur-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:namur-${{ github.ref_name }}"
+
   seraing:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build and publish to dockerhub
         uses: IMIO/buildout.pm/actions/dockerhub@master
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           profile: seraing
-          tags: "imiobe/iadelib:seraing-${{ github.ref_name }}"
+          tags: |
+            "imiobe/iadelib:seraing-${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:seraing-${{ github.ref_name }}"
