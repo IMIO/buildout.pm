@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 2 * * *' # Daily at 02:00
-
+  push:
 jobs:
   base:
     runs-on: ubuntu-latest
