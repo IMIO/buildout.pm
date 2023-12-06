@@ -27,9 +27,6 @@ inputs:
     description: 'Path to Dockerfile'
     required: true
     default: ./docker/Dockerfile-latest
-  cache-image:
-    description: 'Cache image name'
-    required: false
 runs:
   using: "composite"
   steps:
