@@ -27,6 +27,9 @@ inputs:
     description: 'Path to Dockerfile'
     required: true
     default: ./docker/Dockerfile-latest
+  cache-image:
+    description: 'Cache image name'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -57,3 +60,5 @@ runs:
         pull: true
         push: true
         build-args: PROFILE=${{ inputs.profile }}.cfg
+        cache-from: type=registry,ref=${{ inputs.cache-image }}
+        cache-to: type=registry,ref=${{ inputs.cache-image }},mode=min

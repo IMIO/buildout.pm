@@ -21,3 +21,4 @@ jobs:
             imiobe/iadelib:base
             "${{ secrets.HARBOR_URL }}/delib/iadelib:base"
           dockerfile: ./docker/Dockerfile-base
+          cache-image: "${{ secrets.HARBOR_URL }}/delib/iadelib:base-buildcache"
