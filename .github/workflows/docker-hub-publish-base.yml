@@ -3,13 +3,13 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 2 * * *' # Daily at 02:00
-  push:
+
 jobs:
   base:
     runs-on: ubuntu-latest
     steps:
       - name: Build and publish base image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@mod-gh-actions-PMIND-47
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
