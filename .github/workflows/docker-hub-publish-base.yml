@@ -3,7 +3,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 2 * * *' # Daily at 02:00
-  push:
 
 jobs:
   base:
@@ -21,4 +20,3 @@ jobs:
             imiobe/iadelib:base
             "${{ secrets.HARBOR_URL }}/delib/iadelib:base"
           dockerfile: ./docker/Dockerfile-base
-          cache-image: "${{ secrets.HARBOR_URL }}/delib/iadelib:base-buildcache"

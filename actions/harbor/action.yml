@@ -60,5 +60,3 @@ runs:
         pull: true
         push: true
         build-args: PROFILE=${{ inputs.profile }}.cfg
-        cache-from: type=registry,ref=${{ inputs.cache-image }}
-        cache-to: type=registry,ref=${{ inputs.cache-image }},mode=min
