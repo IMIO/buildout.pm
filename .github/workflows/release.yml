@@ -8,8 +8,8 @@ jobs:
   communes:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish communes image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           tags: | 
             "imiobe/iadelib:${{ github.ref_name }}"
@@ -20,8 +20,8 @@ jobs:
   bep:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish bep image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: bep
           tags: |
@@ -31,8 +31,8 @@ jobs:
   charleroi:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish charleroi image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: charleroi
           tags: |
@@ -42,8 +42,8 @@ jobs:
   hainaut-prov:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish hainaut-prov image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: hainaut-prov
           tags: |
@@ -53,8 +53,8 @@ jobs:
   lalouviere:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish lalouviere image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: lalouviere
           tags: |
@@ -64,8 +64,8 @@ jobs:
   lalouviere-cpas:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish lalouviere-cpas image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: lalouviere-cpas
           tags: |
@@ -75,8 +75,8 @@ jobs:
   liege:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish liege image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: liege
           tags: |
@@ -86,8 +86,8 @@ jobs:
   mons:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish mons image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: mons
           tags: |
@@ -97,8 +97,8 @@ jobs:
   namur:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish namur image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: namur
           tags: | 
@@ -108,8 +108,8 @@ jobs:
   seraing:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish seraing image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           profile: seraing
           tags: |

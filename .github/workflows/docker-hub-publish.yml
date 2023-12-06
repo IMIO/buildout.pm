@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build latest
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           tags: |
             imiobe/iadelib:latest
             "${{ secrets.HARBOR_URL }}/delib/iadelib:latest"
           dockerfile: ./docker/Dockerfile-latest
-      - name: Build dev image
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish dev image
+        uses: IMIO/buildout.pm/actions/harbor@master
         with:
           tags: imiobe/iadelib:dev
           dockerfile: ./docker/Dockerfile-dev

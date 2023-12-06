@@ -9,8 +9,8 @@ jobs:
   base:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and publish to dockerhub
-        uses: IMIO/buildout.pm/actions/dockerhub@master
+      - name: Build and publish base image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@mod-gh-actions-PMIND-47
         with:
           tags: |
             imiobe/iadelib:base
