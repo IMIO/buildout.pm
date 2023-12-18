@@ -160,6 +160,8 @@ services:
       test: "curl -f localhost:8080/$$PLONE_PATH/@@ok"
     volumes:
       - ./data/:/data
+      - ./data/import:/data/import
+      - ./extensions:/plone/parts/instance-debug/Extensions
       - tmp:/tmp
       - vartmp:/var/tmp
     labels:
