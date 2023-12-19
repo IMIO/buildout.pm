@@ -1,0 +1,22 @@
+name: Update base image
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 02:00
+
+jobs:
+  base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and publish base image to harbor
+        uses: IMIO/buildout.pm/actions/harbor@master
+        with:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          HARBOR_URL: ${{ secrets.HARBOR_URL }}
+          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          tags: |
+            imiobe/iadelib:base
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:base"
+          dockerfile: ./docker/Dockerfile-base
