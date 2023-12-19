@@ -61,7 +61,7 @@ function start() {
 
 setup "$1"
 
-#PRIORIY="instance-cron instance-debug maintenance script zeoserver"
+#PRIORIY=instance-cron instance-debug maintenance script zeoserver"
 #if [[ "instance" == "$1" || ( ! $PRIORIY == *"$1"* && $# -gt 0 ) ]]; then
 #  wait_for_cron "$1"
 #fi
