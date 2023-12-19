@@ -10,31 +10,31 @@ function setup() {
   fi
   chmod 777 /data/*
 }
-function wait_for_cron() {
-  echo "Waiting for cron"
-  URL="worker-cron:8087/$PLONE_PATH"
-  CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
-  MAX_TRIES=50
-  INTERVAL=5
-  set +e
-  SECONDS=0
-  response="404"
-  tries=0
-  while [[ $response != "200" && $tries -lt $MAX_TRIES ]]
-  do
-    sleep $INTERVAL
-    echo "Waiting for cron"
-    response=$($CURL)
-    ((tries+=1))
-  done
-  set -e
-  if [[ $tries == "$MAX_TRIES" ]]; then
-    echo "Failed to reach $URL after $SECONDS s"
-    exit 1
-  else
-    echo "$URL is up. Waited $SECONDS s"
-  fi
-}
+# function wait_for_cron() {
+#   echo "Waiting for cron"
+#   URL="worker-cron:8087/$PLONE_PATH"
+#   CURL="curl --write-out %{http_code} -so /dev/null $URL/@@ok"
+#   MAX_TRIES=50
+#   INTERVAL=5
+#   set +e
+#   SECONDS=0
+#   response="404"
+#   tries=0
+#   while [[ $response != "200" && $tries -lt $MAX_TRIES ]]
+#   do
+#     sleep $INTERVAL
+#     echo "Waiting for cron"
+#     response=$($CURL)
+#     ((tries+=1))
+#   done
+#   set -e
+#   if [[ $tries == "$MAX_TRIES" ]]; then
+#     echo "Failed to reach $URL after $SECONDS s"
+#     exit 1
+#   else
+#     echo "$URL is up. Waited $SECONDS s"
+#   fi
+# }
 function start() {
   echo "Starting $1"
   cmd="bin/$1"
@@ -61,10 +61,10 @@ function start() {
 
 setup "$1"
 
-PRIORIY="instance-cron instance-debug maintenance script zeoserver"
-if [[ "instance" == "$1" || ( ! $PRIORIY == *"$1"* && $# -gt 0 ) ]]; then
-  wait_for_cron "$1"
-fi
+#PRIORIY="instance-cron instance-debug maintenance script zeoserver"
+#if [[ "instance" == "$1" || ( ! $PRIORIY == *"$1"* && $# -gt 0 ) ]]; then
+#  wait_for_cron "$1"
+#fi
 
 case "$1" in
 "")

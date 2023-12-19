@@ -43,7 +43,7 @@ services:
     depends_on:
       - zeo
       - libreoffice
-      - worker-cron
+#      - worker-cron
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
@@ -58,32 +58,32 @@ services:
       test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "instance1"
-  worker-cron:
-    image: imiobe/iadelib:dev
-    command: instance-cron
-    ports:
-      - "8087:8087"
-    networks:
-      - delib_internal
-      - delib_external
-    depends_on:
-      - zeo
-    environment:
-      - ZEO_CLIENT_CACHE_SIZE=1000MB
-      - ZODB_CACHE_SIZE=100000
-      - ADMIN_PASSWORD=test
-      - PUBLIC_URL=http://localhost/PM
-      - PLONE_PATH=demo
-      - CLUSTER=iadelib_pm42
-      - HOSTNAME=worker-cron
-    volumes:
-      - ./data/:/data
-      - tmp:/tmp
-      - vartmp:/var/tmp
-    healthcheck:
-      test: "curl -f localhost:8087/$$PLONE_PATH/@@ok"
-    labels:
-      SERVICE_NAME: "worker-cron"
+  # worker-cron:
+  #   image: imiobe/iadelib:dev
+  #   command: instance-cron
+  #   ports:
+  #     - "8087:8087"
+  #   networks:
+  #     - delib_internal
+  #     - delib_external
+  #   depends_on:
+  #     - zeo
+  #   environment:
+  #     - ZEO_CLIENT_CACHE_SIZE=1000MB
+  #     - ZODB_CACHE_SIZE=100000
+  #     - ADMIN_PASSWORD=test
+  #     - PUBLIC_URL=http://localhost/PM
+  #     - PLONE_PATH=demo
+  #     - CLUSTER=iadelib_pm42
+  #     - HOSTNAME=worker-cron
+  #   volumes:
+  #     - ./data/:/data
+  #     - tmp:/tmp
+  #     - vartmp:/var/tmp
+  #   healthcheck:
+  #     test: "curl -f localhost:8087/$$PLONE_PATH/@@ok"
+  #   labels:
+  #     SERVICE_NAME: "worker-cron"
   worker-async:
     image: imiobe/iadelib:dev
     command: instance-async
@@ -92,7 +92,7 @@ services:
     depends_on:
       - zeo
       - libreoffice
-      - worker-cron
+#      - worker-cron
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
