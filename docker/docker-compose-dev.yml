@@ -17,6 +17,7 @@ services:
     mem_limit: 500M
     mem_reservation: 150M
     mem_swappiness: 0
+
   zeo:
     image: imiobe/iadelib:dev
     command: zeoserver
@@ -32,6 +33,7 @@ services:
       SERVICE_NAME: "zeo"
     healthcheck:
       test: "/plone/zeo_healthcheck.sh"
+
   instance:
     image: imiobe/iadelib:dev
     command: instance
@@ -43,7 +45,6 @@ services:
     depends_on:
       - zeo
       - libreoffice
-#      - worker-cron
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
@@ -58,32 +59,7 @@ services:
       test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
     labels:
       SERVICE_NAME: "instance1"
-  # worker-cron:
-  #   image: imiobe/iadelib:dev
-  #   command: instance-cron
-  #   ports:
-  #     - "8087:8087"
-  #   networks:
-  #     - delib_internal
-  #     - delib_external
-  #   depends_on:
-  #     - zeo
-  #   environment:
-  #     - ZEO_CLIENT_CACHE_SIZE=1000MB
-  #     - ZODB_CACHE_SIZE=100000
-  #     - ADMIN_PASSWORD=test
-  #     - PUBLIC_URL=http://localhost/PM
-  #     - PLONE_PATH=demo
-  #     - CLUSTER=iadelib_pm42
-  #     - HOSTNAME=worker-cron
-  #   volumes:
-  #     - ./data/:/data
-  #     - tmp:/tmp
-  #     - vartmp:/var/tmp
-  #   healthcheck:
-  #     test: "curl -f localhost:8087/$$PLONE_PATH/@@ok"
-  #   labels:
-  #     SERVICE_NAME: "worker-cron"
+
   worker-async:
     image: imiobe/iadelib:dev
     command: instance-async
@@ -92,7 +68,6 @@ services:
     depends_on:
       - zeo
       - libreoffice
-#      - worker-cron
     environment:
       - ZEO_CLIENT_CACHE_SIZE=1000MB
       - ZODB_CACHE_SIZE=100000
@@ -107,39 +82,7 @@ services:
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "worker-async"
-#  worker-amqp:
-#    image: imiobe/iadelib:dev
-#    command: instance-amqp
-#    ports:
-#      - "20085:8286"
-#    networks:
-#      - delib_internal
-#      - delib_external
-#    depends_on:
-#      - zeo
-#      - worker-cron
-#    environment:
-#      - ZEO_CLIENT_CACHE_SIZE=1000MB
-#      - ZODB_CACHE_SIZE=100000
-#      - CLUSTER=iadelib_pm42
-#      - PLONE_PATH=demo
-#      - MQ_CLIENT_ID
-#      - MQ_WS_URL
-#      - MQ_WS_LOGIN
-#      - MQ_WS_PASSWORD
-#      - MQ_HOST
-#      - MQ_PORT
-#      - MQ_LOGIN
-#      - MQ_PASSWORD
-#      - HOSTNAME=worker-amqp
-#    healthcheck:
-#      test: "curl -f localhost:8286/$$PLONE_PATH/@@ok"
-#    volumes:
-#      - ./data/:/data
-#      - tmp:/tmp
-#      - vartmp:/var/tmp
-#    labels:
-#      SERVICE_NAME: "worker-cron"
+
   maintenance:
     image: imiobe/iadelib:dev
     ports:
@@ -166,6 +109,7 @@ services:
       - vartmp:/var/tmp
     labels:
       SERVICE_NAME: "maintenance"
+
 volumes:
   tmp:
   vartmp:
