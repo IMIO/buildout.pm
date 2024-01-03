@@ -25,6 +25,7 @@ share
 config/core.properties
 local
 docker/data
+docker/extensions
 .plone.versioncheck.cache/
 .plone.versioncheck.tracked.json
 checkversion.html
