@@ -28,7 +28,6 @@ class Environment(object):
         self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
         self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
         self.instance_async_conf = '/plone/parts/instance-async/etc/zope.conf'
-        self.instance_cron_conf = '/plone/parts/instance-cron/etc/zope.conf'
         self.instance_debug_conf = '/plone/parts/instance-debug/etc/zope.conf'
         self.zeoserver_conf = '/plone/parts/zeoserver/etc/zeo.conf'
 
@@ -84,10 +83,9 @@ class Environment(object):
     def fixtures(self):
         """ ZEO Client
         """
-        self._fix_conf(self.instance1_conf, False)
+        self._fix_conf(self.instance1_conf, True)
         self._fix_conf(self.instance_async_conf, False)
         self._fix_conf(self.instance_amqp_conf, False)
-        self._fix_conf(self.instance_cron_conf, True)
         # instance debug doesn't exist in dev env
         if os.path.exists(self.instance_debug_conf):
             self._fix_conf(self.instance_debug_conf, False)
