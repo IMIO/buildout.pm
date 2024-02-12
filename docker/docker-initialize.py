@@ -23,7 +23,8 @@ class Environment(object):
         self.mq_ws_url = "https://" + env.get("MQ_WS_URL", "019999")
         self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
         self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
-        self.hostname = env.get('HOSTNAME')
+        self.hostname = env.get("HOSTNAME")
+        self.bigbang = env.get("BIGBANG", "False")
 
         self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
         self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
@@ -31,7 +32,7 @@ class Environment(object):
         self.instance_debug_conf = '/plone/parts/instance-debug/etc/zope.conf'
         self.zeoserver_conf = '/plone/parts/zeoserver/etc/zeo.conf'
 
-    def _fix(self, path, activate_big_bang):
+    def _fix(self, path):
         with open(path) as file:
             filedata = file.read()
         filedata = re.sub(r'server.*?8100', 'server ' + self.server, filedata)
@@ -41,7 +42,7 @@ class Environment(object):
         filedata = re.sub(r'cache-size.*?1000MB', 'cache-size ' + self.zeo_client_cache_size, filedata)
         filedata = re.sub(r'cache-size.*?100000', 'cache-size ' + self.zodb_cache_size, filedata)
         filedata = filedata.replace('Plone/@@cron-tick', self.plone_path + '/@@cron-tick ')
-        filedata = re.sub(r'ACTIVE_BIGBANG.*?(True|False)', 'ACTIVE_BIGBANG ' + str(activate_big_bang), filedata)
+        filedata = re.sub(r'ACTIVE_BIGBANG.*?(True|False)', 'ACTIVE_BIGBANG ' + self.bigbang, filedata)
         filedata = re.sub(r'path /data/log/instance.*.log', 'path /data/log/' + self.hostname + '.log', filedata)
         filedata = re.sub(r'path /plone/var/log/instance.*-Z2.log',
                           'path /data/log/' + self.hostname + '-Z2.log',
@@ -49,8 +50,8 @@ class Environment(object):
         filedata = re.sub(r'SITE_ID .*', 'SITE_ID ' + self.plone_path, filedata)
         return filedata
 
-    def _fix_conf(self, path, activate_big_bang):
-        filedata = self._fix(path, activate_big_bang)
+    def _fix_conf(self, path):
+        filedata = self._fix(path)
         filedata = re.sub(r'password.*?admin', 'password ' + self.admin_password, filedata)
         filedata = re.sub(r'ADMIN_PASSWORD.*?admin', 'ADMIN_PASSWORD ' + self.admin_password, filedata)
         with open(path, 'w') as file:
@@ -83,14 +84,14 @@ class Environment(object):
     def fixtures(self):
         """ ZEO Client
         """
-        self._fix_conf(self.instance1_conf, True)
-        self._fix_conf(self.instance_async_conf, False)
-        self._fix_conf(self.instance_amqp_conf, False)
+        self._fix_conf(self.instance1_conf)
+        self._fix_conf(self.instance_async_conf)
+        self._fix_conf(self.instance_amqp_conf)
         # instance debug doesn't exist in dev env
         if os.path.exists(self.instance_debug_conf):
-            self._fix_conf(self.instance_debug_conf, False)
+            self._fix_conf(self.instance_debug_conf)
             self._fix_amqp(self.instance_debug_conf)
-        self._fix_conf(self.zeoserver_conf, False)
+        self._fix_conf(self.zeoserver_conf)
         self._fix_amqp(self.instance1_conf)
         self._fix_amqp(self.instance_amqp_conf)
 
