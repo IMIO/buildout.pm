@@ -20,7 +20,7 @@ jobs:
             "imiobe/iadelib:${{ github.ref_name }}"
             "imiobe/iadelib:communes-${{ github.ref_name }}"
             "${{ secrets.HARBOR_URL }}/delib/iadelib:${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/delib/iadelib:communes-${{ github.ref_name }}"
   
   bep:
     runs-on: ubuntu-latest
