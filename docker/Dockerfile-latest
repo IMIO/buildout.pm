@@ -77,9 +77,14 @@ RUN apt-get update \
   && su -c "/plone/get_run_scripts.sh" -s /bin/bash imio \
   && rm /plone/get_run_scripts.sh
 
-
 FROM imiobe/iadelib:base
-ENV DELIB_MAJOR=4.2
+ENV DELIB_MAJOR=4.2 \
+ ZEO_ADDRESS=zeo:8100 \
+ OO_SERVER=libreoffice \
+ OO_PORT=2002 \
+ USE_STREAM=False \
+ CUSTOM_TMP=/var/tmp \
+ ACTIVE_BIGBANG=False
 
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \
@@ -87,19 +92,9 @@ LABEL delib=$DELIB_VERSION \
       maintainer="iMio"
 
 COPY --from=builder /usr/local/lib/python2.7/dist-packages /usr/local/lib/python2.7/dist-packages
-
 COPY --chown=imio --from=builder /plone /plone/
-#COPY --chown=imio docker/docker-initialize.py docker/*.sh /plone/
 WORKDIR /plone
 USER imio
-
-ENV ZEO_ADDRESS=zeo:8100 \
- OO_SERVER=libreoffice \
- OO_PORT=2002 \
- USE_STREAM=False \
- CUSTOM_TMP=/var/tmp \
- ACTIVE_BIGBANG=False
-
 EXPOSE 8081
 ENTRYPOINT ["/plone/docker-entrypoint.sh"]
 CMD [""]

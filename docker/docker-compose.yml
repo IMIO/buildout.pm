@@ -53,6 +53,10 @@ services:
       - HOSTNAME=instance1
       - PLONE_PATH=demo
       - ADMIN_PASSWORD=test
+      - ACTIVE_BIGBANG=True
+      - PLONE_EXTENSION_IDS=plonetheme.classic:default,plonetheme.sunburst:default,Products.MeetingCommunes:default
+      - DEFAULT_LANGUAGE=fr
+      - SITE_ID=demo
     volumes:
       - ./data:/data
       - tmp:/tmp

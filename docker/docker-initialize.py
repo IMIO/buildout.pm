@@ -3,7 +3,6 @@
 import os
 import re
 
-
 class Environment(object):
     """ Configure container via environment variables
     """
@@ -24,8 +23,7 @@ class Environment(object):
         self.mq_ws_login = env.get("MQ_WS_LOGIN", "testuser")
         self.mq_ws_password = env.get("MQ_WS_PASSWORD", "test")
         self.hostname = env.get("HOSTNAME")
-        self.bigbang = env.get("BIGBANG", "False")
-
+        self.bigbang = env.get("ACTIVE_BIGBANG", "False")
         self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
         self.instance_amqp_conf = '/plone/parts/instance-amqp/etc/zope.conf'
         self.instance_async_conf = '/plone/parts/instance-async/etc/zope.conf'
