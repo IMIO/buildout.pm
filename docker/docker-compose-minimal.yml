@@ -1,0 +1,72 @@
+version: '2.4'
+services:
+
+  libreoffice:
+    image: imiobe/libreoffice:7.3
+    command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
+    expose:
+      - "2002"
+    volumes:
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    networks:
+      - delib_internal
+    labels:
+      SERVICE_NAME: "libreoffice"
+    restart:
+      unless-stopped
+    mem_limit: 500M
+    mem_reservation: 150M
+    mem_swappiness: 0
+
+  zeo:
+    image: imiobe/iadelib:latest
+    command: zeoserver
+    environment:
+      - HOSTNAME=zeo
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    networks:
+      - delib_internal
+    labels:
+      SERVICE_NAME: "zeo"
+    healthcheck:
+      test: "/plone/zeo_healthcheck.sh"
+
+  instance:
+    image: imiobe/iadelib:latest
+    command: instance
+    ports:
+      - "20081:8081"
+    networks:
+      - delib_internal
+      - delib_external
+    depends_on:
+      - zeo
+      - libreoffice
+    environment:
+      - ZEO_CLIENT_CACHE_SIZE=1000MB
+      - ZODB_CACHE_SIZE=100000
+      - CLUSTER=iadelib_pm42
+      - HOSTNAME=instance1
+      - PLONE_PATH=demo
+      - ADMIN_PASSWORD=test
+    volumes:
+      - ./data:/data
+      - tmp:/tmp
+      - vartmp:/var/tmp
+    healthcheck:
+      test: "curl -f localhost:8081/$$PLONE_PATH/@@ok"
+    labels:
+      SERVICE_NAME: "instance1"
+
+volumes:
+  tmp:
+  vartmp:
+
+networks:
+  delib_internal:
+    internal: true
+  delib_external:
