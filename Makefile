@@ -31,7 +31,7 @@ install-requirements:
 .PHONY: buildout
 ifeq ($(shell test -f buildout.cfg && echo -n yes),yes)
 buildout: install-requirements  ## Runs bootstrap if needed and builds the buildout
-	if test -z $(args) ; then time bin/python bin/buildout ; else time bin/python bin/buildout -c $(args) ; fi
+	if test -z $(args) ; then time bin/python bin/buildout -N; else time bin/python bin/buildout -c $(args) ; fi
 else
 buildout:
 	echo "buildout.cfg not found"
