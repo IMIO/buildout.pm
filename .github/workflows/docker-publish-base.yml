@@ -17,7 +17,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:base"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:base
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}

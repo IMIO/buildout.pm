@@ -21,8 +21,8 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:communes-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:communes-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -39,7 +39,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:bep-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:bep-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -56,7 +56,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:charleroi-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:charleroi-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -73,7 +73,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:hainaut-prov-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:hainaut-prov-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -90,7 +90,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:lalouviere-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:lalouviere-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -107,7 +107,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:lalouviere-cpas-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:lalouviere-cpas-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -124,7 +124,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:liege-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:liege-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -140,7 +140,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:mons-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:mons-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -156,7 +156,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:namur-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:namur-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
@@ -172,7 +172,7 @@ jobs:
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
-            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:seraing-${{ github.ref_name }}"
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:seraing-${{ github.ref_name }}
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
