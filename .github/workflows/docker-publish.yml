@@ -1,32 +1,47 @@
 name: Update images
+
 on:
   workflow_dispatch:
   push:
     branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}
+
+env:
+  IMAGE_NAME: delib/iadelib
+
 jobs:
-  docker:
-    runs-on: ubuntu-latest
+  docker-latest:
+    runs-on: gha-runners-delib
     steps:
-      - name: Build latest
-        uses: IMIO/buildout.pm/actions/harbor@master
+      - name: Build and publish communes image to harbor
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          tags: |
-            imiobe/iadelib:latest
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:latest"
-          dockerfile: ./docker/Dockerfile-latest
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:latest"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=communes.cfg'
+
+  docker-dev:
+    runs-on: gha-runners-delib
+    steps:  
       - name: Build and publish dev image
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          tags: imiobe/iadelib:dev
-          dockerfile: ./docker/Dockerfile-dev
-          profile: communes-dev
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:dev"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-dev'
+          BUILD_ARGS: 'PROFILE=communes-dev.cfg'

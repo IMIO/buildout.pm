@@ -1,167 +1,181 @@
 name: Release
 
 on:
-  create:
-    tag:
+  workflow_dispatch:
+  push:
+    tags:
+      - '**'
+
+concurrency:
+  group: ${{ github.workflow }}
+
+env:
+  IMAGE_NAME: delib/iadelib
 
 jobs:
   communes:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish communes image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          tags: | 
-            "imiobe/iadelib:${{ github.ref_name }}"
-            "imiobe/iadelib:communes-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:communes-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:communes-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=communes.cfg'
   
   bep:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish bep image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: bep
-          tags: |
-            "imiobe/iadelib:bep-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:bep-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:bep-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=bep.cfg'
 
   charleroi:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish charleroi image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: charleroi
-          tags: |
-            "imiobe/iadelib:charleroi-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:charleroi-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:charleroi-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=charleroi.cfg'
 
   hainaut-prov:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish hainaut-prov image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: hainaut-prov
-          tags: |
-            "imiobe/iadelib:hainaut-prov-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:hainaut-prov-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:hainaut-prov-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=hainaut-prov.cfg'
   
   lalouviere:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish lalouviere image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: lalouviere
-          tags: |
-            "imiobe/iadelib:lalouviere-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:lalouviere-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:lalouviere-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=lalouviere.cfg'
   
   lalouviere-cpas:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish lalouviere-cpas image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: lalouviere-cpas
-          tags: |
-            "imiobe/iadelib:lalouviere-cpas-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:lalouviere-cpas-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:lalouviere-cpas-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=lalouviere-cpas.cfg'
   
   liege:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish liege image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: liege
-          tags: |
-            "imiobe/iadelib:liege-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:liege-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:liege-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=liege.cfg'
 
   mons:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish mons image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: mons
-          tags: |
-            "imiobe/iadelib:mons-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:mons-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:mons-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=mons.cfg'
 
   namur:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish namur image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: namur
-          tags: | 
-            "imiobe/iadelib:namur-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:namur-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:namur-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=namur.cfg'
 
   seraing:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib
     steps:
       - name: Build and publish seraing image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.2
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          profile: seraing
-          tags: |
-            "imiobe/iadelib:seraing-${{ github.ref_name }}"
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:seraing-${{ github.ref_name }}"
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            "${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:seraing-${{ github.ref_name }}"
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          DOCKERFILE: './docker/Dockerfile-latest'
+          BUILD_ARGS: 'PROFILE=seraing.cfg'
