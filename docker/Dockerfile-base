@@ -1,4 +1,4 @@
-FROM imiobe/plone-base:4.3.20-ubuntu as builder
+FROM harbor.imio.be/common/plone-base:4.3.20-ubuntu as builder
 
 ARG PROFILE="communes.cfg"
 
@@ -77,7 +77,7 @@ RUN apt-get update -qqy \
   && su -c "bin/buildout -t 30 -N" -s /bin/bash imio \
   && rm -rf develop-eggs src var/blobstorage var/filestorage parts bin/instance? parts .git/hooks/pre-commit var/tmp
 
-FROM imiobe/plone-base:4.3.20-ubuntu
+FROM harbor.imio.be/common/plone-base:4.3.20-ubuntu
 ENV DELIB_MAJOR=4.2
 
 LABEL delib=$DELIB_VERSION \

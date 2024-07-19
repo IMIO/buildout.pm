@@ -19,7 +19,7 @@ services:
     mem_swappiness: 0
 
   zeo:
-    image: imiobe/iadelib:dev
+    image: harbor.imio.be/delib/iadelib:dev
     command: zeoserver
     environment:
       - HOSTNAME=zeo
@@ -35,7 +35,7 @@ services:
       test: "/plone/zeo_healthcheck.sh"
 
   instance:
-    image: imiobe/iadelib:dev
+    image: harbor.imio.be/delib/iadelib:dev
     command: instance
     ports:
       - "20081:8081"
@@ -62,7 +62,7 @@ services:
       SERVICE_NAME: "instance1"
 
   worker-async:
-    image: imiobe/iadelib:dev
+    image: harbor.imio.be/delib/iadelib:dev
     command: instance-async
     networks:
       - delib_internal
@@ -85,7 +85,7 @@ services:
       SERVICE_NAME: "worker-async"
 
   maintenance:
-    image: imiobe/iadelib:dev
+    image: harbor.imio.be/delib/iadelib:dev
     ports:
       - "20089:8080"
     networks:

@@ -1,4 +1,4 @@
-FROM imiobe/iadelib:latest
+FROM harbor.imio.be/delib/iadelib:latest
 
 ARG PROFILE="communes-dev.cfg"
 

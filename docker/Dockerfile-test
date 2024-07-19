@@ -1,4 +1,4 @@
-FROM imiobe/iadelib:dev
+FROM harbor.imio.be/delib/iadelib:dev
 
 ARG PROFILE="communes-dev.cfg"
 ARG PR_NUM=''
