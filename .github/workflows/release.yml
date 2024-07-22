@@ -17,7 +17,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish communes image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -35,7 +35,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish bep image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -52,7 +52,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish charleroi image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -69,7 +69,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish hainaut-prov image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -86,7 +86,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish lalouviere image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -103,7 +103,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish lalouviere-cpas image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -120,7 +120,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish liege image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -136,7 +136,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish mons image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -152,7 +152,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish namur image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -168,7 +168,7 @@ jobs:
     runs-on: gha-runners-delib
     steps:
       - name: Build and publish seraing image to harbor
-        uses: IMIO/gha/build-push-notify@v3.2
+        uses: IMIO/gha/build-push-notify@v3.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |

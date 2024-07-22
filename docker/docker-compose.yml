@@ -2,7 +2,7 @@ version: '2.4'
 services:
 
   libreoffice:
-    image: imiobe/libreoffice:7.3
+    image: harbor.imio.be/common/libreoffice:7.3
     command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
