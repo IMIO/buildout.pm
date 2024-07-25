@@ -72,7 +72,7 @@ libreoffice:  ## Start a LibreOffice server on port 2002
 .PHONY: start-libreoffice
 start-libreoffice:  ## Start a LibreOffice server on port 2002
 	make stop-libreoffice
-	docker run --rm -p 127.0.0.1:2002:2002 -u 0:0 -v /tmp:/tmp/ --name="oo_server" -d imiobe/libreoffice:7.3 soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
+	docker run --rm -p 127.0.0.1:2002:2002 -u 0:0 -v /tmp:/tmp/ --name="oo_server" -d harbor.imio.be/common/libreoffice:7.3 soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
 
 .PHONY: stop-libreoffice
 stop-libreoffice:  ## Kills the LibreOffice server
