@@ -14,10 +14,10 @@ env:
 
 jobs:
   communes:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish communes image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -32,10 +32,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=communes.cfg'
   
   bep:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish bep image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -49,10 +49,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=bep.cfg'
 
   charleroi:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish charleroi image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -66,10 +66,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=charleroi.cfg'
 
   hainaut-prov:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish hainaut-prov image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -83,10 +83,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=hainaut-prov.cfg'
   
   lalouviere:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish lalouviere image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -100,10 +100,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=lalouviere.cfg'
   
   lalouviere-cpas:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish lalouviere-cpas image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -117,10 +117,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=lalouviere-cpas.cfg'
   
   liege:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish liege image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -133,10 +133,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=liege.cfg'
 
   mons:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish mons image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -149,10 +149,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=mons.cfg'
 
   namur:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish namur image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
@@ -165,10 +165,10 @@ jobs:
           BUILD_ARGS: 'PROFILE=namur.cfg'
 
   seraing:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish seraing image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |

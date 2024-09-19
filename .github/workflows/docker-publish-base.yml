@@ -10,10 +10,10 @@ env:
 
 jobs:
   base:
-    runs-on: gha-runners-delib
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish base image to harbor
-        uses: IMIO/gha/build-push-notify@v3.3
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAGS: |
