@@ -1,7 +1,7 @@
 version: "2.4"
 services:
   loffice:
-    image: imiobe/libreoffice:7.3
+    image: harbor.imio.be/common/libreoffice:7.3
     command: soffice --headless --nodefault --accept="socket,host=loffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
@@ -18,7 +18,7 @@ services:
     mem_swappiness: 0
 
   instance:
-    image: imiobe/iadelib:dev
+    image: harbor.imio.be/delib/iadelib:dev
     command: bin/testmc -t testAdvice
     depends_on:
       - loffice

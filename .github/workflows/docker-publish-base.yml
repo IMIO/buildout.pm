@@ -1,22 +1,26 @@
 name: Update base image
+
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 2 * * *' # Daily at 02:00
 
+env:
+  IMAGE_NAME: delib/iadelib
+
 jobs:
   base:
-    runs-on: ubuntu-latest
+    runs-on: gha-runners-delib-py3
     steps:
       - name: Build and publish base image to harbor
-        uses: IMIO/buildout.pm/actions/harbor@master
+        uses: IMIO/gha/build-push-notify@v3.9.3
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          HARBOR_URL: ${{ secrets.HARBOR_URL }}
-          DELIB_HARBOR_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
-          DELIB_HARBOR_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
-          tags: |
-            imiobe/iadelib:base
-            "${{ secrets.HARBOR_URL }}/delib/iadelib:base"
-          dockerfile: ./docker/Dockerfile-base
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAGS: |
+            ${{ secrets.HARBOR_URL }}/${{ env.IMAGE_NAME }}:base
+          REGISTRY_URL: ${{ secrets.HARBOR_URL }}
+          REGISTRY_USERNAME: ${{ secrets.DELIB_HARBOR_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DELIB_HARBOR_PASSWORD }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
+          CONTEXT: '.'
+          DOCKERFILE: './docker/Dockerfile-base'

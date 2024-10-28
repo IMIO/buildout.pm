@@ -2,7 +2,7 @@ version: '2.4'
 services:
 
   libreoffice:
-    image: imiobe/libreoffice:7.3
+    image: harbor.imio.be/common/libreoffice:7.3
     command: soffice --headless --norestore --accept="socket,host=libreoffice,port=2002,tcpNoDelay=1;urp;StarOffice.ServiceManager"
     expose:
       - "2002"
@@ -20,7 +20,7 @@ services:
     mem_swappiness: 0
 
   zeo:
-    image: imiobe/iadelib:latest
+    image: harbor.imio.be/delib/iadelib:latest
     command: zeoserver
     environment:
       - HOSTNAME=zeo
@@ -36,7 +36,7 @@ services:
       test: "/plone/zeo_healthcheck.sh"
 
   instance:
-    image: imiobe/iadelib:latest
+    image: harbor.imio.be/delib/iadelib:latest
     command: instance
     ports:
       - "20081:8081"
