@@ -1,0 +1,42 @@
+name: Test package
+
+on:
+  workflow_dispatch:
+  push:
+#    branches:
+#      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: gha-runners-delib-py2
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["2.7"]
+        plone-version: ["4.3"]
+        experimental: [false]
+    if: ${{ !github.event_name == 'pull_request' || !github.event.pull_request.draft }}
+    steps:
+      - name: Needed for local development
+        if: ${{ env.ACT }}
+        run: echo /home/runner/externals/node20/bin >> $GITHUB_PATH
+        shell: bash
+      - name: Launch soffice
+        run: soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore &
+        shell: bash
+      - name: Run tests
+        uses: IMIO/gha/plone-package-test-notify@main
+        env:
+          cache-name: cache-eggs
+        with:
+          BUILDOUT_CONFIG_FILE: prod-test.cfg
+          CACHE_KEY: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.python-version }}
+          TEST_COMMAND: OO_SERVER=localhost OO_PORT=2002 bin/testprod --layer=\!ROBOT --test=\!\(testSetup\|testPerf\)
+          INSTALL_DEPENDENCIES_COMMANDS: |
+            sudo pip install -r requirements.txt
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
