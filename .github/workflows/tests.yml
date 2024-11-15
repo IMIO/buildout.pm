@@ -3,8 +3,8 @@ name: Test package
 on:
   workflow_dispatch:
   push:
-#    branches:
-#      - master
+   branches:
+     - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -30,7 +30,7 @@ jobs:
         run: soffice '--accept=socket,host=0.0.0.0,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore &
         shell: bash
       - name: Run tests
-        uses: IMIO/gha/plone-package-test-notify@main
+        uses: IMIO/gha/plone-package-test-notify@v4
         env:
           cache-name: cache-eggs
         with:
