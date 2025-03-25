@@ -10,7 +10,7 @@ env:
 
 jobs:
   base:
-    runs-on: gha-runners-delib-py3
+    runs-on: gha-runners-test-k8s-mode
     steps:
       - name: Build and publish base image to harbor
         uses: IMIO/gha/build-push-notify@v3.9.3

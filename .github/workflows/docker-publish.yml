@@ -14,7 +14,7 @@ env:
 
 jobs:
   docker-latest:
-    runs-on: gha-runners-delib-py3
+    runs-on: gha-runners-test-k8s-mode
     steps:
       - name: Build and publish communes image to harbor
         uses: IMIO/gha/build-push-notify@v3.9.3
@@ -31,7 +31,7 @@ jobs:
           BUILD_ARGS: 'PROFILE=communes.cfg'
 
   docker-dev:
-    runs-on: gha-runners-delib-py3
+    runs-on: gha-runners-test-k8s-mode
     steps:  
       - name: Build and publish dev image
         uses: IMIO/gha/build-push-notify@v3.9.3

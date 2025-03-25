@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: gha-runners-delib-py2
+    runs-on: gha-runners-test-k8s-mode
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
