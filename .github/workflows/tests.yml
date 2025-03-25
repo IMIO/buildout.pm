@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: gha-runners-test-k8s-mode
+    runs-on: gha-runners-k8s-mode-test
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
