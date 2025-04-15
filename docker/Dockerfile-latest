@@ -73,7 +73,7 @@ RUN apt-get update \
   && su -c "virtualenv -p python2 ." -s /bin/bash imio \
   && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
   && su -c "bin/buildout -t 30 -N" -s /bin/bash imio \
-  && rm -rf develop-eggs/ src/ var/blobstorage/ var/filestorage/ parts/instance? bin/instance? \
+  && rm -rf develop-eggs/ var/blobstorage/ var/filestorage/ parts/instance? bin/instance? \
   && su -c "/plone/get_run_scripts.sh" -s /bin/bash imio \
   && rm /plone/get_run_scripts.sh
 

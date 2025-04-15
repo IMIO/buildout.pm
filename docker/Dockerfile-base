@@ -75,7 +75,7 @@ RUN apt-get update -qqy \
   && su -c "virtualenv -p python2 ." -s /bin/bash imio \
   && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
   && su -c "bin/buildout -t 30 -N" -s /bin/bash imio \
-  && rm -rf develop-eggs src var/blobstorage var/filestorage parts bin/instance? parts .git/hooks/pre-commit var/tmp
+  && rm -rf develop-eggs var/blobstorage var/filestorage parts bin/instance? parts .git/hooks/pre-commit var/tmp
 
 FROM harbor.imio.be/common/plone-base:4.3.20-ubuntu
 ENV DELIB_MAJOR=4.2
