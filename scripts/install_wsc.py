@@ -36,6 +36,6 @@ with api.env.adopt_user(username="admin"):
     if WSC_DISABLE:
         webspellchecker_config.set_enabled(False)
         logger.info("Webspellchecker disabled.")
-    # by default only use WSC in rich text fields
-    webspellchecker_config.set_disable_autosearch_in(u'["input", "textarea"]')
+    # by default disable WSC in quickupload as it breaks added annexes
+    webspellchecker_config.set_disable_autosearch_in(u'["#form-widgets-title", "#form-widgets-description"]')
     transaction.commit()
