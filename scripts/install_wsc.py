@@ -37,5 +37,6 @@ with api.env.adopt_user(username="admin"):
         webspellchecker_config.set_enabled(False)
         logger.info("Webspellchecker disabled.")
     # by default disable WSC in quickupload as it breaks added annexes
-    webspellchecker_config.set_disable_autosearch_in(u'["#form-widgets-title", "#form-widgets-description"]')
+    webspellchecker_config.set_disable_autosearch_in(
+        u'["#form-widgets-title", "#form-widgets-description", ".select2-focusser", ".select2-input"]')
     transaction.commit()
