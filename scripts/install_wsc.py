@@ -14,15 +14,12 @@ import transaction
 setup_logger(level=logging.INFO)
 setup_app(app)
 with api.env.adopt_user(username="admin"):
-    if IImioWebspellcheckerLayer not in registered_layers():
-        logger.info("Installing webspellchecker...")
-        portal = api.portal.get()
-        portal.portal_setup.runImportStepFromProfile(
-            'profile-Products.PloneMeeting:default',
-            'PloneMeeting-Install-Imio-Webspellchecker')
-        logger.info("Installed webspellchecker.")
-    else:
-        logger.info("Webspellchecker already installed. Skipping installation.")
+    logger.info("Installing webspellchecker...")
+    portal = api.portal.get()
+    portal.portal_setup.runImportStepFromProfile(
+        'profile-Products.PloneMeeting:default',
+        'PloneMeeting-Install-Imio-Webspellchecker')
+    logger.info("Installed webspellchecker.")
 
     WSC_JS_BUNDLE_URL = getenv("WSC_JS_BUNDLE_URL")
     WSC_SERVICE_URL = getenv("WSC_SERVICE_URL")
