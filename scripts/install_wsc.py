@@ -32,10 +32,10 @@ with api.env.adopt_user(username="admin"):
     if WSC_JS_BUNDLE_URL:
         webspellchecker_config.set_js_bundle_url(WSC_JS_BUNDLE_URL.decode('utf-8'))
         logger.info("WSC_JS_BUNDLE_URL set to %s.", WSC_JS_BUNDLE_URL)
-
     WSC_DISABLE = getenv("WSC_DISABLE")
     if WSC_DISABLE:
         webspellchecker_config.set_enabled(False)
         logger.info("Webspellchecker disabled.")
-
+    # by default disable WSC in quickupload as it breaks added annexes
+    webspellchecker_config.set_disable_autosearch_in(u'["#form-widgets-title", "#form-widgets-description"]')
     transaction.commit()
