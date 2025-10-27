@@ -51,15 +51,6 @@ cleanall:  ## Clears build artefacts and virtualenv
 	if test -f var/instance1.pid; then kill -15 $(shell cat var/instance1.pid) || true;fi
 	rm -fr bin include lib local share develop-eggs downloads eggs parts .installed.cfg .mr.developer.cfg .git/hooks/pre-commit var/tmp
 
-.PHONY: jenkins
-jenkins: install-requirements  ## Same as buildout but for jenkins use only
-	# can be run by example with: make jenkins profile='communes'
-	sed -ie "s#communes#$(profile)#" jenkins.cfg
-	sed -ie "s#Products.PloneMeeting#$(package)#" jenkins.cfg
-	sed -ie "s#bin/test#bin/$(testSuite)#" jenkins.cfg
-	bin/python bin/buildout -c jenkins.cfg annotate
-	bin/python bin/buildout -c jenkins.cfg
-
 .PHONY: libreoffice-local
 libreoffice-local:  ## Starts a LibreOffice server daemon process using locally installed LibreOffice
 	soffice '--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager' --nologo --headless --nofirststartwizard --norestore
