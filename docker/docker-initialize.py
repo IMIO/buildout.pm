@@ -26,11 +26,11 @@ class Environment(object):
         self.hostname = env.get("HOSTNAME")
         self.bigbang = env.get("BIGBANG", "False")
 
-        self.sso_auth_url = env.get("SSO_AUTH_URL", "https://auth.imio-app.be/realms/vision/protocol/openid-connect/token")
-        self.sso_auth_username = env.get("SSO_AUTH_USERNAME", "")
-        self.sso_auth_password = env.get("SSO_AUTH_PASSWORD", "")
-        self.sso_client_id = env.get("SSO_CLIENT_ID", "vision")
-        self.sso_client_secret = env.get("SSO_CLIENT_SECRET", "secret")
+        self.sso_auth_url = env.get("SSO_APPS_URL", "https://auth.imio-app.be/realms/vision/protocol/openid-connect/token")
+        self.sso_auth_username = env.get("SSO_APPS_USER_USERNAME", "")
+        self.sso_auth_password = env.get("SSO_APPS_USER_PASSWORD", "")
+        self.sso_client_id = env.get("SSO_APPS_CLIENT_ID", "vision")
+        self.sso_client_secret = env.get("SSO_APPS_CLIENT_SECRET", "secret")
         self.vision_api_url = env.get("VISION_API_URL", "https://ipa.imio.be/imio/vision/v1/")
 
         self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
@@ -56,11 +56,11 @@ class Environment(object):
                           filedata)
         filedata = re.sub(r'SITE_ID .*', 'SITE_ID ' + self.plone_path, filedata)
         # SSO/vision
-        filedata = re.sub(r'SSO_AUTH_URL .*', 'SSO_AUTH_URL ' + self.sso_auth_url, filedata)
-        filedata = re.sub(r'SSO_AUTH_USERNAME .*', 'SSO_AUTH_USERNAME ' + self.sso_auth_username, filedata)
-        filedata = re.sub(r'SSO_AUTH_PASSWORD .*', 'SSO_AUTH_PASSWORD ' + self.sso_auth_password, filedata)
-        filedata = re.sub(r'SSO_CLIENT_ID .*', 'SSO_CLIENT_ID ' + self.sso_client_id, filedata)
-        filedata = re.sub(r'SSO_CLIENT_SECRET .*', 'SSO_CLIENT_SECRET ' + self.sso_client_secret, filedata)
+        filedata = re.sub(r'SSO_APPS_URL .*', 'SSO_APPS_URL ' + self.sso_auth_url, filedata)
+        filedata = re.sub(r'SSO_APPS_USER_USERNAME .*', 'SSO_APPS_USER_USERNAME ' + self.sso_auth_username, filedata)
+        filedata = re.sub(r'SSO_APPS_USER_PASSWORD .*', 'SSO_APPS_USER_PASSWORD ' + self.sso_auth_password, filedata)
+        filedata = re.sub(r'SSO_APPS_CLIENT_ID .*', 'SSO_APPS_CLIENT_ID ' + self.sso_client_id, filedata)
+        filedata = re.sub(r'SSO_APPS_CLIENT_SECRET .*', 'SSO_APPS_CLIENT_SECRET ' + self.sso_client_secret, filedata)
         filedata = re.sub(r'VISION_API_URL .*', 'VISION_API_URL ' + self.vision_api_url, filedata)
 
         return filedata
