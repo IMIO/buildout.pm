@@ -7,16 +7,10 @@ USER root
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
 # Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
 
-RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still
 RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      lynx \
-     default-jre-headless \
-     libreoffice-java-common \
-     libreoffice-writer \
-     libreoffice-calc \
-     libreoffice-script-provider-python \
      file \
      imagemagick \
      graphicsmagick \
@@ -80,6 +74,8 @@ RUN apt-get update -qqy \
 FROM harbor.imio.be/common/plone-base:4.3.20-ubuntu
 ENV DELIB_MAJOR=4.2
 
+ARG LO_VERSION=25.2
+
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \
       description="ia.Delib image, based on harbor.imio.be/common/plone-base:4.3.20-ubuntu-20.04" \
@@ -93,36 +89,45 @@ COPY --chown=imio docker/docker-initialize.py docker/*.sh /plone/
 WORKDIR /plone
 USER root
 # Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
-
-RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still
-RUN apt-get update \
-  && apt-get full-upgrade -qqy \
-  && apt-get install -qqy --no-install-recommends \
-     lynx \
-     default-jre-headless \
-     libreoffice-java-common \
-     libreoffice-writer \
-     libreoffice-calc \
-     libreoffice-script-provider-python \
-     file \
-     imagemagick \
-     graphicsmagick \
-     ghostscript \
-     poppler-data \
-     ruby \
-     libmagic1 \
-     libldap-2.5-0 \
-     ldap-utils \
-     libldap-common \
-     libpq5 \
-     lbzip2 \
-     libsigc++-2.0-0v5 \
-     zint \
-  && rm -rf /var/lib/apt/lists/* \
-  && gem install docsplit \
-  && echo "TLS_REQCERT	allow" >> /etc/ldap/ldap.conf \
-  && su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio \
-  && chmod +x /plone/*.sh
+RUN set -eux; \
+    add-apt-repository -y ppa:libreoffice/libreoffice-still; \
+    apt-get update -qqy; \
+    apt-get full-upgrade -qqy; \
+    apt-get install -qqy --no-install-recommends \
+      lynx \
+      default-jre-headless \
+      libreoffice-java-common \
+      libreoffice-writer \
+      libreoffice-calc \
+      libreoffice-script-provider-python \
+      file \
+      imagemagick \
+      graphicsmagick \
+      ghostscript \
+      poppler-data \
+      ruby \
+      libmagic1 \
+      libldap-2.5-0 \
+      ldap-utils \
+      libldap-common \
+      libpq5 \
+      lbzip2 \
+      libsigc++-2.0-0v5 \
+      zint; \
+    \
+    if ! libreoffice --version | grep -q "^LibreOffice ${LO_VERSION}\."; then \
+      echo >&2 "ERROR: Expected LibreOffice ${LO_VERSION}.x but got:"; \
+      libreoffice --version >&2 || true; \
+      echo >&2 "APT candidate versions for libreoffice-common:"; \
+      apt-cache policy libreoffice-common >&2 || true; \
+      exit 1; \
+    fi; \
+    \
+    gem install docsplit; \
+    echo "TLS_REQCERT	allow" >> /etc/ldap/ldap.conf; \
+    su -c "bin/pip install 'python-ldap==2.4.15' -r requirements.txt" -s /bin/bash imio; \
+    chmod +x /plone/*.sh; \
+    rm -rf /var/lib/apt/lists/*
 
 USER imio
 
