@@ -7,7 +7,7 @@ USER root
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile /plone/
 # Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
 
-# RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still
 RUN apt-get update -qqy \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
@@ -94,7 +94,7 @@ WORKDIR /plone
 USER root
 # Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
 
-# RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still \
+RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
