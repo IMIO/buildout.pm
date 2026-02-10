@@ -7,6 +7,7 @@ USER root
 # Required by docsplit: default-jre-headless libreoffice-java-common libreoffice-writer libreoffice-calc
 
 COPY --chown=imio *.cfg *.conf requirements.txt Makefile docker/docker-initialize.py docker/*.sh /plone/
+RUN add-apt-repository -yu ppa:libreoffice/libreoffice-still
 RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
