@@ -5,6 +5,7 @@ on:
   push:
    branches:
      - master
+     - PM-4362_imio_esign
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
