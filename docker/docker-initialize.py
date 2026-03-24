@@ -26,11 +26,12 @@ class Environment(object):
         self.hostname = env.get("HOSTNAME")
         self.bigbang = env.get("BIGBANG", "False")
 
-        self.sso_apps_auth_url = env.get("SSO_APPS_URL", "https://auth.imio-app.be/realms/vision/protocol/openid-connect/token")
+        self.sso_apps_auth_url = env.get("SSO_APPS_URL", "https://keycloak-apps.cloud.imio-test.be/realms/sso-apps/protocol/openid-connect/token")
         self.sso_apps_auth_username = env.get("SSO_APPS_USER_USERNAME", "")
         self.sso_apps_auth_password = env.get("SSO_APPS_USER_PASSWORD", "")
         self.sso_apps_client_id = env.get("SSO_APPS_CLIENT_ID", "vision")
         self.sso_apps_client_secret = env.get("SSO_APPS_CLIENT_SECRET", "secret")
+        self.api_root_url = env.get("API_ROOT_URL", "https://api-staging.imio.be")
         self.vision_api_url = env.get("VISION_API_URL", "https://ipa.imio.be/imio/vision/v1/")
 
         self.instance1_conf = '/plone/parts/instance/etc/zope.conf'
@@ -61,6 +62,7 @@ class Environment(object):
         filedata = re.sub(r'SSO_APPS_USER_PASSWORD .*', 'SSO_APPS_USER_PASSWORD ' + self.sso_apps_auth_password, filedata)
         filedata = re.sub(r'SSO_APPS_CLIENT_ID .*', 'SSO_APPS_CLIENT_ID ' + self.sso_apps_client_id, filedata)
         filedata = re.sub(r'SSO_APPS_CLIENT_SECRET .*', 'SSO_APPS_CLIENT_SECRET ' + self.sso_apps_client_secret, filedata)
+        filedata = re.sub(r'API_ROOT_URL .*', 'API_ROOT_URL ' + self.api_root_url, filedata)
         filedata = re.sub(r'VISION_API_URL .*', 'VISION_API_URL ' + self.vision_api_url, filedata)
 
         return filedata
