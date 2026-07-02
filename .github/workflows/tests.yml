@@ -36,7 +36,7 @@ jobs:
         with:
           BUILDOUT_CONFIG_FILE: prod-test.cfg
           CACHE_KEY: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.python-version }}
-          TEST_COMMAND: OO_SERVER=localhost OO_PORT=2002 bin/testprod --layer=\!ROBOT --test=\!\(testSetup\|testPerf\)
+          TEST_COMMAND: OO_SERVER=localhost OO_PORT=2002 bin/testprod --layer=\!ROBOT --test=\!testSetup
           INSTALL_DEPENDENCIES_COMMANDS: |
             sudo pip install -r requirements.txt
           MATTERMOST_WEBHOOK_URL: ${{ secrets.DELIB_MATTERMOST_WEBHOOK_URL }}
