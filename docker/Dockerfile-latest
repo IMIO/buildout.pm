@@ -11,11 +11,6 @@ RUN apt-get update \
   && apt-get full-upgrade -qqy \
   && apt-get install -qqy --no-install-recommends \
      lynx \
-     default-jre-headless \
-     libreoffice-java-common \
-     libreoffice-writer \
-     libreoffice-calc \
-     libreoffice-script-provider-python \
      file \
      imagemagick \
      graphicsmagick \
@@ -81,6 +76,8 @@ RUN apt-get update \
 FROM harbor.imio.be/delib/iadelib:base
 ENV DELIB_MAJOR=4.2
 
+ARG LO_VERSION=25.2
+
 LABEL delib=$DELIB_VERSION \
       name="ia.Delib" \
       description="ia.Delib image, based on harbor.imio.be/common/plone-base:4.3.20-ubuntu-20.04" \
@@ -91,9 +88,29 @@ COPY --from=builder /usr/local/lib/python2.7/dist-packages /usr/local/lib/python
 COPY --chown=imio --from=builder /plone /plone/
 COPY --chown=imio scripts/*.py /plone/scripts
 
+USER root
+RUN set -eux; \
+    add-apt-repository -y ppa:libreoffice/libreoffice-still; \
+    apt-get update -qqy; \
+    apt-get install -qqy --no-install-recommends \
+      default-jre-headless \
+      libreoffice-java-common \
+      libreoffice-writer \
+      libreoffice-calc \
+      libreoffice-script-provider-python; \
+    \
+    if ! libreoffice --version | grep -q "^LibreOffice ${LO_VERSION}\."; then \
+      echo >&2 "ERROR: Expected LibreOffice ${LO_VERSION}.x but got:"; \
+      libreoffice --version >&2 || true; \
+      echo >&2 "APT candidate versions for libreoffice-common:"; \
+      apt-cache policy libreoffice-common >&2 || true; \
+      exit 1; \
+    fi; \
+    \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /plone
 USER imio
-
 ENV ZEO_ADDRESS=zeo:8100 \
  OO_SERVER=libreoffice \
  OO_PORT=2002 \
