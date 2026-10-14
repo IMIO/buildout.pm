@@ -1,7 +1,6 @@
 from imio.helpers.security import setup_app
 from imio.helpers.security import setup_logger
 from plone import api
-from Products.PloneMeeting.utils import getAdvicePortalTypeIds
 
 import logging
 import os
@@ -14,7 +13,8 @@ with api.env.adopt_user(username="admin"):
     tool = api.portal.get_tool("portal_plonemeeting")
     cfg_id = os.environ.get("MEETING_CONFIG")
     cfgs = [tool.get(cfg_id)] if cfg_id else tool.objectValues("MeetingConfig")
+    # The MeetingConfig methods redirect to HTTP_REFERER at the end.
+    tool.REQUEST.set("HTTP_REFERER", tool.absolute_url())
     for cfg in cfgs:
-        portal_types = [cfg.getItemTypeName(), cfg.getMeetingTypeName()] + getAdvicePortalTypeIds()
-        cfg._updateAnnexConfidentiality(portal_types=portal_types)
+        cfg.updateAnnexConfidentiality()
     transaction.commit()
