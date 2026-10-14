@@ -7,26 +7,12 @@ import os
 import transaction
 
 
-logger = logging.getLogger("update_labels_access_cache")
-
-
-def get_configs(tool):
-    cfg_id = os.environ.get("MEETING_CONFIG")
-    if not cfg_id:
-        return tool.objectValues("MeetingConfig")
-    cfg = tool.get(cfg_id)
-    if cfg is None or cfg.meta_type != "MeetingConfig":
-        raise ValueError("MeetingConfig '%s' not found" % cfg_id)
-    return [cfg]
-
-
 setup_logger(level=logging.INFO)
 setup_app(app)
 with api.env.adopt_user(username="admin"):
     tool = api.portal.get_tool("portal_plonemeeting")
-    for cfg in get_configs(tool):
-        logger.info("Updating labels access cache of '%s'" % cfg.getId())
-        warnings = cfg.update_labels_access_cache(redirect=False)
-        for warning in warnings:
-            logger.warning(warning)
+    cfg_id = os.environ.get("MEETING_CONFIG")
+    cfgs = [tool.get(cfg_id)] if cfg_id else tool.objectValues("MeetingConfig")
+    for cfg in cfgs:
+        cfg.update_labels_access_cache(redirect=False)
     transaction.commit()
