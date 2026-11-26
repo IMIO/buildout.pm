@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.2.36rc8 (unreleased)
+## 4.2.36rc7 (2026-11-26)
 
 - Use branch `1.x` for `collective.behavior.talcondition` in `sources.cfg`.
 - Products.PloneMeeting 4.2.29rc19
